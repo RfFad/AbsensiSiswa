@@ -1,0 +1,83 @@
+<%- include("../Componen/header") %>
+<title>Edit Guru</title>
+<%- include("../Componen/sideNavbar") %>
+
+<div class="content-wrapper">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Edit Data Guru</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Edit Guru</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <% if (messages.success) { %>
+                <div class="alert alert-success">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                  <%= messages.success %>
+                </div>
+              <% } %>
+              <% if (messages.error) { %>
+                <div class="alert alert-danger">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                  <%= messages.error %>
+                </div>
+              <% } %>
+
+              <form action="/admin/guru/update/<%= guru.id_guru %>" method="post">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="Nip">Nip</label>
+                    <div class="form-group mb-3">
+                      <input type="text" class="form-control" name="nip" placeholder="Masukkan nip" value="<%= guru.nip %>">
+                    </div>
+                    <label for="Nama_guru">Nama Guru</label>
+                    <div class="form-group mb-3">
+                      <input type="text" class="form-control" name="nama_guru" placeholder="Masukkan nama guru" value="<%= guru.nama_guru %>">
+                    </div>
+                    <label for="Jabatan">Jabatan</label>
+                    <div class="form-group mb-3">
+                      <input type="text" class="form-control" name="jabatan" placeholder="Masukkan jabatan" value="<%= guru.jabatan %>">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="alamat">Alamat</label>
+                    <div class="form-group mb-3">
+                      <input type="text" class="form-control" name="alamat" placeholder="Masukkan alamat" value="<%= guru.alamat %>">
+                    </div>
+                    <label for="jk">Jenis Kelamin</label>
+                    <div class="form-group mb-3">
+                      <select class="form-control" name="jk">
+                        <option value="laki-laki" <%= guru.jk === 'laki-laki' ? 'selected' : '' %>>Laki-laki</option>
+                        <option value="perempuan" <%= guru.jk === 'perempuan' ? 'selected' : '' %>>Perempuan</option>
+                      </select>
+                    </div>
+                    <label for="password">Password</label>
+                    <div class="form-group mb-3">
+                      <input type="password" class="form-control" name="password" placeholder="Masukkan password" value="<%= guru.password %>">
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Data</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<%- include("../Componen/footer") %>

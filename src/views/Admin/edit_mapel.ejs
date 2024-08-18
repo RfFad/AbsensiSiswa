@@ -1,0 +1,35 @@
+<%- include("../Componen/header") %>
+<title>Davice | Ralan</title>
+<%- include("../Componen/sideNavbar") %>
+<div class="content-wrapper d-flex justify-content-center align-items-start" style="min-height: 100vh; padding-top: 50px;">
+    <!-- Card for updating Mapel -->
+    <div class="card w-50 shadow">
+        <div class="card-header">
+            <h2 class="card-title">Update Mapel</h2>
+        </div>
+        <div class="card-body">
+            <!-- Display success message -->
+            <% if (messages.success) { %>
+                <div class="alert alert-success">
+                    <%= messages.success %>
+                </div>
+            <% } %>
+            <!-- Display error message -->
+            <% if (messages.error) { %>
+                <div class="alert alert-danger">
+                    <%= messages.error %>
+                </div>
+            <% } %>
+           
+            <!-- Form to update Mapel -->
+            <form action="/admin/mapel/update/<%= Mapel.idm %>?_method=PATCH" method="post">
+                <label for="Mapel">Nama Mapel</label>
+                <div class="form-group mb-3">
+                    <input type="text" class="form-control" name="nama_mp" placeholder="Masukkan nama mapel" value="<%= Mapel.nama_mp %>">
+                </div>
+                <button type="submit" class="btn btn-primary">Update Data</button>
+            </form>
+        </div>
+    </div>
+</div>
+<%- include("../Componen/footer") %>

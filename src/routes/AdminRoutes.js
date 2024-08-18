@@ -4,9 +4,10 @@ const { checkRole } = require('../controllers/AuthController');
 const verifyUser = require('../configs/verify');
 const {authHeader} = require('../configs/jwtMiddleware')  // assuming authHeader is another middleware
 const {getInsertSiswa, pageInsert} = require('../controllers/AdminCrudController')
-const {getPageKelas, getInsertKelas, getDataKelas} = require('../controllers/KelasController')
-const {getInsertGuru, getPageGuru, getGuruData} = require ('../controllers/GuruController')
+const {getPageKelas, getInsertKelas, getDataKelas, getUpdateKelas, getUpdatePageKelas, getDeleteKelas} = require('../controllers/KelasController')
+const {getInsertGuru, getPageGuru, getGuruData, getUpdatePage, updateGuru, getDeleteGuru} = require ('../controllers/GuruController')
 const{getCountData} = require ('../controllers/CountAdminController');
+const {getInsertMapel, getDataMapel, getPageMapel, getUpdateMapel, getUpdatePageMapel, getDeleteMapel} = require('../controllers/MapelController')
 
 //router
 router.get('/', checkRole('admin'), authHeader, getCountData)
@@ -18,9 +19,22 @@ router.post('/create_siswa', getInsertSiswa)
 router.get('/kelas', getPageKelas);
 router.post('/insert_kelas', getInsertKelas);
 router.get('/data_kelas', getDataKelas);
+router.get('/kelas/edit/:id_kelas', getUpdatePageKelas);
+router.post('/kelas/delete/:id_kelas', getDeleteKelas);
+router.post('/kelas/update/:id_kelas', getUpdateKelas);
+//Mapel
+router.get('/data_mapel', getDataMapel);
+router.get('/mapel/create', getPageMapel);
+router.post('/mapel/create', getInsertMapel);
+router.get('/mapel/edit/:idm', getUpdatePageMapel);
+router.post('/mapel/update/:idm', getUpdateMapel);
+router.post('/mapel/delete/:idm', getDeleteMapel);
 //guru
 router.get('/guru', getPageGuru);
 router.get('/data_guru', getGuruData)
 router.post('/insert_guru', getInsertGuru);
+router.get('/guru/edit/:id_guru', getUpdatePage)
+router.post('/guru/update/:id_guru', updateGuru);
+router.post('/guru/delete/:id_guru', getDeleteGuru)
 
 module.exports = router;

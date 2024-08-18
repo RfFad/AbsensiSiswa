@@ -11,17 +11,24 @@
         </div>
         <div class="card-body">
             <% if (messages.success) { %>
-                
-                <div class="alert alert-success">
-                    <%= messages.success %>
-                </div>
+                <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: '<%= messages.success %>',
+                });
+            </script>
             <% } %>
+        
             <% if (messages.error) { %>
-                <div class="alert alert-danger">
-                    <%= messages.error %>
-                </div>
+                <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: '<%= messages.error %>',
+                });
+            </script>
             <% } %>
-           
             <form action="/admin/insert_kelas" method="post">
                 <label for="Kelas">Nama Kelas</label>
                 <div class="form-group mb-3">

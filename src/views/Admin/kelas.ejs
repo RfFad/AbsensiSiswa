@@ -6,7 +6,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1>DataTables</h1>
+        <h1>Data Kelas</h1>
       </div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
@@ -37,20 +37,38 @@
                 <button type="submit" class="btn btn-secondary ml-2" style="height: 35px;">Search</button>
               </div>
             </div>
-            
+            <% if (messages.success) { %>
+              <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <%= messages.success %>
+              </div>
+            <% } %>
+            <% if (messages.error) { %>
+              <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <%= messages.error %>
+              </div>
+            <% } %>
             <div class="table-responsive">
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
                   <tr>
                     <th style="width: 1%;">No</th>
                     <th>Nama Kelas</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <% row.forEach((rowItem, index) => { %>
+                  <% row.forEach((kelas, index) => { %>
                   <tr>
                     <td><%= index + 1 %></td>
-                    <td><%= rowItem.nama_kelas %></td>
+                    <td><%= kelas.nama_kelas %></td>
+                    <td>
+                      <a href="/admin/kelas/edit/<%= kelas.id_kelas %>" class="btn btn-warning"><i class="fas fa-edit">Edit</i></a>
+                      <form action="/admin/kelas/delete/<%= kelas.id_kelas %>?_method=DELETE" method="post" style="display:inline;" class="delete-form">
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete(this)"><i class='fas fa-trash-alt'></i>Hapus</button>
+                      </form>                    
+                    </td>
                   </tr>
                   <% }) %>
                 </tbody>
@@ -73,5 +91,25 @@
 </section>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script>
+    function confirmDelete(button) {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Anda tidak akan dapat mengembalikan data ini!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit the form if confirmed
+                button.closest('form').submit();
+            }
+        });
+    }
+</script>
 <%- include("../Componen/footer") %>
