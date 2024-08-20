@@ -19,7 +19,7 @@
                 <%= messages.success %>
             </div>
         <% } %>
-    <form action="/admin/create_siswa" method="POST">
+    <form action="/admin/insert_siswa" method="POST">
       <div class="card-body">
         <div class="form-group">
           <label for="nis">NIS</label>
@@ -30,8 +30,13 @@
             <input type="text" class="form-control" name="nama_siswa" id="nama_siswa" placeholder="asu">
           </div>
         <div class="form-group">
-            <label for="kelas">KELAS</label>
-            <input type="text" class="form-control" name="kelas" id="kelas" placeholder="Enter email">
+           <label for="kelas"> KELAS </label>
+           <select class="form-control" name="id_kelas" id="">
+             <% row.forEach ((kelas )=> { %>
+            <option value="<%= kelas.id_kelas %>"><%= kelas.nama_kelas %></option>
+            <% }) %>
+           </select>
+
           </div>
         <div class="form-group">
             <label for="nama_wali">NAMA WALI</label>
@@ -45,25 +50,9 @@
             </select>
         </div>
         <div class="form-group">
-          <label for="username">USERNAME</label>
-          <input type="text" class="form-control" name="username" id="username" placeholder="Enter email">
-        </div>
-        <div class="form-group">
           <label for="password">PASSWORD</label>
           <input type="password" name="password" class="form-control" id="password" placeholder="Password">
         </div>
-        <div class="form-group">
-          <label for="role">Role</label>
-          <select class="form-control" id="role" name="role" required>
-              <option value="admin">Admin</option>
-              <option value="siswa">Siswa</option>
-              <option value="guru">Guru</option>
-          </select>
-      </div>
-      <div class="form-group">
-        <label for="username">NIS_SISWa</label>
-        <input type="text" class="form-control" name="nis_siswa" id="username" placeholder="Enter email">
-      </div>
           </div>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>        

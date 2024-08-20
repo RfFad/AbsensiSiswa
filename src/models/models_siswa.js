@@ -1,66 +1,91 @@
-const db = require('../configs/Databases');
+const connection = require('../configs/Databases');
 
-const insertSiswa = {
-    checkUsernameExists: async (username) => {
-        const result = await db.query('SELECT COUNT(*) AS count FROM auth WHERE username = ?', [username]);
-        // Check if result has the expected structure
-        if (result && result.length > 0) {
-            const rows = result[0];
-            return rows.count > 0;
-        }
-        return false;
-    },
+const getSiswa = async () => {
+    return new Promise((resolve, reject) => {
+        connection.query(`
+          SELECT * FROM siswa 
+        `, (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(result);
+        });
+    });
+}
 
-    checkNisExists: async (nis) => {
-        const result = await db.query('SELECT COUNT(*) AS count FROM siswa WHERE nis = ?', [nis]);
-        if (result && result.length > 0) {
-            const rows = result[0];
-            return rows.count > 0;
-        }
-        return false;
-    },
+const getSiswaById = async (id_siswa) => {
+    return new Promise((resolve, reject) => {
+        connection.query(`
+          SELECT * FROM siswa WHERE id_siswa = ?
+        `, [id_siswa], (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+            if (result.length === 0) {
+                return reject(new Error('Siswa tidak ditemukan'));
+            }
+            resolve(result[0]);
+        });
+    });
+}
 
-    createSiswaAndUser: async (nis, nama_siswa, kelas, nama_wali, gender, username, password, role, nis_siswa) => {
-        try {
-            // Check if username or nis already exists
-            const usernameExists = await insertSiswa.checkUsernameExists(username);
-            const nisExists = await insertSiswa.checkNisExists(nis);
+const InsertSiswa = async (nis, nama_siswa, id_kelas, jk, nama_wali, alamat,password) => {
+    return new Promise((resolve, reject) => {
+        connection.query(`
+            SELECT * FROM siswa WHERE nis = ?
+        `, [nis], (error, results) => {
+            if (error) return reject(error);
 
-            if (usernameExists) {
-                throw new Error('Username already exists');
+            if (results.length > 0) {
+                return reject(new Error('NIS sudah digunakan, tidak boleh menambahkan data NIS yang sama'));
+            }
+           
+            // Insert data
+            connection.query(`
+                INSERT INTO siswa (nis, nama_siswa, id_kelas, jk, nama_wali, alamat,password) VALUES (?, ?, ?, ?, ?, ?, ?)
+            `, [nis, nama_siswa, id_kelas, jk, nama_wali, alamat,password], (insertError, insertResults) => {
+                if (insertError) return reject(insertError);
+                resolve(insertResults);
+            });
+        });
+    });
+}
+
+const UpdateSiswa = async (id_siswa, nis, nama_siswa, id_kelas, jk, nama_wali, alamat,password) => {
+    return new Promise((resolve, reject) => {
+        connection.query(`
+            SELECT * FROM siswa WHERE id_siswa = ?
+        `, [id_guru], (error, results) => {
+            if (error) return reject(error);
+
+            if (results.length === 0) {
+                return reject(new Error('Data siswa tidak ditemukan'));
             }
 
-            if (nisExists) {
-                throw new Error('NIS already exists');
-            }
+            // Update data
+            connection.query(`
+                UPDATE siswa 
+                SET nis = ?, nama_siswa = ?, id_kelas = ?, jk = ?, nama_wali = ?, alamat = ?, password = ? 
+                WHERE id_siswa = ?
+            `, [nis, nama_siswa, id_kelas, jk, nama_wali, alamat,password], (updateError, updateResults) => {
+                if (updateError) return reject(updateError);
+                resolve(updateResults);
+            });
+        });
+    });
+}
+const DeleteSiswa = async (id_guru) => {
+    return new Promise ((resolve, reject) => {
+       
+                connection.query(`
+                    DELETE FROM siswa WHERE id_siswa = ?
+                    `, [id_siswa], (deleteError,deleteResults) => {
+                        if(deleteError) return reject(deleteError)
+                        resolve(deleteResults);
+                    })
 
-            // Start a new transaction
-            await db.query('START TRANSACTION');
+            
+    })
+}
 
-            // Insert into the siswa table
-            const siswaResult = await db.query(`
-                INSERT INTO siswa (nis, nama_siswa, kelas, nama_wali, gender) VALUES (?, ?, ?, ?, ?)`,
-                [nis, nama_siswa, kelas, nama_wali, gender]
-            );
-
-            // Insert into the auth table
-            const userResult = await db.query(`
-                INSERT INTO auth (username, password, role, nis_siswa) VALUES (?, ?, ?, ?)`,
-                [username, password, role, nis_siswa]
-            );
-
-            // Commit the transaction
-            await db.query('COMMIT');
-
-            // Return both results
-            return { siswaResult, userResult };
-
-        } catch (error) {
-            // If any error occurs, rollback the transaction
-            await db.query('ROLLBACK');
-            throw error;  // Rethrow the error to be handled by the calling function
-        }
-    }
-};
-
-module.exports = insertSiswa;
+module.exports = { getSiswa, getSiswaById, InsertSiswa, UpdateSiswa, DeleteSiswa };

@@ -3,19 +3,20 @@ const router = express.Router();
 const { checkRole } = require('../controllers/AuthController');
 const verifyUser = require('../configs/verify');
 const {authHeader} = require('../configs/jwtMiddleware')  // assuming authHeader is another middleware
-const {getInsertSiswa, pageInsert} = require('../controllers/AdminCrudController')
+// const {getInsertSiswa, pageInsert} = require('../controllers/AdminCrudController')
 const {getPageKelas, getInsertKelas, getDataKelas, getUpdateKelas, getUpdatePageKelas, getDeleteKelas} = require('../controllers/KelasController')
 const {getInsertGuru, getPageGuru, getGuruData, getUpdatePage, updateGuru, getDeleteGuru} = require ('../controllers/GuruController')
 const{getCountData} = require ('../controllers/CountAdminController');
 const {getInsertMapel, getDataMapel, getPageMapel, getUpdateMapel, getUpdatePageMapel, getDeleteMapel} = require('../controllers/MapelController')
 const {getInsertHari, getPageHari} = require ('../controllers/HariController');
+const { getInsertSiswa, getPageSiswa, getSiswaData, getUpdatePageSiswa, updateSiswa, getDeleteSiswa } = require('../controllers/SiswaController') 
 
 //router
 router.get('/', checkRole('admin'), authHeader, getCountData)
 
-//
-router.get('/insert_siswa', pageInsert)
-router.post('/create_siswa', getInsertSiswa)
+// //
+// router.get('/insert_siswa', pageInsert)
+// router.post('/create_siswa', getInsertSiswa)
 //kelas
 router.get('/kelas', getPageKelas);
 router.post('/insert_kelas', getInsertKelas);
@@ -40,5 +41,12 @@ router.post('/guru/delete/:id_guru', getDeleteGuru);
 //hari
 router.get('/hari', getPageHari);
 router.post('/hari/create', getInsertHari);
+//siswa
+router.get('/siswa', getPageSiswa);
+router.get('/data_siswa', getSiswaData)
+router.post('/insert_siswa', getInsertSiswa);
+router.get('/siswa/edit/:id_siswa', getUpdatePageSiswa)
+router.post('/siswa/update/:id_siswa', updateSiswa);
+router.post('/siswa/delete/:id_siswa', getDeleteSiswa);
 
 module.exports = router;
