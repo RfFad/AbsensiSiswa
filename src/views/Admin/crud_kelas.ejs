@@ -1,5 +1,5 @@
 <%- include("../Componen/header") %>
-<title>Davice | Ralan</title>
+<title>Admin | Create Kelas</title>
 <%- include("../Componen/sideNavbar") %>
 <div class="content-wrapper d-flex justify-content-center align-items-start" style="min-height: 100vh; padding-top: 50px;">
     <!-- Display flash messages -->
@@ -32,7 +32,7 @@
             <form action="/admin/insert_kelas" method="post">
                 <label for="Kelas">Nama Kelas</label>
                 <div class="form-group mb-3">
-                    <input type="text" class="form-control" name="nama_kelas" placeholder="Masukkan nama kelas">
+                    <input type="text" class="form-control" name="nama_kelas" placeholder="Masukkan nama kelas" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Tambahkan Data</button>
             </form>

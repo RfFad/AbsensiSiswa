@@ -17,7 +17,8 @@ const io = socketIO(server);
 
 const AdminRouter = require('./src/routes/AdminRoutes');
 const LoginRoutes = require('./src/routes/router-login');
-const SiswaRoutes = require('./src/routes/SiswaRoutes')
+const SiswaRoutes = require('./src/routes/SiswaRoutes');
+const GuruRoutes = require('./src/routes/GuruRoutes')
 
 // Configurasi dan gunakan library
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -47,6 +48,7 @@ app.use(express.static(path.join(__dirname, 'src/public')));
 app.use('/Admin', AdminRouter);
 app.use('/Login', LoginRoutes);
 app.use('/Siswa', SiswaRoutes);
+app.use('/Guru', GuruRoutes);
 // Socket io event
 // Socket.IO event handling
 io.on('connection', (socket) => {

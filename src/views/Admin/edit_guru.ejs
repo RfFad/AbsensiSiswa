@@ -1,5 +1,5 @@
 <%- include("../Componen/header") %>
-<title>Edit Guru</title>
+<title>Admin | Edit Guru</title>
 <%- include("../Componen/sideNavbar") %>
 
 <div class="content-wrapper">
@@ -41,21 +41,21 @@
                   <div class="col-md-6">
                     <label for="Nip">Nip</label>
                     <div class="form-group mb-3">
-                      <input type="text" class="form-control" name="nip" placeholder="Masukkan nip" value="<%= guru.nip %>">
+                      <input type="text" class="form-control" name="nip" placeholder="Masukkan nip" value="<%= guru.nip %>" required>
                     </div>
                     <label for="Nama_guru">Nama Guru</label>
                     <div class="form-group mb-3">
-                      <input type="text" class="form-control" name="nama_guru" placeholder="Masukkan nama guru" value="<%= guru.nama_guru %>">
+                      <input type="text" class="form-control" name="nama_guru" placeholder="Masukkan nama guru" value="<%= guru.nama_guru %>" required>
                     </div>
                     <label for="Jabatan">Jabatan</label>
                     <div class="form-group mb-3">
-                      <input type="text" class="form-control" name="jabatan" placeholder="Masukkan jabatan" value="<%= guru.jabatan %>">
+                      <input type="text" class="form-control" name="jabatan" placeholder="Masukkan jabatan" value="<%= guru.jabatan %>" required>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <label for="alamat">Alamat</label>
                     <div class="form-group mb-3">
-                      <input type="text" class="form-control" name="alamat" placeholder="Masukkan alamat" value="<%= guru.alamat %>">
+                      <input type="text" class="form-control" name="alamat" placeholder="Masukkan alamat" value="<%= guru.alamat %>" required>
                     </div>
                     <label for="jk">Jenis Kelamin</label>
                     <div class="form-group mb-3">
@@ -66,7 +66,7 @@
                     </div>
                     <label for="password">Password</label>
                     <div class="form-group mb-3">
-                      <input type="password" class="form-control" name="password" placeholder="Masukkan password" value="<%= guru.password %>">
+                      <input type="password" class="form-control" name="password" placeholder="Masukkan password" value="<%= guru.password %>" required>
                     </div>
                   </div>
                 </div>

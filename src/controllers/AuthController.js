@@ -1,6 +1,13 @@
-const connect = require('../configs/Databases');
 const jwt = require('jsonwebtoken');
+const mysql = require('mysql');
+const md5 = require('md5'); // Import the MD5 module
 
+const connect = mysql.createPool({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "absensi_app"
+});
 
 module.exports = {
     login(req, res) {
@@ -12,11 +19,11 @@ module.exports = {
     },
 
     async loginAuth(req, res) {
-        let nis = req.body.username;
-        let password = req.body.password;
+        let username = req.body.username;
+        let password = md5(req.body.password); // Hash the password using MD5
     
-        if (nis && password) {
-            connect.beginTransaction(function (err, connection) {
+        if (username && password) {
+            connect.getConnection(function (err, connection) {
                 if (err) {
                     console.error('Database connection error:', err);
                     return res.status(500).json({
@@ -25,11 +32,9 @@ module.exports = {
                     });
                 }
     
-                console.log('Executing query: SELECT * FROM auth WHERE username = ?', nis);
-    
-                connect.query(
-                    `SELECT * FROM auth WHERE username = ? and password = ?`,
-                    [nis, password],
+                connection.query(
+                    `SELECT * FROM user WHERE username = ? AND password = ?`,
+                    [username, password],
                     function (error, results) {
                         if (error) {
                             connection.release();
@@ -42,48 +47,99 @@ module.exports = {
     
                         if (results.length > 0) {
                             const tokenPayload = {
-                                nis: results[0].nis,
-                                role: results[0].role // Fixed this line to access role correctly
+                                username: results[0].username,
+                                role: results[0].role
                             };
     
                             const accessToken = jwt.sign(tokenPayload, 'SECRET', { expiresIn: "1h" });
     
                             req.session.loggedin = true;
-                            req.session.nis = tokenPayload.nis;
+                            req.session.username = tokenPayload.username;
                             req.session.role = tokenPayload.role;
     
                             res.cookie('token', accessToken, { httpOnly: true });
-    
-                            // Redirect based on user role
-                            if (req.session.role === 'admin') {
-                                res.redirect('/admin');
-                            } else if (req.session.role === 'siswa') {
-                                res.redirect('/siswa');
-                            } else {
-                                // Default redirect if role is not recognized
-                                res.redirect('/login');
-                            }
-    
+                            res.redirect('/admin');
                         } else {
-                            req.flash('color', 'danger');
-                            req.flash('status', 'Oops..');
-                            req.flash('message', 'Akun tidak ditemukan');
-                            res.redirect('/login');
-                        }
+                            // If not found in `auth`, check `siswa`
+                            connection.query(
+                                `SELECT * FROM siswa WHERE nis = ? AND password = ?`,
+                                [username, password],
+                                function (error, results) {
+                                    if (error) {
+                                        connection.release();
+                                        console.error(error);
+                                        return res.status(500).json({
+                                            status: 'error',
+                                            message: 'Internal server error'
+                                        });
+                                    }
     
-                        connect.commit();
+                                    if (results.length > 0) {
+                                        const tokenPayload = {
+                                            username: results[0].nis,
+                                            role: 'siswa'
+                                        };
+    
+                                        const accessToken = jwt.sign(tokenPayload, 'SECRET', { expiresIn: "1h" });
+    
+                                        req.session.loggedin = true;
+                                        req.session.username = tokenPayload.username;
+                                        req.session.role = tokenPayload.role;
+    
+                                        res.cookie('token', accessToken, { httpOnly: true });
+                                        res.redirect('/siswa');
+                                    } else {
+                                        // If not found in `siswa`, check `guru`
+                                        connection.query(
+                                            `SELECT * FROM guru WHERE nip = ? AND password = ?`,
+                                            [username, password],
+                                            function (error, results) {
+                                                connection.release();
+                                                if (error) {
+                                                    console.error(error);
+                                                    return res.status(500).json({
+                                                        status: 'error',
+                                                        message: 'Internal server error'
+                                                    });
+                                                }
+        
+                                                if (results.length > 0) {
+                                                    const tokenPayload = {
+                                                        username: results[0].nama_guru,
+                                                        role: 'guru'
+                                                    };
+        
+                                                    const accessToken = jwt.sign(tokenPayload, 'SECRET', { expiresIn: "1h" });
+        
+                                                    req.session.loggedin = true;
+                                                    req.session.username = tokenPayload.username;
+                                                    req.session.role = tokenPayload.role;
+        
+                                                    res.cookie('token', accessToken, { httpOnly: true });
+                                                    res.redirect('/guru');
+                                                } else {
+                                                    req.flash('color', 'danger');
+                                                    req.flash('status', 'Oops..');
+                                                    req.flash('message', 'Username or password is incorrect');
+                                                    res.redirect('/login');
+                                                }
+                                            }
+                                        );
+                                    }
+                                }
+                            );
+                        }
                     }
                 );
             });
         } else {
             req.flash('color', 'danger');
             req.flash('status', 'Oops..');
-            req.flash('message', 'Username dan password harus diisi');
+            req.flash('message', 'Username and password must be filled in');
             res.redirect('/login');
         }
     },
     
-
     logout(req, res) {
         req.session.destroy((err) => {
             if (err) {
@@ -113,7 +169,7 @@ module.exports = {
             }
 
             const newTokenPayload = {
-                nis: decoded.nis,
+                username: decoded.username,
                 role: decoded.role,
             };
 
@@ -131,7 +187,6 @@ module.exports = {
         });
     },
 
-    // Role-based middleware
     checkRole(role) {
         return (req, res, next) => {
             if (req.session.role !== role) {

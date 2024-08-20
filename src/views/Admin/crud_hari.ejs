@@ -1,0 +1,35 @@
+<%- include("../Componen/header") %>
+<title>Admin | Create Mapel</title>
+<%- include("../Componen/sideNavbar") %>
+<div class="content-wrapper d-flex justify-content-center align-items-start" style="min-height: 100vh; padding-top: 50px;">
+    <!-- Display flash messages -->
+   
+    <!-- Card for adding class -->
+    <div class="card w-50 shadow">
+        <div class="card-header">
+            <h2 class="card-title">Tambahkan Hari</h2>
+        </div>
+        <div class="card-body">
+            <% if (messages.success) { %>
+                
+                <div class="alert alert-success">
+                    <%= messages.success %>
+                </div>
+            <% } %>
+            <% if (messages.error) { %>
+                <div class="alert alert-danger">
+                    <%= messages.error %>
+                </div>
+            <% } %>
+           
+            <form action="/admin/hari/create" method="post">
+                <label for="Kelas">Nama Hari</label>
+                <div class="form-group mb-3">
+                    <input type="text" class="form-control" name="hari" placeholder="Masukkan nama hari" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Tambahkan Data</button>
+            </form>
+        </div>
+    </div>
+</div>
+<%- include("../Componen/footer") %>

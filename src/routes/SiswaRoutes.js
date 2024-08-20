@@ -5,18 +5,11 @@ const verifyUser = require('../configs/verify');
 const {authHeader} = require('../configs/jwtMiddleware');  // assuming authHeader is another middleware
 const {profile} = require('../controllers/ProfileController')
 
-router.get('/', checkRole('siswa'), authHeader, verifyUser.isLogin, (req, res) => {
+router.get('/', checkRole('siswa'), authHeader, async(req, res)=>{
     try {
-        res.render('Siswa/index');
+        res.render('Siswa/index')
     } catch (error) {
-        res.status(404).send(error);
-    }
-})
-router.get('/profile', checkRole('siswa'), authHeader, verifyUser.isLogin, profile, (req, res) => {
-    try {
-        res.render('siswa/profile')
-    } catch (error) {
-        res.status(404).send(error);
+        res.status(400).json(error);
     }
 })
 
