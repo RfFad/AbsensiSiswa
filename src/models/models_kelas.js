@@ -18,7 +18,7 @@ const getKelasById = async (id_kelas) => {
 const getKelas = async () => {
     return new Promise((resolve, reject) => {
         connection.query(`
-          SELECT * FROM kelas 
+          SELECT * FROM kelas ORDER BY id_kelas
             `, (error, result) => {
                 if(error) {
                     return reject (error) ;

@@ -61,13 +61,13 @@
                 <tbody>
                   
                   <p id="no-results" style="display: none; text-align: center; padding: 10px; font-size: 30px; font-weight: bold;">Data tidak ada</p>
-                  <% row.forEach((har, index) => { %>
+                  <% row.forEach((hari, index) => { %>
                     <tr>
                     <td><%= index + 1 %></td>
-                    <td><%= har.hari %></td>
+                    <td><%= hari.hari %></td>
                     <td>
-                      <a href="/admin/hari/edit/<%= kelas.idh %>" class="btn btn-warning"><i class="fas fa-edit">Edit</i></a>
-                      <form action="/admin/hari/delete/<%= kelas.idh %>?_method=DELETE" method="post" style="display:inline;" class="delete-form">
+                      <a href="/admin/hari/edit/<%= hari.idh %>" class="btn btn-warning"><i class="fas fa-edit">Edit</i></a>
+                      <form action="/admin/hari/delete/<%= hari.idh %>?_method=DELETE" method="post" style="display:inline;" class="delete-form">
                         <button type="button" class="btn btn-danger" onclick="confirmDelete(this)"><i class='fas fa-trash-alt'></i>Hapus</button>
                       </form>                    
                     </td>

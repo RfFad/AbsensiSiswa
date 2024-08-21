@@ -24,6 +24,18 @@ const getCount = {
                     resolve(result[0]);
                 })
         })
+    },
+    CountMapel : async () => {
+        return new Promise((resolve, reject) => {
+            connection.query(`
+              SELECT COUNT(*) AS count FROM mata_pelajaran 
+                `, (error, result) => {
+                    if(error) {
+                        return reject (error) ;
+                    }
+                    resolve(result[0]);
+                })
+        })
     }
 }
 

@@ -18,7 +18,7 @@ const getMapelById = async (idm) => {
 const getMapel = async () => {
     return new Promise((resolve, reject) => {
         connection.query(`
-          SELECT * FROM mata_pelajaran 
+          SELECT * FROM mata_pelajaran ORDER BY idm
             `, (error, result) => {
                 if(error) {
                     return reject (error) ;

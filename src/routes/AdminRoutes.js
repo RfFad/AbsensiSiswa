@@ -8,7 +8,7 @@ const {getPageKelas, getInsertKelas, getDataKelas, getUpdateKelas, getUpdatePage
 const {getInsertGuru, getPageGuru, getGuruData, getUpdatePage, updateGuru, getDeleteGuru} = require ('../controllers/GuruController')
 const{getCountData} = require ('../controllers/CountAdminController');
 const {getInsertMapel, getDataMapel, getPageMapel, getUpdateMapel, getUpdatePageMapel, getDeleteMapel} = require('../controllers/MapelController')
-const {getInsertHari, getPageHari} = require ('../controllers/HariController');
+const {getInsertHari, getPageHari, getDataHari, getDeleteHari, getUpdateHari, getUpdatePageHari} = require ('../controllers/HariController');
 
 //router
 router.get('/', checkRole('admin'), authHeader, getCountData)
@@ -40,5 +40,9 @@ router.post('/guru/delete/:id_guru', getDeleteGuru);
 //hari
 router.get('/hari', getPageHari);
 router.post('/hari/create', getInsertHari);
+router.get('/data_hari', getDataHari);
+router.get('/hari/edit/:idh', getUpdatePageHari);
+router.post('/hari/delete/:idh', getDeleteHari);
+router.post('/hari/update/:idh', getUpdateHari);
 
 module.exports = router;
