@@ -1,78 +1,91 @@
 <%- include("../Componen/header") %>
-<title>Admin | create_siswa</title>
+<title>Admin | Create siswa</title>
 <%- include("../Componen/sideNavbar") %>
+
+
 <div class="content-wrapper">
-    
-<div class="card card-primary">
-    <div class="card-header">
-      <h3 class="card-title">Quick Example</h3>
+<div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Insert Data</h1>
+      </div>
     </div>
-    <!-- /.card-header -->
-    <!-- form start -->
-       <% if (messages.error) { %>
-            <div class="alert alert-danger">
-                <%= messages.error %>
-            </div>
-        <% } %>
-        <% if (messages.success) { %>
-            <div class="alert alert-success">
-                <%= messages.success %>
-            </div>
-        <% } %>
-    <form action="/admin/create_siswa" method="POST">
-      <div class="card-body">
-        <div class="form-group">
-          <label for="nis">NIS</label>
-          <input type="text" class="form-control" name="nis" id="nis" placeholder="Masukan Nip">
-        </div>
-        <div class="form-group">
-            <label for="nama_siswa">NAMA</label>
-            <input type="text" class="form-control" name="nama_siswa" id="nama_siswa" placeholder="asu">
-          </div>
-        <div class="form-group">
-            <label for="kelas">KELAS</label>
-            <input type="text" class="form-control" name="kelas" id="kelas" placeholder="Enter email">
-          </div>
-        <div class="form-group">
-            <label for="nama_wali">NAMA WALI</label>
-            <input type="text" class="form-control" name="nama_wali" id="nama_wali" placeholder="Enter email">
-          </div>
-          <div class="form-group">
-            <label for="gender">Gender</label>
-            <select class="form-control" id="gender" name="gender" required>
-                <option value="Laki-laki">Laki-laki</option>
-                <option value="Perempuan">Perempuan</option>
-            </select>
-        </div>
-        <div class="form-group">
-          <label for="username">USERNAME</label>
-          <input type="text" class="form-control" name="username" id="username" placeholder="Enter email">
-        </div>
-        <div class="form-group">
-          <label for="password">PASSWORD</label>
-          <input type="password" name="password" class="form-control" id="password" placeholder="Password">
-        </div>
-        <div class="form-group">
-          <label for="role">Role</label>
-          <select class="form-control" id="role" name="role" required>
-              <option value="admin">Admin</option>
-              <option value="siswa">Siswa</option>
-              <option value="guru">Guru</option>
-          </select>
-      </div>
-      <div class="form-group">
-        <label for="username">NIS_SISWa</label>
-        <input type="text" class="form-control" name="nis_siswa" id="username" placeholder="Enter email">
-      </div>
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>        
-      </div>
-      <!-- /.card-body -->
+  </div><!-- /.container-fluid -->
+</section>
 
-    </form>
-  </div>
-  <!-- /.card -->
-
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">DataTable with minimal features & hover style</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <% if (messages.success) { %>
+                <div class="alert alert-success">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <%= messages.success %>
+                </div>
+            <% } %>
+            <% if (messages.error) { %>
+              <div class="alert alert-danger">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <%= messages.error %>
+                </div>
+            <% } %>
+           
+              <form action="/admin/insert_siswa" method="post">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="nis">nis</label>
+                <div class="form-group mb-3">
+                    <input type="text" class="form-control" name="nis" placeholder="Masukkan nis" required>
+                </div>
+                    <label for="Nama_siswa">Nama siswa</label>
+                <div class="form-group mb-3">
+                    <input type="text" class="form-control" name="nama_siswa" placeholder="Masukkan nama siswa" required>
+                </div>
+                    <label for="Kelas">Kelas</label>
+                <div class="form-group mb-3">
+                    <input type="text" class="form-control" name="id_kelas" placeholder="Masukkan Kelas" required>
+                </div>
+                  </div>
+                  <div class="col-md-6">
+                <label for="gender">Jenis Kelamin</label>
+                <div class="form-group mb-3">
+                    <select class="form-control" name="jk">
+                      <option value="laki-laki">laki-laki</option>
+                      <option value="perempuan">Perempuan</option>
+                      </select>
+                </div>
+                <label for="Nama Wali">Nama Wali</label>
+                <div class="form-group mb-3">
+                    <input type="text" class="form-control" name="nama_wali" placeholder="Masukkan Nama Wali" required>
+                </div>
+                <label for="alamat">Alamat</label>
+                <div class="form-group mb-3">
+                    <input type="text" class="form-control" name="alamat" placeholder="Masukkan alamat" required>
+                </div>
+                <label for="password">Password</label>
+                <div class="form-group mb-3">
+                    <input type="password" class="form-control" name="password" placeholder="Masukkan password" required>
+                </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Tambahkan Data</button>
+              </form>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+    </div>
+  </section>
+  
 </div>
+
 <%- include("../Componen/footer") %>
