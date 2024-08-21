@@ -9,7 +9,7 @@ const {getInsertGuru, getPageGuru, getGuruData, getUpdatePage, updateGuru, getDe
 const{getCountData} = require ('../controllers/CountAdminController');
 const {getInsertMapel, getDataMapel, getPageMapel, getUpdateMapel, getUpdatePageMapel, getDeleteMapel} = require('../controllers/MapelController')
 const {getInsertHari, getPageHari, getDataHari, getDeleteHari, getUpdateHari, getUpdatePageHari} = require ('../controllers/HariController');
-const {getInsertHari, getPageHari} = require ('../controllers/HariController');
+// const {getInsertHari, getPageHari} = require ('../controllers/HariController');
 const { getInsertSiswa, getPageSiswa, getSiswaData, getUpdatePageSiswa, updateSiswa, getDeleteSiswa } = require('../controllers/SiswaController') 
 
 //router

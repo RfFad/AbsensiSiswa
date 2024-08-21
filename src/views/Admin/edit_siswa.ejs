@@ -1,5 +1,5 @@
 <%- include("../Componen/header") %>
-<title>Admin | Create siswa</title>
+<title>Admin | Edit siswa</title>
 <%- include("../Componen/sideNavbar") %>
 
 
@@ -7,7 +7,7 @@
 <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1>Insert Data</h1>
+        <h1>Update Data</h1>
       </div>
     </div>
   </div><!-- /.container-fluid -->
@@ -37,45 +37,45 @@
                 </div>
             <% } %>
            
-              <form action="/admin/insert_siswa" method="post">
+              <form action="/admin/siswa/update/<%= siswa.id_siswa %>" method="post">
                 <div class="row">
                   <div class="col-md-6">
                     <label for="nis">nis</label>
                 <div class="form-group mb-3">
-                    <input type="text" class="form-control" name="nis" placeholder="Masukkan nis" required>
+                    <input type="text" class="form-control" name="nis" placeholder="Masukkan nis" value="<%= siswa.nis %>" required>
                 </div>
                     <label for="Nama_siswa">Nama siswa</label>
                 <div class="form-group mb-3">
-                    <input type="text" class="form-control" name="nama_siswa" placeholder="Masukkan nama siswa" required>
+                    <input type="text" class="form-control" name="nama_siswa" placeholder="Masukkan nama siswa"  value="<%= siswa.nama_siswa %>" required>
                 </div>
                     <label for="Kelas">id_Kelas</label>
                 <div class="form-group mb-3">
-                    <input type="text" class="form-control" name="id_kelas" placeholder="Masukkan Kelas" required>
+                    <input type="text" class="form-control" name="id_kelas" placeholder="Masukkan Kelas"  value="<%= siswa.id_kelas %>" required>
                 </div>
                   </div>
                   <div class="col-md-6">
                 <label for="gender">Jenis Kelamin</label>
                 <div class="form-group mb-3">
                     <select class="form-control" name="jk">
-                      <option value="laki-laki">laki-laki</option>
-                      <option value="perempuan">Perempuan</option>
+                      <option value="laki-laki" <%= siswa.jk === 'laki-laki' ? 'selected' : '' %>>laki-laki</option>
+                      <option value="perempuan" <%= siswa.jk === 'perempuan' ? 'selected' : '' %>>Perempuan</option>
                       </select>
                 </div>
                 <label for="Nama Wali">Nama Wali</label>
                 <div class="form-group mb-3">
-                    <input type="text" class="form-control" name="nama_wali" placeholder="Masukkan Nama Wali" required>
+                    <input type="text" class="form-control" name="nama_wali" placeholder="Masukkan Nama Wali"  value="<%= siswa.nama_wali %>" required>
                 </div>
                 <label for="alamat">Alamat</label>
                 <div class="form-group mb-3">
-                    <input type="text" class="form-control" name="alamat" placeholder="Masukkan alamat" required>
+                    <input type="text" class="form-control" name="alamat" placeholder="Masukkan alamat"  value="<%= siswa.alamat %>" required>
                 </div>
                 <label for="password">Password</label>
                 <div class="form-group mb-3">
-                    <input type="password" class="form-control" name="password" placeholder="Masukkan password" required>
+                    <input type="password" class="form-control" name="password" placeholder="Masukkan password"  value="<%= siswa.password %>" required>
                 </div>
                   </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Tambahkan Data</button>
+                <button type="submit" class="btn btn-primary">Update Data</button>
               </form>
             </div>
             <!-- /.card-body -->

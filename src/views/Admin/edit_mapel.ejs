@@ -22,10 +22,10 @@
             <% } %>
            
             <!-- Form to update Mapel -->
-            <form action="/admin/mapel/update/<%= Mapel.idm %>?_method=PATCH" method="post">
+            <form action="/admin/mapel/update/<%= Mapel.idm %>" method="post">
                 <label for="Mapel">Nama Mapel</label>
                 <div class="form-group mb-3">
-                    <input type="text" class="form-control" name="nama_mp" placeholder="Masukkan nama mapel" value="<%= Mapel.nama_mp %>">
+                    <input type="text" class="form-control" name="nama_mp" placeholder="Masukkan nama mapel" value="<%= Mapel.nama_mp %>" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Update Data</button>
             </form>

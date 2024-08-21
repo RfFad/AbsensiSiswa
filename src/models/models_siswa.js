@@ -55,7 +55,7 @@ const UpdateSiswa = async (id_siswa, nis, nama_siswa, id_kelas, jk, nama_wali, a
     return new Promise((resolve, reject) => {
         connection.query(`
             SELECT * FROM siswa WHERE id_siswa = ?
-        `, [id_guru], (error, results) => {
+        `, [id_siswa], (error, results) => {
             if (error) return reject(error);
 
             if (results.length === 0) {
@@ -67,14 +67,14 @@ const UpdateSiswa = async (id_siswa, nis, nama_siswa, id_kelas, jk, nama_wali, a
                 UPDATE siswa 
                 SET nis = ?, nama_siswa = ?, id_kelas = ?, jk = ?, nama_wali = ?, alamat = ?, password = ? 
                 WHERE id_siswa = ?
-            `, [nis, nama_siswa, id_kelas, jk, nama_wali, alamat,password], (updateError, updateResults) => {
+            `, [nis, nama_siswa, id_kelas, jk, nama_wali, alamat,password, id_siswa], (updateError, updateResults) => {
                 if (updateError) return reject(updateError);
                 resolve(updateResults);
             });
         });
     });
 }
-const DeleteSiswa = async (id_guru) => {
+const DeleteSiswa = async (id_siswa) => {
     return new Promise ((resolve, reject) => {
        
                 connection.query(`

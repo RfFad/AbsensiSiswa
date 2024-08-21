@@ -45,7 +45,7 @@ const getInsertSiswa = async (req, res) => {
 const getUpdatePageSiswa = async (req, res) => {
     const { id_siswa } = req.params;
     try {
-        const guru = await getSiswaById(id_siswa);
+        const siswa = await getSiswaById(id_siswa);
         if (!siswa) {
             req.flash('error', 'Data siswa tidak ditemukan!');
             return res.redirect('/admin/data_siswa');

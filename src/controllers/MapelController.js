@@ -60,9 +60,9 @@ const getUpdatePageMapel = async (req, res) => {
 }
 const getUpdateMapel = async (req, res) => {
     const {idm} =req.params;
-    const {nama_mapel} = req.body;
+    const {nama_mp} = req.body;
     try {
-        await UpdateMapel(idm, nama_mapel);
+        await UpdateMapel(idm, nama_mp);
         req.flash('success', 'Berhasil memperbarui data!');
         return res.redirect('/admin/data_mapel');
     } catch (error) {
