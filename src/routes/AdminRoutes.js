@@ -8,12 +8,9 @@ const {getPageKelas, getInsertKelas, getDataKelas, getUpdateKelas, getUpdatePage
 const {getInsertGuru, getPageGuru, getGuruData, getUpdatePage, updateGuru, getDeleteGuru} = require ('../controllers/GuruController')
 const{getCountData} = require ('../controllers/CountAdminController');
 const {getInsertMapel, getDataMapel, getPageMapel, getUpdateMapel, getUpdatePageMapel, getDeleteMapel} = require('../controllers/MapelController')
-<<<<<<< HEAD
 const {getInsertHari, getPageHari, getDataHari, getDeleteHari, getUpdateHari, getUpdatePageHari} = require ('../controllers/HariController');
-=======
 const {getInsertHari, getPageHari} = require ('../controllers/HariController');
 const { getInsertSiswa, getPageSiswa, getSiswaData, getUpdatePageSiswa, updateSiswa, getDeleteSiswa } = require('../controllers/SiswaController') 
->>>>>>> ab94e529277afb50f3ff0cfb4ccb78cdabafdb71
 
 //router
 router.get('/', checkRole('admin'), authHeader, getCountData)
@@ -45,12 +42,12 @@ router.post('/guru/delete/:id_guru', getDeleteGuru);
 //hari
 router.get('/hari', getPageHari);
 router.post('/hari/create', getInsertHari);
-<<<<<<< HEAD
+
 router.get('/data_hari', getDataHari);
 router.get('/hari/edit/:idh', getUpdatePageHari);
 router.post('/hari/delete/:idh', getDeleteHari);
 router.post('/hari/update/:idh', getUpdateHari);
-=======
+
 //siswa
 router.get('/siswa', getPageSiswa);
 router.get('/data_siswa', getSiswaData)
@@ -58,6 +55,5 @@ router.post('/insert_siswa', getInsertSiswa);
 router.get('/siswa/edit/:id_siswa', getUpdatePageSiswa)
 router.post('/siswa/update/:id_siswa', updateSiswa);
 router.post('/siswa/delete/:id_siswa', getDeleteSiswa);
->>>>>>> ab94e529277afb50f3ff0cfb4ccb78cdabafdb71
 
 module.exports = router;
