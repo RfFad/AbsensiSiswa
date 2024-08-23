@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 20, 2024 at 06:26 AM
+-- Generation Time: Aug 23, 2024 at 05:54 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -43,7 +43,8 @@ CREATE TABLE `guru` (
 
 INSERT INTO `guru` (`id_guru`, `nip`, `nama_guru`, `jk`, `jabatan`, `alamat`, `password`) VALUES
 (9, 13334568, 'Supratman', 'laki-laki', 'Sp.d', 'Kuningan', 'a3c9fdc6de4571be0cc3fffe4e30840c'),
-(10, 12283199, 'Sinta', 'perempuan', 'Sp.d', 'kuningan, kec. nusaherang', '38e71496d583420e90eb7111fbb12a6a');
+(10, 12283199, 'Sinta', 'perempuan', 'Sp.d', 'kuningan, kec. nusaherang', '38e71496d583420e90eb7111fbb12a6a'),
+(11, 12227825, 'SULTON ', 'laki-laki', 'Bendahara', 'Jamblang', '41b9eb2f5ba1ee2b3f33a7ccdb578454');
 
 -- --------------------------------------------------------
 
@@ -74,27 +75,18 @@ INSERT INTO `hari` (`idh`, `hari`) VALUES
 
 CREATE TABLE `kelas` (
   `id_kelas` int(11) NOT NULL,
-  `nama_kelas` varchar(100) NOT NULL
+  `nama_kelas` varchar(100) NOT NULL,
+  `id_sekolah` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `kelas`
 --
 
-INSERT INTO `kelas` (`id_kelas`, `nama_kelas`) VALUES
-(47, '7 A'),
-(48, '7 B'),
-(49, '7 C'),
-(50, '7 D'),
-(51, '7 E'),
-(52, '7 F'),
-(53, '7 G'),
-(54, '7 H'),
-(55, '7 I'),
-(56, '8 A'),
-(57, '8 B'),
-(58, '8 C'),
-(59, '9 C');
+INSERT INTO `kelas` (`id_kelas`, `nama_kelas`, `id_sekolah`) VALUES
+(61, '7A', 1),
+(62, '7B', 1),
+(63, 'XII TEI 1', 1);
 
 -- --------------------------------------------------------
 
@@ -120,6 +112,27 @@ INSERT INTO `mata_pelajaran` (`idm`, `nama_mp`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sekolah`
+--
+
+CREATE TABLE `sekolah` (
+  `id_sekolah` int(11) NOT NULL,
+  `kode` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `nama` varchar(255) NOT NULL,
+  `alamat` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `sekolah`
+--
+
+INSERT INTO `sekolah` (`id_sekolah`, `kode`, `email`, `nama`, `alamat`) VALUES
+(1, '213123891273891100', 'smpn1kadugede@gmail.com', 'SMPN 2 KADUGEDE', 'KAB. KUNINGAN, KEC. KADUGEDE');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `siswa`
 --
 
@@ -139,7 +152,8 @@ CREATE TABLE `siswa` (
 --
 
 INSERT INTO `siswa` (`id_siswa`, `nis`, `nama_siswa`, `id_kelas`, `jk`, `nama_wali`, `alamat`, `password`) VALUES
-(1, 12228421, 'Refan', 4, 'laki-laki', 'kodar', 'Cirebon', 'fec7e6a8ff07fcc693f2289ee29fc61f');
+(6, 12228427, 'SUBHAN MUNAWAR', 61, 'laki-laki', '-', 'Cirebon', '54720908504a448634a4342de90e124c'),
+(7, 12227871, 'Rizqika', 63, 'laki-laki', '-', 'Sindang Laut', '204263404888ae5cef42f1c9975b6111');
 
 -- --------------------------------------------------------
 
@@ -160,7 +174,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `username`, `password`, `role`, `id_sekolah`) VALUES
-(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', 1);
+(3, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', 1);
 
 --
 -- Indexes for dumped tables
@@ -183,7 +197,8 @@ ALTER TABLE `hari`
 --
 ALTER TABLE `kelas`
   ADD PRIMARY KEY (`id_kelas`),
-  ADD UNIQUE KEY `nama_kelas` (`nama_kelas`);
+  ADD UNIQUE KEY `nama_kelas` (`nama_kelas`),
+  ADD KEY `id_sekolah` (`id_sekolah`);
 
 --
 -- Indexes for table `mata_pelajaran`
@@ -192,16 +207,24 @@ ALTER TABLE `mata_pelajaran`
   ADD PRIMARY KEY (`idm`);
 
 --
+-- Indexes for table `sekolah`
+--
+ALTER TABLE `sekolah`
+  ADD PRIMARY KEY (`id_sekolah`);
+
+--
 -- Indexes for table `siswa`
 --
 ALTER TABLE `siswa`
-  ADD PRIMARY KEY (`id_siswa`);
+  ADD PRIMARY KEY (`id_siswa`),
+  ADD KEY `id_kelas` (`id_kelas`);
 
 --
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`id_user`);
+  ADD PRIMARY KEY (`id_user`),
+  ADD KEY `id_sekolah` (`id_sekolah`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -211,19 +234,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `guru`
 --
 ALTER TABLE `guru`
-  MODIFY `id_guru` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_guru` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `hari`
 --
 ALTER TABLE `hari`
-  MODIFY `idh` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idh` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id_kelas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id_kelas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `mata_pelajaran`
@@ -232,16 +255,44 @@ ALTER TABLE `mata_pelajaran`
   MODIFY `idm` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
+-- AUTO_INCREMENT for table `sekolah`
+--
+ALTER TABLE `sekolah`
+  MODIFY `id_sekolah` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `siswa`
 --
 ALTER TABLE `siswa`
-  MODIFY `id_siswa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_siswa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `kelas`
+--
+ALTER TABLE `kelas`
+  ADD CONSTRAINT `kelas_ibfk_1` FOREIGN KEY (`id_sekolah`) REFERENCES `sekolah` (`id_sekolah`);
+
+--
+-- Constraints for table `siswa`
+--
+ALTER TABLE `siswa`
+  ADD CONSTRAINT `siswa_ibfk_1` FOREIGN KEY (`id_kelas`) REFERENCES `kelas` (`id_kelas`);
+
+--
+-- Constraints for table `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`id_sekolah`) REFERENCES `sekolah` (`id_sekolah`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

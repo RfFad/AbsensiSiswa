@@ -5,7 +5,8 @@ const getCountData = async(req, res) => {
         const countKelas = await getCount.CountKelas();
         const countGuru = await getCount.CountGuru();
         const countMapel = await getCount.CountMapel();
-        res.render ('admin/index', {countKelas,countGuru,countMapel});
+        const countSiswa = await getCount.CountSiswa();
+        res.render ('admin/index', {countKelas,countGuru,countMapel, countSiswa});
     } catch (error) {
         res.status(400).json(error);
     }

@@ -42,7 +42,7 @@ const InsertKelas = async (nama_kelas) => {
 
             // Insert the new nama_kelas if it doesn't exist
             connection.query(`
-                INSERT INTO kelas (nama_kelas) VALUES (?)
+                INSERT INTO kelas (nama_kelas, id_sekolah) VALUES (?, 1)
             `, [nama_kelas], (insertError, insertResults) => {
                 if (insertError) return reject(insertError);
                 resolve(insertResults);

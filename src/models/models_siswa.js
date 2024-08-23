@@ -3,7 +3,7 @@ const connection = require('../configs/Databases');
 const getSiswa = async () => {
     return new Promise((resolve, reject) => {
         connection.query(`
-          SELECT * FROM siswa 
+          SELECT siswa.*, kelas.nama_kelas as nama_kelas FROM siswa join kelas on siswa.id_kelas = kelas.id_kelas order by siswa.id_siswa 
         `, (error, result) => {
             if (error) {
                 return reject(error);

@@ -48,12 +48,15 @@
                 <div class="form-group mb-3">
                     <input type="text" class="form-control" name="nama_siswa" placeholder="Masukkan nama siswa" required>
                 </div>
-                    <label for="Kelas">id_Kelas</label>
-                <div class="form-group mb-3">
-                    <input type="text" class="form-control" name="id_kelas" placeholder="Masukkan Kelas" required>
+                <div class="form-group">
+                 <label for="kelas"> KELAS </label>
+                 <select class="form-control" name="id_kelas" id="">
+                   <% row.forEach ((kelas )=> { %>
+                  <option value="<%= kelas.id_kelas %>"><%= kelas.nama_kelas %></option>
+                  <% }) %>
+                 </select>
+      
                 </div>
-                  </div>
-                  <div class="col-md-6">
                 <label for="gender">Jenis Kelamin</label>
                 <div class="form-group mb-3">
                     <select class="form-control" name="jk">
@@ -61,6 +64,9 @@
                       <option value="perempuan">Perempuan</option>
                       </select>
                 </div>
+                  </div>
+                  <div class="col-md-6">
+                
                 <label for="Nama Wali">Nama Wali</label>
                 <div class="form-group mb-3">
                     <input type="text" class="form-control" name="nama_wali" placeholder="Masukkan Nama Wali" required>

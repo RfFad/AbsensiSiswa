@@ -13,6 +13,18 @@ const getCount = {
                 })
         })
     },
+    CountSiswa : async () => {
+        return new Promise((resolve, reject) => {
+            connection.query(`
+              SELECT COUNT(*) AS count FROM siswa 
+                `, (error, result) => {
+                    if(error) {
+                        return reject (error) ;
+                    }
+                    resolve(result[0]);
+                })
+        })
+    },
     CountKelas : async () => {
         return new Promise((resolve, reject) => {
             connection.query(`

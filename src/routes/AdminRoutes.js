@@ -11,6 +11,7 @@ const {getInsertMapel, getDataMapel, getPageMapel, getUpdateMapel, getUpdatePage
 const {getInsertHari, getPageHari, getDataHari, getDeleteHari, getUpdateHari, getUpdatePageHari} = require ('../controllers/HariController');
 // const {getInsertHari, getPageHari} = require ('../controllers/HariController');
 const { getInsertSiswa, getPageSiswa, getSiswaData, getUpdatePageSiswa, updateSiswa, getDeleteSiswa } = require('../controllers/SiswaController') 
+const {getUpdatePageSekolah, updateSekolahData, getDataSekolah} = require('../controllers/SekolahController')
 
 //router
 router.get('/', checkRole('admin'), authHeader, getCountData)
@@ -55,5 +56,10 @@ router.post('/insert_siswa', getInsertSiswa);
 router.get('/siswa/edit/:id_siswa', getUpdatePageSiswa)
 router.post('/siswa/update/:id_siswa', updateSiswa);
 router.post('/siswa/delete/:id_siswa', getDeleteSiswa);
+//sekolah
+router.get('/sekolah', getDataSekolah)
+router.get('/sekolah/edit/:id_sekolah', getUpdatePageSekolah);
+router.post('/sekolah/update/:id_sekolah', updateSekolahData);
+
 
 module.exports = router;

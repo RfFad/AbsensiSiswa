@@ -45,6 +45,7 @@ const getInsertSiswa = async (req, res) => {
 const getUpdatePageSiswa = async (req, res) => {
     const { id_siswa } = req.params;
     try {
+        const row =  await getKelas()
         const siswa = await getSiswaById(id_siswa);
         if (!siswa) {
             req.flash('error', 'Data siswa tidak ditemukan!');
@@ -54,7 +55,7 @@ const getUpdatePageSiswa = async (req, res) => {
             success: req.flash('success'),
             error: req.flash('error')
         };
-        res.render("admin/edit_siswa", { siswa, messages });
+        res.render("admin/edit_siswa", { siswa, messages, row });
     } catch (error) {
         console.error("Error rendering the update page:", error);
         res.status(400).send("Server Error");

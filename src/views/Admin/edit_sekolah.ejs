@@ -1,0 +1,61 @@
+<%- include("../Componen/header") %>
+<title>Admin | Edit Sekolah</title>
+<%- include("../Componen/sideNavbar") %>
+
+<div class="content-wrapper">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Edit Biodata Sekolah</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Edit Guru</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+             
+
+              <form action="/admin/sekolah/update/<%= sekolah.id_sekolah %>" method="post">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="Nip">Nama Sekolah</label>
+                    <div class="form-group mb-3">
+                      <input type="text" class="form-control" name="nama" placeholder="Masukkan nip" value="<%= sekolah.nama %>" required>
+                    </div>
+                    <label for="Nama_guru">Kode Sekolah</label>
+                    <div class="form-group mb-3">
+                      <input type="text" class="form-control" name="kode" placeholder="Masukkan nama guru" value="<%= sekolah.kode %>" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="alamat">Email</label>
+                    <div class="form-group mb-3">
+                      <input type="email" class="form-control" name="email" placeholder="Masukkan alamat" value="<%= sekolah.email %>" required>
+                    </div>
+                    <label for="password">Alamat</label>
+                    <div class="form-group mb-3">
+                      <input type="text" class="form-control" name="alamat" placeholder="Masukkan password" value="<%= sekolah.alamat %>" required>
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Data</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<%- include("../Componen/footer") %>
