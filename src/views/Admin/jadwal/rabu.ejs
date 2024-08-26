@@ -1,19 +1,14 @@
-<%- include("../Componen/header") %>
-<title>Admin | Data Guru</title>
-<%- include("../Componen/sideNavbar") %>
+<%- include("../../Componen/header") %>
+<title>Admin | Data Jadwal</title>
+<%- include("../../Componen/sideNavbar") %>
 
 <div class="content-wrapper">
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1>Data Guru</h1>
+        <h1>Data Jadwal</h1>
       </div>
-      <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item active">DataTables</li>
-        </ol>
-      </div>
+      
     </div>
   </div><!-- /.container-fluid -->
 </section>
@@ -25,58 +20,78 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">DataTable with minimal features & hover style</h3>
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                  <a class="nav-link " href="/admin/jadwal/senin">SENIN</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/admin/jadwal/selasa">SELASA</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page"  href="/admin/jadwal/rabu">RABU</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/admin/jadwal/kamis">KAMIS</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/admin/jadwal/jumat">JUMAT</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/admin/jadwal/sabtu">SABTU</a>
+                </li>
+               
+              </ul>
           </div>
           <!-- /.card-header -->
           
           <div class="card-body">
             <div class="d-flex flex-column flex-md-row justify-content-between mb-2">
-              <a href="/admin/guru" class="btn btn-success mb-2 mb-md-0" style="height: 35px;">Tambahkan Data +</a>
+              <a href="/admin/jadwal" class="btn btn-success mb-2 mb-md-0" style="height: 35px;">Tambahkan Data +</a>
               <div class="d-flex justify-content-end">
                 <input type="text" class="form-control" name="table_search" style="width: 160px;">
                 <button type="submit" class="btn btn-secondary ml-2" style="height: 35px;">Search</button>
               </div>
             </div>
             <% if (messages.success) { %>
-                
               <div class="alert alert-success">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                  <%= messages.success %>
+                <%= messages.success %>
               </div>
-          <% } %>
-          <% if (messages.error) { %>
+            <% } %>
+            <% if (messages.error) { %>
               <div class="alert alert-danger">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                  <%= messages.error %>
+                <%= messages.error %>
               </div>
-          <% } %>
+            <% } %>
             <div class="table-responsive">
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
                   <tr>
                     <th style="width: 1%;">No</th>
-                    <th>Nip</th>
-                    <th>Nama Guru</th>
-                    <th>Gender</th>
-                    <th>Jabatan</th>
-                    <th>Alamat</th>
+                    <th>HARI</th>
+                    <th>KELAS</th>
+                    <th>NAMA GURU</th>
+                    <th>MAPEL</th>
+                    <th>JAM PELAJARAN</th>
                     <th>Action</th>
 
                   </tr>
                 </thead>
                 <tbody>
                   <p id="no-results" style="display: none; text-align: center; padding: 10px; font-size: 30px; font-weight: bold;">Data tidak ada</p>
-                  <% row.forEach((guru, index) => { %>
+                  <% row.forEach((jadwal, index) => { %>
                   <tr>
                     <td><%= index + 1 %></td>
-                    <td><%= guru.nip %></td>
-                    <td><%= guru.nama_guru %></td>
-                    <td><%= guru.jk %></td>
-                    <td><%= guru.jabatan %></td>
-                    <td><%= guru.alamat %></td>
+                    <td><%= jadwal.hari %></td>
+                    <td><%= jadwal.nama_kelas %></td>
+                    <td><%= jadwal.nama_guru %></td>
+                    <td><%= jadwal.nama_mp %></td>
+                    <td><%= jadwal.jam_mulai.slice(0, 5) %> - <%= jadwal.jam_selesai.slice(0, 5) %></td>
+                   
                     <td>
-                      <a href="/admin/guru/edit/<%= guru.id_guru %>" class="btn btn-warning btn-sm"><i class="fas fa-edit">Edit</i></a>
-                      <form action="/admin/guru/delete/<%= guru.id_guru%>?_method=DELETE" method="post" style="display:inline;" class="delete-form">
+                      <a href="/admin/jadwal/edit/<%= jadwal.idj %>" class="btn btn-warning btn-sm"><i class="fas fa-edit">Edit</i></a>
+                      <form action="/admin/jadwal/delete/<%= jadwal.idj %>?_method=DELETE" method="post" style="display:inline;" class="delete-form">
                         <button type="button" class="btn btn-danger" onclick="confirmDelete(this)"><i class='fas fa-trash-alt'></i>Hapus</button>
                       </form>     
                     </td>
@@ -116,4 +131,4 @@
       });
   }
 </script>
-<%- include("../Componen/footer") %>
+<%- include("../../Componen/footer") %>

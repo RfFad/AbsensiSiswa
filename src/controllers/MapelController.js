@@ -6,7 +6,7 @@ const getDataMapel = async (req, res) => {
             error: req.flash('error')
         };
         const row = await getMapel();
-        res.render("admin/mapel", { row, index: 1, messages });  // Removed the leading slash
+        res.render("admin/mapel/mapel", { row, index: 1, messages });  // Removed the leading slash
     } catch (error) {
         res.status(420).json(error);
     }
@@ -19,7 +19,7 @@ const getPageMapel = async (req, res) => {
             success: req.flash('success'),
             error: req.flash('error')
         };
-        res.render("admin/crud_mapel", { messages });
+        res.render("admin/mapel/crud_mapel", { messages });
     } catch (error) {
         console.error("Error rendering the page:", error);
         res.status(500).send("Server Error");
@@ -52,7 +52,7 @@ const getUpdatePageMapel = async (req, res) => {
             success: req.flash('success'),
             error: req.flash('error')
         }
-        res.render('admin/edit_mapel', {Mapel, messages})
+        res.render('admin/mapel/edit_mapel', {Mapel, messages})
     } catch (error) {
         console.error("Error rendering the update page:", error);
         res.status(400).send("Server Error");

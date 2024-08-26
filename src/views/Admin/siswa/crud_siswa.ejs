@@ -1,6 +1,6 @@
-<%- include("../Componen/header") %>
-<title>Admin | Create Guru</title>
-<%- include("../Componen/sideNavbar") %>
+<%- include("../../Componen/header") %>
+<title>Admin | Create siswa</title>
+<%- include("../../Componen/sideNavbar") %>
 
 
 <div class="content-wrapper">
@@ -37,33 +37,43 @@
                 </div>
             <% } %>
            
-              <form action="/admin/insert_guru" method="post">
+              <form action="/admin/insert_siswa" method="post">
                 <div class="row">
                   <div class="col-md-6">
-                    <label for="Nip">Nip</label>
+                    <label for="nis">nis</label>
                 <div class="form-group mb-3">
-                    <input type="text" class="form-control" name="nip" placeholder="Masukkan nip" required>
+                    <input type="text" class="form-control" name="nis" placeholder="Masukkan nis" required>
                 </div>
-                    <label for="Nama_guru">Nama Guru</label>
+                    <label for="Nama_siswa">Nama siswa</label>
                 <div class="form-group mb-3">
-                    <input type="text" class="form-control" name="nama_guru" placeholder="Masukkan nama guru" required>
+                    <input type="text" class="form-control" name="nama_siswa" placeholder="Masukkan nama siswa" required>
                 </div>
-                    <label for="Jabatan">Jabatan</label>
-                <div class="form-group mb-3">
-                    <input type="text" class="form-control" name="jabatan" placeholder="Masukkan jabatan" required>
+                <div class="form-group">
+                 <label for="kelas"> KELAS </label>
+                 <select class="form-control" name="id_kelas" id="">
+                   <% row.forEach ((kelas )=> { %>
+                  <option value="<%= kelas.id_kelas %>"><%= kelas.nama_kelas %></option>
+                  <% }) %>
+                 </select>
+      
                 </div>
-                  </div>
-                  <div class="col-md-6">
-                    <label for="alamat">alamat</label>
-                <div class="form-group mb-3">
-                    <input type="text" class="form-control" name="alamat" placeholder="Masukkan alamat" required>
-                </div>
-                <label for="Kelas">Jenis Kelamin</label>
+                <label for="gender">Jenis Kelamin</label>
                 <div class="form-group mb-3">
                     <select class="form-control" name="jk">
                       <option value="laki-laki">laki-laki</option>
                       <option value="perempuan">Perempuan</option>
                       </select>
+                </div>
+                  </div>
+                  <div class="col-md-6">
+                
+                <label for="Nama Wali">Nama Wali</label>
+                <div class="form-group mb-3">
+                    <input type="text" class="form-control" name="nama_wali" placeholder="Masukkan Nama Wali" required>
+                </div>
+                <label for="alamat">Alamat</label>
+                <div class="form-group mb-3">
+                    <input type="text" class="form-control" name="alamat" placeholder="Masukkan alamat" required>
                 </div>
                 <label for="password">Password</label>
                 <div class="form-group mb-3">
@@ -84,4 +94,4 @@
   
 </div>
 
-<%- include("../Componen/footer") %>
+<%- include("../../Componen/footer") %>

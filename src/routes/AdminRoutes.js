@@ -12,6 +12,7 @@ const {getInsertHari, getPageHari, getDataHari, getDeleteHari, getUpdateHari, ge
 // const {getInsertHari, getPageHari} = require ('../controllers/HariController');
 const { getInsertSiswa, getPageSiswa, getSiswaData, getUpdatePageSiswa, updateSiswa, getDeleteSiswa } = require('../controllers/SiswaController') 
 const {getUpdatePageSekolah, updateSekolahData, getDataSekolah} = require('../controllers/SekolahController')
+const jadwal = require ('../controllers/JadwalController')
 
 //router
 router.get('/', checkRole('admin'), authHeader, getCountData)
@@ -60,6 +61,17 @@ router.post('/siswa/delete/:id_siswa', getDeleteSiswa);
 router.get('/sekolah', getDataSekolah)
 router.get('/sekolah/edit/:id_sekolah', getUpdatePageSekolah);
 router.post('/sekolah/update/:id_sekolah', updateSekolahData);
+//jadwal
+router.get('/jadwal', jadwal.getPageInsert);
+router.post('/insert_jadwal', jadwal.getInsertJadwal)
+router.get('/jadwal/senin', jadwal.senin)
+router.get('/jadwal/selasa', jadwal.selasa)
+router.get('/jadwal/rabu', jadwal.rabu)
+router.get('/jadwal/kamis', jadwal.kamis)
+router.get('/jadwal/jumat', jadwal.jumat)
+router.get('/jadwal/edit/:idj', jadwal.getUpdatePage);
+router.post('/jadwal/update/:idj', jadwal.getUpdateInsert);
+router.post('/jadwal/delete/:idj', jadwal.getDelete)
 
 
 module.exports = router;

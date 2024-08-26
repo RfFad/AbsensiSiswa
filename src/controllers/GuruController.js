@@ -8,7 +8,7 @@ const getGuruData = async (req, res) => {
             error: req.flash('error')
         };
         const row = await getGuru();
-        res.render("admin/guru", { row, index: 1, messages });
+        res.render("admin/guru/guru", { row, index: 1, messages });
     } catch (error) {
         res.status(500).json(error);
     }
@@ -20,7 +20,7 @@ const getPageGuru = async (req, res) => {
             success: req.flash('success'),
             error: req.flash('error')
         };
-        res.render("admin/crud_guru", { messages });
+        res.render("admin/guru/crud_guru", { messages });
     } catch (error) {
         console.error("Error rendering the page:", error);
         res.status(400).send("Server Error");
@@ -52,7 +52,7 @@ const getUpdatePage = async (req, res) => {
             success: req.flash('success'),
             error: req.flash('error')
         };
-        res.render("admin/edit_guru", { guru, messages });
+        res.render("admin/guru/edit_guru", { guru, messages });
     } catch (error) {
         console.error("Error rendering the update page:", error);
         res.status(400).send("Server Error");

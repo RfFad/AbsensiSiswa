@@ -1,0 +1,120 @@
+<%- include("../../Componen/header") %>
+<title>Admin | Data Kelas</title>
+<%- include("../../Componen/sideNavbar") %>
+
+<div class="content-wrapper">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Data Kelas</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">DataTables</li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <ul class="nav nav-tabs">
+              <li role="presentation" class="active "><a href="#">Senin</a></li>
+              <li role="presentation" class="ml-2"><a href="#">Selasa</a></li>
+              <li role="presentation"><a href="#">Rabu</a></li>
+              <li role="presentation"><a href="media.php?module=kamis">Kamis</a></li>
+              <li role="presentation"><a href="media.php?module=jumat">Jum'at</a></li>
+            </ul>
+            <h3 class="card-title">DataTable with minimal features & hover style</h3>
+          </div>
+          <!-- /.card-header -->
+
+          <div class="card-body">
+            <div class="d-flex flex-column flex-md-row justify-content-between mb-2">
+              <a href="/admin/kelas" class="btn btn-success mb-2 mb-md-0" style="height: 35px;">Tambahkan Data +</a>
+              <div class="d-flex justify-content-end">
+                <input type="text" name="table_search" class="form-control" style="width: 160px;">
+                <button type="submit" class="btn btn-secondary ml-2" style="height: 35px;">Search</button>
+              </div>
+            </div>
+            <% if (messages.success) { %>
+              <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <%= messages.success %>
+              </div>
+            <% } %>
+            <% if (messages.error) { %>
+              <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <%= messages.error %>
+              </div>
+            <% } %>
+            <div class="table-responsive">
+              <table id="example2" class="table table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th style="width: 1%;">No</th>
+                    <th>Nama Kelas</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                  <p id="no-results" style="display: none; text-align: center; padding: 10px; font-size: 30px; font-weight: bold;">Data tidak ada</p>
+                  <% row.forEach((kelas, index) => { %>
+                    <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= kelas.nama_kelas %></td>
+                    <td>
+                      <a href="/admin/kelas/edit/<%= kelas.id_kelas %>" class="btn btn-warning"><i class="fas fa-edit">Edit</i></a>
+                      <form action="/admin/kelas/delete/<%= kelas.id_kelas %>?_method=DELETE" method="post" style="display:inline;" class="delete-form">
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete(this)"><i class='fas fa-trash-alt'></i>Hapus</button>
+                      </form>                    
+                    </td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+                
+              </table>
+              <p id="no-data" style="display: none;">Data tidak ditemukan</p>
+            </div>
+            <!-- /.table-responsive -->
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function confirmDelete(button) {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Anda tidak akan dapat mengembalikan data ini!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit the form if confirmed
+                button.closest('form').submit();
+            }
+        });
+    }
+</script>
+<%- include("../../Componen/footer") %>
