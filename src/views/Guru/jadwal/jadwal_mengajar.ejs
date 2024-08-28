@@ -1,0 +1,81 @@
+<%- include("../../Componen/header") %>
+<title>Admin | Data Jadwal</title>
+<%- include("../../Componen/sideNavbarGuru") %>
+
+<div class="content-wrapper">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Data Jadwal</h1>
+      </div>
+      
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            Jadwal Mengajar Guru
+          </div>
+          <!-- /.card-header -->
+          
+          <div class="card-body">
+            <div class="d-flex flex-column flex-md-row justify-content-between mb-2">
+              
+              <div class="d-flex justify-content-end">
+                  <button type="submit" class="btn btn-secondary mr-2" style="height: 35px;">Search</button>
+                <input type="text" class="form-control" name="table_search" style="width: 160px;">
+              </div>
+            </div>
+           
+            <div class="table-responsive">
+              <table id="example2" class="table table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th style="width: 1%;">No</th>
+                    <th>HARI</th>
+                    <th>KELAS</th>
+                    <th>MAPEL</th>
+                    <th>JAM PELAJARAN</th>
+                    <th>Action</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <p id="no-results" style="display: none; text-align: center; padding: 10px; font-size: 30px; font-weight: bold;">Data tidak ada</p>
+                  <% row.forEach((jadwal, index) => { %>
+                  <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= jadwal.hari %></td>
+                    <td><%= jadwal.nama_kelas %></td>
+                    <td><%= jadwal.nama_mp %></td>
+                    <td><%= jadwal.jam_mulai.slice(0, 5) %> - <%= jadwal.jam_selesai.slice(0, 5) %></td>
+                   
+                    <td>
+                      <a href="#" class="btn btn-info"><i class="fas fa-edit">Absen</i></a>  
+                      <a href="#" class="btn btn-warning"><i class="fas fa-edit">Rekap Absen</i></a>  
+                    </td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+                
+              </table>
+            </div>
+            <!-- /.table-responsive -->
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<%- include("../../Componen/footer") %>

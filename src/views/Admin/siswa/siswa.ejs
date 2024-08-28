@@ -72,7 +72,7 @@
                     <td><%= siswa.nama_wali %></td>
                     <td><%= siswa.alamat %></td>
                     <td>
-                      <a href="/admin/siswa/edit/<%= siswa.id_siswa %>" class="btn btn-warning btn-sm"><i class="fas fa-edit">Edit</i></a>
+                      <a href="/admin/siswa/edit/<%= siswa.id_siswa %>" class="btn btn-warning"><i class="fas fa-edit">Edit</i></a>
                       <form action="/admin/siswa/delete/<%= siswa.id_siswa%>?_method=DELETE" method="post" style="display:inline;" class="delete-form">
                         <button type="button" class="btn btn-danger" onclick="confirmDelete(this)"><i class='fas fa-trash-alt'></i>Hapus</button>
                       </form>     

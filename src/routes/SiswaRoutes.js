@@ -3,7 +3,7 @@ const router = express.Router();
 const { checkRole } = require('../controllers/AuthController');
 const verifyUser = require('../configs/verify');
 const {authHeader} = require('../configs/jwtMiddleware');  // assuming authHeader is another middleware
-const {profile} = require('../controllers/ProfileController')
+
 
 router.get('/', checkRole('siswa'), authHeader, async(req, res)=>{
     try {
