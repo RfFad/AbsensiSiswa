@@ -1,12 +1,12 @@
 <%- include("../../Componen/header") %>
-<title>Admin | Data Siswa</title>
+<title>Admin | Data Riwayat</title>
 <%- include("../../Componen/sideNavbar") %>
 
 <div class="content-wrapper">
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1>Data Siswa</h1>
+        <h1>Data Riwayat</h1>
       </div>
       
     </div>
@@ -26,7 +26,7 @@
           
           <div class="card-body">
             <div class="d-flex flex-column flex-md-row justify-content-between mb-2">
-              <a href="/admin/siswa" class="btn btn-success mb-2 mb-md-0" style="height: 35px;">Tambahkan Data +</a>
+              <a href="/admin/riwayat" class="btn btn-success mb-2 mb-md-0" style="height: 35px;">Tambahkan Data +</a>
               <div class="d-flex justify-content-end">
                 <input type="text" class="form-control" name="table_search" style="width: 160px;">
                 <button type="submit" class="btn btn-secondary ml-2" style="height: 35px;">Search</button>
@@ -50,30 +50,23 @@
                 <thead>
                   <tr>
                     <th style="width: 1%;">No</th>
-                    <th>Nis</th>
                     <th>Nama Siswa</th>
-                    <th>Kelas</th>
-                    <th>Jk</th>
-                    <th>Nama Wali</th>
-                    <th>Alamat</th>
-                    <th>Action</th>
+                    <th>Prestasi</th>
+                    <th>Pelanggaran</th>
 
                   </tr>
                 </thead>
                 <tbody>
                   <p id="no-results" style="display: none; text-align: center; padding: 10px; font-size: 30px; font-weight: bold;">Data tidak ada</p>
-                  <% row.forEach((siswa, index) => { %>
+                  <% row.forEach((riwayat, index) => { %>
                   <tr>
                     <td><%= index + 1 %></td>
-                    <td><%= siswa.nis %></td>
-                    <td><%= siswa.nama_siswa %></td>
-                    <td><%= siswa.nama_kelas %></td>
-                    <td><%= siswa.jk %></td>
-                    <td><%= siswa.nama_wali %></td>
-                    <td><%= siswa.alamat %></td>
+                    <td><%= riwayat.nama_siswa %></td>
+                    <td><%= riwayat.prestasi %></td>
+                    <td><%= riwayat.pelanggaran %></td>
                     <td>
-                      <a href="/admin/siswa/edit/<%= siswa.id_siswa %>" class="btn btn-warning btn-sm"><i class="fas fa-edit">Edit</i></a>
-                      <form action="/admin/siswa/delete/<%= siswa.id_siswa%>?_method=DELETE" method="post" style="display:inline;" class="delete-form">
+                      <a href="/admin/riwayat/edit/<%= riwayat.id_riwayat %>" class="btn btn-warning btn-sm"><i class="fas fa-edit">Edit</i></a>
+                      <form action="/admin/riwayat/delete/<%= riwayat.id_riwayat%>?_method=DELETE" method="post" style="display:inline;" class="delete-form">
                         <button type="button" class="btn btn-danger" onclick="confirmDelete(this)"><i class='fas fa-trash-alt'></i>Hapus</button>
                       </form>     
                     </td>
