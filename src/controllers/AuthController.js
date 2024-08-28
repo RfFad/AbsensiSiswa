@@ -105,7 +105,7 @@ module.exports = {
         
                                                 if (results.length > 0) {
                                                     const tokenPayload = {
-                                                        username: results[0].nama_guru,
+                                                        username: results[0].nip,
                                                         role: 'guru'
                                                     };
         

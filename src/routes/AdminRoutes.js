@@ -4,15 +4,15 @@ const { checkRole } = require('../controllers/AuthController');
 const verifyUser = require('../configs/verify');
 const {authHeader} = require('../configs/jwtMiddleware')  // assuming authHeader is another middleware
 // const {getInsertSiswa, pageInsert} = require('../controllers/AdminCrudController')
-const {getPageKelas, getInsertKelas, getDataKelas, getUpdateKelas, getUpdatePageKelas, getDeleteKelas} = require('../controllers/KelasController')
-const {getInsertGuru, getPageGuru, getGuruData, getUpdatePage, updateGuru, getDeleteGuru} = require ('../controllers/GuruController')
-const{getCountData} = require ('../controllers/CountAdminController');
-const {getInsertMapel, getDataMapel, getPageMapel, getUpdateMapel, getUpdatePageMapel, getDeleteMapel} = require('../controllers/MapelController')
-const {getInsertHari, getPageHari, getDataHari, getDeleteHari, getUpdateHari, getUpdatePageHari} = require ('../controllers/HariController');
-// const {getInsertHari, getPageHari} = require ('../controllers/HariController');
-const { getInsertSiswa, getPageSiswa, getSiswaData, getUpdatePageSiswa, updateSiswa, getDeleteSiswa } = require('../controllers/SiswaController') 
-const {getUpdatePageSekolah, updateSekolahData, getDataSekolah} = require('../controllers/SekolahController')
-const jadwal = require ('../controllers/JadwalController')
+const {getPageKelas, getInsertKelas, getDataKelas, getUpdateKelas, getUpdatePageKelas, getDeleteKelas} = require('../controllers/admin/KelasController')
+const {getInsertGuru, getPageGuru, getGuruData, getUpdatePage, updateGuru, getDeleteGuru} = require ('../controllers/admin/GuruController')
+const{getCountData} = require ('../controllers/admin/CountAdminController');
+const {getInsertMapel, getDataMapel, getPageMapel, getUpdateMapel, getUpdatePageMapel, getDeleteMapel} = require('../controllers/admin/MapelController')
+const {getInsertHari, getPageHari, getDataHari, getDeleteHari, getUpdateHari, getUpdatePageHari} = require ('../controllers/admin/HariController');
+// const {getInsertHari, getPageHari} = require ('../controllers/admin/HariController');
+const { getInsertSiswa, getPageSiswa, getSiswaData, getUpdatePageSiswa, updateSiswa, getDeleteSiswa } = require('../controllers/admin/SiswaController') 
+const {getUpdatePageSekolah, updateSekolahData, getDataSekolah} = require('../controllers/admin/SekolahController')
+const jadwal = require ('../controllers/admin/JadwalController')
 
 //router
 router.get('/', checkRole('admin'), authHeader, getCountData)

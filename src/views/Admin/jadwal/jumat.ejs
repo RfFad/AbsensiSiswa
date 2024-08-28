@@ -90,7 +90,7 @@
                     <td><%= jadwal.jam_mulai.slice(0, 5) %> - <%= jadwal.jam_selesai.slice(0, 5) %></td>
                    
                     <td>
-                      <a href="/admin/jadwal/edit/<%= jadwal.idj %>" class="btn btn-warning btn-sm"><i class="fas fa-edit">Edit</i></a>
+                      <a href="/admin/jadwal/edit/<%= jadwal.idj %>" class="btn btn-warning"><i class="fas fa-edit">Edit</i></a>
                       <form action="/admin/jadwal/delete/<%= jadwal.idj %>?_method=DELETE" method="post" style="display:inline;" class="delete-form">
                         <button type="button" class="btn btn-danger" onclick="confirmDelete(this)"><i class='fas fa-trash-alt'></i>Hapus</button>
                       </form>     
