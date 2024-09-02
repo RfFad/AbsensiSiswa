@@ -14,7 +14,7 @@
           <img src="/waifu_Aing.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block"><%= rows.nama_guru %> <%= rows.jabatan %></a>
+          <a href="#" class="d-block" id="profile-link"><%= rows.nama_guru %> <%= rows.jabatan %></a>
         </div>
       </div>
 
@@ -54,6 +54,116 @@
        </ul>
       </nav>
       <!-- /.sidebar-menu -->
+
+        <!-- Profile Modal -->
+<div id="profile-modal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Edit Profile</h2>
+    <form id="profile-form" enctype="multipart/form-data" method="POST" action="/update-profile">
+      <div class="form-group">
+        <label for="name">Nama:</label>
+        <input type="text" id="name" name="nama_guru" value="<%= rows.nama_guru %>" required>
+      </div>
+      <div class="form-group">
+        <label for="gender">Gender:</label>
+        <select id="gender" name="jk" required>
+          <option value="Male" <%= rows.gender === 'Male' ? 'selected' : '' %>>Male</option>
+          <option value="Female" <%= rows.gender === 'Female' ? 'selected' : '' %>>Female</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="position">Jabatan:</label>
+        <input type="text" id="position" name="jabatan" value="<%= rows.jabatan %>" required>
+      </div>
+      <div class="form-group">
+        <label for="address">Alamat:</label>
+        <textarea id="address" name="alamat" required><%= rows.alamat %></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+  </div>
+</div>
+
+  <style>
+    .modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input[type="text"],
+.form-group select,
+.form-group textarea,
+.form-group input[type="file"] {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+  // Get the modal
+  var modal = document.getElementById("profile-modal");
+
+  // Get the link that opens the modal
+  var link = document.getElementById("profile-link");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // When the user clicks the link, open the modal
+  link.onclick = function() {
+    modal.style.display = "block";
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+});
+
+  </script>
     </div>
     <!-- /.sidebar -->
   </aside>
