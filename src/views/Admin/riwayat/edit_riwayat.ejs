@@ -22,36 +22,56 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <% if (messages.success) { %>
+              <% if (messages && messages.success) { %>
                 <div class="alert alert-success">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                   <%= messages.success %>
                 </div>
               <% } %>
-              <% if (messages.error) { %>
+              <% if (messages && messages.error) { %>
                 <div class="alert alert-danger">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                   <%= messages.error %>
                 </div>
               <% } %>
-           
-              <form action="/admin/siswa/update/<%= siswa.id_siswa %>" method="post">
+
+              <form action="/admin/riwayat/update/<%= riwayat.id_riwayat %>" method="post">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group mb-3">
+                      <label for="kelas">Kelas</label>
+                      <select class="form-control" name="id_kelas" id="kelas" required>
+                        <option value="" disabled>Pilih Kelas</option>
+                        <% kelas.forEach((row) => { %>
+                          <option value="<%= row.id_kelas %>" <%= row.id_kelas === riwayat.id_kelas ? 'selected' : '' %>>
+                            <%= row.nama_kelas %>
+                          </option>
+                        <% }) %>
+                      </select>
+                    </div>
+                    <div class="form-group mb-3">
                       <label for="nama_siswa">Nama Siswa</label>
-                      <input type="text" class="form-control" name="nama_siswa" placeholder="Masukkan Nama Siswa" value="<%= siswa.nama_siswa %>" required>
+                      <select class="form-control" name="id_siswa" id="nama_siswa" required>
+                        <option value="<%= riwayat.id_siswa %>"  <%= riwayat.id_siswa === siswa.id_siswa ? 'selected' : '' %>><%= riwayat.nama_siswa %></option>
+                        <!-- Options will be dynamically loaded here -->
+                      </select>
                     </div>
                     <div class="form-group mb-3">
                       <label for="prestasi">Prestasi</label>
-                      <input type="text" class="form-control" name="prestasi" placeholder="Masukkan Prestasi" value="<%= siswa.prestasi %>" required>
+                      <input type="text" class="form-control" name="prestasi" placeholder="Masukkan Prestasi" value="<%= riwayat.prestasi %>" required>
                     </div>
+                  
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group mb-3">
                       <label for="pelanggaran">Pelanggaran</label>
-                      <input type="text" class="form-control" name="pelanggaran" placeholder="Masukkan pelanggaran" value="<%= siswa.pelanggaran %>" required>
+                      <input type="text" class="form-control" name="pelanggaran" placeholder="Masukkan Pelanggaran" value="<%= riwayat.pelanggaran %>" required>
+                    </div>
+                    <div class="form-group mb-3">
+                      <label for="tanggal">Tanggal</label>                            
+                      <input type="date" class="form-control" name="tanggal" value="<%=new Date(riwayat.tanggal).toISOString().split('T')[0] %>" required>
                     </div>
 
-                  <div class="col-md-6">
                   </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Update Data</button>
@@ -67,3 +87,41 @@
 </div>
 
 <%- include("../../Componen/footer") %>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Load students when the page loads based on the current class
+    const initialKelasId = $('#kelas').val();
+    if (initialKelasId) {
+      loadSiswa(initialKelasId, '<%= riwayat.id_siswa %>');
+    }
+
+    // Update students when a different class is selected
+    $('#kelas').change(function() {
+      const kelasId = $(this).val();
+      if (kelasId) {
+        loadSiswa(kelasId);
+      } else {
+        $('#nama_siswa').empty().append('<option value="" disabled selected>Pilih Kelas Terlebih Dahulu</option>');
+      }
+    });
+
+    function loadSiswa(kelasId, selectedSiswaId = null) {
+      $.ajax({
+        url: '/admin/getSiswaByKelas/' + kelasId,
+        type: 'GET',
+        success: function(data) {
+          $('#nama_siswa').empty().append('<option value="" disabled selected>Pilih Nama Siswa</option>');
+          data.forEach(function(siswa) {
+            const selected = selectedSiswaId && selectedSiswaId === siswa.id_siswa ? 'selected' : '';
+            $('#nama_siswa').append('<option value="' + siswa.id_siswa + '" ' + selected + '>' + siswa.nama_siswa + '</option>');
+          });
+        },
+        error: function(err) {
+          console.error(err);
+        }
+      });
+    }
+  });
+</script>

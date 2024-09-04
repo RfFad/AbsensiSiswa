@@ -34,22 +34,22 @@
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Dashboard Link -->
         <li class="nav-item">
-          <a href="/admin" class="nav-link">
-            <i class="nav-icon fas fa-copy"></i>
+          <a href="/admin" class="nav-link <%= currentPath === '/admin' ? 'active' : '' %>">
+            <i class="nav-icon  fas fa-tachometer-alt"></i>
             <p>Dashboard</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/admin/sekolah" class="nav-link">
-            <i class="nav-icon fas fa-copy"></i>
+          <a href="/admin/sekolah" class="nav-link <%= currentPath === '/admin/sekolah' ? 'active' : '' %>">
+            <i class="nav-icon fas fa-school"></i>
             <p>Sekolah</p>
           </a>
         </li>
 
         <!-- Siswa Section -->
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-copy"></i>
+        <li class="nav-item  <%=(currentPath === '/admin/data_siswa' || currentPath === '/admin/siswa') ? 'menu-open' : ''%>">
+          <a href="#" class="nav-link  <%=(currentPath === '/admin/data_siswa' || currentPath === '/admin/siswa' || currentPath === '/admin/siswa/edit/:id_siswa') ? 'active' : ''%>">
+            <i class="nav-icon fas fa-user"></i>
             <p>
               Siswa
               <i class="fas fa-angle-left right"></i>
@@ -57,13 +57,13 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="/admin/data_siswa" class="nav-link">
+              <a href="/admin/data_siswa" class="nav-link <%= currentPath === '/admin/data_siswa' ? 'active' : '' %>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Data Siswa</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="/admin/siswa" class="nav-link">
+              <a href="/admin/siswa" class="nav-link <%= currentPath === '/admin/siswa' ? 'active' : '' %>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Insert Siswa</p>
               </a>
@@ -71,9 +71,9 @@
           </ul>
         </li>
         <!-- Riwayat Section -->
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-copy"></i>
+        <li class="nav-item <%=(currentPath === '/admin/data_riwayat' || currentPath === '/admin/riwayat') ? 'menu-open' : ''%>">
+          <a href="#" class="nav-link <%= (currentPath === '/admin/data_riwayat' || currentPath === '/admin/riwayat' || currentPath === '/admin/riwayat/edit/:id_riwayat') ? 'active' : '' %>">
+            <i class="nav-icon fas fa-clipboard"></i>
             <p>
               Riwayat
               <i class="fas fa-angle-left right"></i>
@@ -81,13 +81,13 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="/admin/data_riwayat" class="nav-link">
+              <a href="/admin/data_riwayat" class="nav-link <%= currentPath === '/admin/data_riwayat' ? 'active' : '' %>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Data Riwayat</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="/admin/riwayat" class="nav-link">
+              <a href="/admin/riwayat" class="nav-link <%= currentPath === '/admin/riwayat' ? 'active' : '' %>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Insert Riwayat</p>
               </a>
@@ -95,9 +95,9 @@
           </ul>
         </li>
       <!-- Guru Section -->
-      <li class="nav-item">
-        <a href="#" class="nav-link">
-          <i class="nav-icon fas fa-copy"></i>
+      <li class="nav-item <%= currentPath === '/admin/data_guru' ? 'menu-open' : ''%><%= currentPath === '/admin/guru' ? 'menu-open' : ''%>">
+        <a href="#" class="nav-link <%= (currentPath === '/admin/guru' || currentPath === '/admin/data_guru' || currentPath === '/admin/guru/edit/:id_guru') ? 'active' : '' %>">
+          <i class="nav-icon fas fa-user"></i>
           <p>
             Guru
             <i class="fas fa-angle-left right"></i>
@@ -105,13 +105,13 @@
         </a>
         <ul class="nav nav-treeview">
           <li class="nav-item">
-            <a href="/admin/data_guru" class="nav-link">
+            <a href="/admin/data_guru" class="nav-link <%= currentPath === '/admin/data_guru' ? 'active' : '' %>">
               <i class="far fa-circle nav-icon"></i>
               <p>Data Guru</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="/admin/guru" class="nav-link">
+            <a href="/admin/guru" class="nav-link <%= currentPath === '/admin/guru' ? 'active' : '' %>">
               <i class="far fa-circle nav-icon"></i>
               <p>Insert Guru</p>
             </a>
@@ -119,9 +119,9 @@
         </ul>
       </li>
       <!-- Jadwal Section -->
-      <li class="nav-item">
-        <a href="#" class="nav-link">
-          <i class="nav-icon fas fa-copy"></i>
+      <li class="nav-item <%= (currentPath === '/admin/data_jadwal' || currentPath === '/admin/jadwal') ? 'menu-open' : '' %>">
+        <a href="#" class="nav-link <%=( currentPath === '/admin/data_jadwal' || currentPath === '/admin/jadwal' || currentPath === '/admin/jadwal/edit/:idj') ? 'active' : '' %>">
+          <i class="nav-icon far fa-calendar-alt"></i>
           <p>
             Jadwal
             <i class="fas fa-angle-left right"></i>
@@ -129,13 +129,13 @@
         </a>
         <ul class="nav nav-treeview">
           <li class="nav-item">
-            <a href="/admin/jadwal/senin" class="nav-link">
+            <a href="/admin/jadwal/senin" class="nav-link <%= currentPath === '/admin/data_jadwal' ? 'active' : '' %>">
               <i class="far fa-circle nav-icon"></i>
               <p>Data Jadwal</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="/admin/jadwal" class="nav-link">
+            <a href="/admin/jadwal" class="nav-link <%= currentPath === '/admin/jadwal' ? 'active' : '' %>">
               <i class="far fa-circle nav-icon"></i>
               <p>Insert Jadwal</p>
             </a>
@@ -143,9 +143,9 @@
         </ul>
       </li>
         <!-- Kelas Section -->
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-copy"></i>
+        <li class="nav-item <%= (currentPath === '/admin/data_kelas' || currentPath === '/admin/kelas') ? 'menu-open' : '' %>">
+          <a href="#" class="nav-link <%= (currentPath === '/admin/data_kelas' || currentPath === '/admin/kelas' || currentPath === '/admin/kelas/edit/:id_kelas') ? 'active' : '' %>">
+            <i class="nav-icon fas fa-th"></i>
             <p>
               Kelas
               <i class="fas fa-angle-left right"></i>
@@ -153,13 +153,13 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="/admin/data_kelas" class="nav-link">
+              <a href="/admin/data_kelas" class="nav-link <%= currentPath === '/admin/data_kelas' ? 'active' : '' %>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Data Kelas</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="/admin/kelas" class="nav-link">
+              <a href="/admin/kelas" class="nav-link <%= currentPath === '/admin/kelas' ? 'active' : '' %>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Insert Kelas</p>
               </a>
@@ -195,9 +195,9 @@
         </li>
 
         <!-- Mapel Section -->
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-copy"></i>
+        <li class="nav-item <%= (currentPath === '/admin/data_mapel' || currentPath ==='/admin/mapel' ) ? 'menu-open' : ''%>">
+          <a href="#" class="nav-link <%= (currentPath === '/admin/data_mapel' || currentPath ==='/admin/mapel' || currentPath === '/admin/mapel/edit/:idm') ? 'active' : ''%>">
+            <i class="nav-icon fas fa-book"></i>
             <p>
               Mapel
               <i class="fas fa-angle-left right"></i>
@@ -205,13 +205,13 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="/admin/data_mapel" class="nav-link">
+              <a href="/admin/data_mapel" class="nav-link <%= currentPath === '/admin/data_mapel' ? 'active' : '' %>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Data Mapel</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="/admin/mapel/create" class="nav-link">
+              <a href="/admin/mapel/create" class="nav-link <%= currentPath === '/admin/mapel' ? 'active' : '' %>">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Insert Mapel</p>
               </a>

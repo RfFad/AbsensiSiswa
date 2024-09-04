@@ -15,7 +15,7 @@ const getSiswaData = async (req, res) => {
       error: req.flash("error"),
     };
     const row = await getSiswa();
-    res.render("admin/siswa/siswa", { row, index: 1, messages });
+    res.render("admin/siswa/siswa", { row, index: 1, messages, currentPath : '/admin/data_siswa' });
   } catch (error) {
     res.status(500).json(error);
   }
@@ -28,7 +28,7 @@ const getPageSiswa = async (req, res) => {
       success: req.flash("success"),
       error: req.flash("error"),
     };
-    res.render("admin/siswa/crud_siswa", { messages, row });
+    res.render("admin/siswa/crud_siswa", { messages, row, currentPath : '/admin/siswa' });
   } catch (error) {
     console.error("Error rendering the page:", error);
     res.status(400).send("Server Error");
@@ -70,7 +70,7 @@ const getUpdatePageSiswa = async (req, res) => {
       success: req.flash("success"),
       error: req.flash("error"),
     };
-    res.render("admin/siswa/edit_siswa", { siswa, messages, row });
+    res.render("admin/siswa/edit_siswa", { siswa, messages, row, currentPath : '/admin/siswa/edit/:id_siswa' });
   } catch (error) {
     console.error("Error rendering the update page:", error);
     res.status(400).send("Server Error");

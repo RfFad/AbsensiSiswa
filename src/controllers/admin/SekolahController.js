@@ -11,7 +11,7 @@ const getDataSekolah = async (req, res) => {
       error: req.flash("error"),
     };
     const row = await getSekolah();
-    res.render("admin/sekolah", { row, index: 1, messages });
+    res.render("admin/sekolah", { row, index: 1, messages, currentPath : '/admin/sekolah' });
   } catch (error) {
     res.status(420).json({ error: error.message });
   }
@@ -21,7 +21,7 @@ const getUpdatePageSekolah = async (req, res) => {
   try {
     const id_sekolah = req.params.id_sekolah;
     const sekolah = await getSekolahById(id_sekolah);
-    res.render("admin/edit_sekolah", { sekolah });
+    res.render("admin/edit_sekolah", { sekolah, currentPath:'' });
   } catch (error) {
     res.status(404).send(error.message);
   }

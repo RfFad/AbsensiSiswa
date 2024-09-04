@@ -3,7 +3,7 @@ const connection = require('../configs/Databases');
 const getRiwayat = async () => {
     return new Promise((resolve, reject) => {
         connection.query(`
-          SELECT riwayat.*, siswa.nama_siswa as nama_siswa FROM riwayat join siswa on siswa.id_siswa = siswa.id_siswa order by riwayat.id_riwayat 
+          SELECT riwayat.*, siswa.nama_siswa as nama_siswa FROM riwayat join siswa on riwayat.id_siswa = siswa.id_siswa order by riwayat.id_riwayat 
         `, (error, result) => {
             if (error) {
                 return reject(error);
@@ -29,30 +29,22 @@ const getRiwayatById = async (id_riwayat) => {
     });
 }
 
-const InsertRiwayat = async (id_siswa, prestasi, pelanggaran) => {
+const InsertRiwayat = async (id_siswa, id_kelas, prestasi, pelanggaran, tanggal) => {
     return new Promise((resolve, reject) => {
-        connection.query(`
-            SELECT * FROM riwayat WHERE id_riwayat = ?
-        `, [id_riwayat], (error, results) => {
-            if (error) return reject(error);
-
-            if (results.length > 0) {
-                return reject(new Error('ID sudah digunakan, tidak boleh menambahkan data ID yang sama'));
-            }
-           
             // Insert data
             connection.query(`
-                INSERT INTO riwayat (id_siswa, prestasi, pelanggaran) VALUES (?, ?, ?)
-            `, [id_siswa, prestasi, pelanggaran], (insertError, insertResults) => {
+                INSERT INTO riwayat (id_siswa, id_kelas, prestasi, pelanggaran, tanggal) VALUES (?, ?, ?, ?, ?)
+            `, [id_siswa, id_kelas, prestasi, pelanggaran, tanggal], (insertError, insertResults) => {
                 if (insertError) return reject(insertError);
                 resolve(insertResults);
             });
-        });
+        ;
     });
 }
 
-const UpdateRiwayat = async (id_riwayat, id_siswa, prestasi, pelanggaran) => {
+const UpdateRiwayat = async (id_riwayat, id_siswa, id_kelas, prestasi, pelanggaran, tanggal) => {
     return new Promise((resolve, reject) => {
+        // Check if the record exists
         connection.query(`
             SELECT * FROM riwayat WHERE id_riwayat = ?
         `, [id_riwayat], (error, results) => {
@@ -62,18 +54,19 @@ const UpdateRiwayat = async (id_riwayat, id_siswa, prestasi, pelanggaran) => {
                 return reject(new Error('Data siswa tidak ditemukan'));
             }
 
-            // Update data
+            // Update the record
             connection.query(`
                 UPDATE riwayat 
-                SET id_siswa = ?, prestasi = ?, pelanggaran = ?
+                SET id_siswa = ?, id_kelas = ?, prestasi = ?, pelanggaran = ?, tanggal = ?
                 WHERE id_riwayat = ?
-            `, [id_siswa, prestasi, pelanggaran, id_riwayat], (updateError, updateResults) => {
+            `, [id_siswa, id_kelas, prestasi, pelanggaran, tanggal, id_riwayat], (updateError, updateResults) => {
                 if (updateError) return reject(updateError);
                 resolve(updateResults);
             });
         });
     });
 }
+
 const DeleteRiwayat = async (id_riwayat) => {
     return new Promise ((resolve, reject) => {
        

@@ -12,7 +12,7 @@ const getDataKelas = async (req, res) => {
       error: req.flash("error"),
     };
     const row = await getKelas();
-    res.render("admin/kelas/kelas", { row, index: 1, messages }); // Removed the leading slash
+    res.render("admin/kelas/kelas", { row, index: 1, messages, currentPath : '/admin/data_kelas' }); // Removed the leading slash
   } catch (error) {
     res.status(420).json(error);
   }
@@ -24,7 +24,7 @@ const getPageKelas = async (req, res) => {
       success: req.flash("success"),
       error: req.flash("error"),
     };
-    res.render("admin/kelas/crud_kelas", { messages });
+    res.render("admin/kelas/crud_kelas", { messages, currentPath : '/admin/kelas' });
   } catch (error) {
     console.error("Error rendering the page:", error);
     res.status(500).send("Server Error");
@@ -57,7 +57,7 @@ const getUpdatePageKelas = async (req, res) => {
       success: req.flash("success"),
       error: req.flash("error"),
     };
-    res.render("admin/kelas/edit_kelas", { kelas, messages });
+    res.render("admin/kelas/edit_kelas", { kelas, messages, currentPath : '/admin/kelas/edit/:id_kelas' });
   } catch (error) {
     console.error("Error rendering the update page:", error);
     res.status(400).send("Server Error");

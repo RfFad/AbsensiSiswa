@@ -87,5 +87,17 @@ const DeleteSiswa = async (id_siswa) => {
             
     })
 }
+const GetSiswaKelas = async (id_kelas) => {
+    return new Promise((resolve, reject) => {
+        connection.query(`
+          SELECT siswa.*, kelas.nama_kelas as nama_kelas FROM siswa join kelas on siswa.id_kelas = kelas.id_kelas WHERE siswa.id_kelas = ? order by siswa.nis; 
+        `,[id_kelas], (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(result);
+        });
+    });
+}
 
-module.exports = { getSiswa, getSiswaById, InsertSiswa, UpdateSiswa, DeleteSiswa };
+module.exports = { getSiswa, getSiswaById, InsertSiswa, UpdateSiswa, DeleteSiswa, GetSiswaKelas };

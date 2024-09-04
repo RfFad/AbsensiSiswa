@@ -1,0 +1,103 @@
+<%- include("../../Componen/header") %>
+<title>Admin | Edit Riwayat</title>
+<%- include("../../Componen/sideNavbar") %>
+
+<div class="content-wrapper">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="container-fluid mt-3">
+          <div class="callout callout-info">
+            <h5><i class="fas fa-info"></i> Note:</h5>
+            <h5>MATA PELAJARAN : <%= jadwal.nama_mp %></h5>
+            <h5>KELAS : <%= jadwal.nama_kelas %></h5>
+          </div>
+        </div>
+        <div class="container-body">
+          <div class="card card-primary ml-2 mr-2 border border-primary">
+            <div class="card-header">
+              <h3 class="card-title">Absensi Siswa</h3>
+            </div>
+
+            <!-- Start form -->
+            <form action="/guru/input_absen" method="POST">
+              <!-- Include necessary hidden fields -->
+              <input type="hidden" name="idk" value="<%= jadwal.id_kelas %>">
+              <input type="hidden" name="tgl" value="<%= dateToday %>">
+              <input type="hidden" name="idj" value="<%= jadwal.idj %>">
+
+              <div class="card-body">
+                <table id="example2" class="table table-bordered table-hover table-sm table-striped table-responsive">
+                  <thead>
+                    <tr>
+                      <th style="width: 1%;">NIS</th>
+                      <th>NAMA</th>
+                      <th>KETERANGAN</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% siswa.forEach((row) => { %>
+                    <tr>
+                      <td><%= row.nis %></td>
+                      <td><%= row.nama %></td>
+                      <td class="text-center">
+                        <div class="form-group">
+                          <!-- Ensure radio button names and values match controller expectations -->
+                          <label class="radio-inline mr-3">
+                            <input type="radio" name="<%= row.ids %>" value="A" <%= (row.keterangan === 'A') ? 'checked' : '' %>> A
+                          </label>
+                          <label class="radio-inline mr-3">
+                            <input type="radio" name="<%= row.ids %>" value="I" <%= (row.keterangan === 'I') ? 'checked' : '' %>> I
+                          </label>
+                          <label class="radio-inline mr-3">
+                            <input type="radio" name="<%= row.ids %>" value="S" <%= (row.keterangan === 'S') ? 'checked' : '' %>> S
+                          </label>
+                          <label class="radio-inline mr-3">
+                            <input type="radio" name="<%= row.ids %>" value="M" <%= (row.keterangan === 'M') ? 'checked' : '' %>> M
+                          </label>
+                          <label class="radio-inline">
+                            <input type="radio" name="<%= row.ids %>" value="N" <%= (row.keterangan === 'N') ? 'checked' : '' %>> N
+                          </label>
+                        </div>
+                      </td>
+                    </tr>
+                    <% }) %>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th>NIS</th>
+                      <th>NAMA</th>
+                      <th>KETERANGAN</th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+
+              <!-- Card footer with description -->
+              <div class="card-footer">
+                <div class="keterangan bg-primary text-white rounded p-3">
+                  <h4 class="keterangan-notes">Keterangan Absensi</h4>
+                  <ul class="list-unstyled mb-0">
+                    <li><strong>A =</strong> Tidak Masuk Tanpa Keterangan</li>
+                    <li><strong>I =</strong> Tidak Masuk Ada Surat Ijin Atau Pemberitahuan</li>
+                    <li><strong>S =</strong> Tidak Masuk Ada Surat Dokter Atau Pemberitahuan</li>
+                    <li><strong>M =</strong> Hadir</li>
+                    <li><strong>N =</strong> Belum di Absen</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <!-- Submit button -->
+              <div class="card-footer text-right">
+                <button type="submit" class="btn btn-primary">Simpan Absensi</button>
+              </div>
+            </form>
+            <!-- End form -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../../Componen/footer") %>

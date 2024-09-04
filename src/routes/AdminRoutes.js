@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const db = require('../configs/Databases')
 const { checkRole } = require('../controllers/AuthController');
 const verifyUser = require('../configs/verify');
 const {authHeader} = require('../configs/jwtMiddleware')  // assuming authHeader is another middleware
@@ -12,7 +13,8 @@ const {getInsertHari, getPageHari, getDataHari, getDeleteHari, getUpdateHari, ge
 // const {getInsertHari, getPageHari} = require ('../controllers/admin/HariController');
 const { getInsertSiswa, getPageSiswa, getSiswaData, getUpdatePageSiswa, updateSiswa, getDeleteSiswa } = require('../controllers/admin/SiswaController') 
 const {getUpdatePageSekolah, updateSekolahData, getDataSekolah} = require('../controllers/admin/SekolahController')
-const jadwal = require ('../controllers/admin/JadwalController')
+const jadwal = require ('../controllers/admin/JadwalController');
+const riwayat = require ('../controllers/admin/RiwayatController')
 
 //router
 router.get('/', checkRole('admin'), authHeader, getCountData)
@@ -72,6 +74,24 @@ router.get('/jadwal/jumat', jadwal.jumat)
 router.get('/jadwal/edit/:idj', jadwal.getUpdatePage);
 router.post('/jadwal/update/:idj', jadwal.getUpdateInsert);
 router.post('/jadwal/delete/:idj', jadwal.getDelete)
+//riwayat
+router.get('/riwayat', riwayat.getPageRiwayat);
+router.get('/data_riwayat', riwayat.getRiwayatData)
+router.post('/insert_riwayat',riwayat.getInsertRiwayat );
+router.get('/riwayat/edit/:id_riwayat', riwayat.getUpdatePageRiwayat)
+router.post('/riwayat/update/:id_riwayat', riwayat.UpdateRiwayat);
+router.post('/riwayat/delete/:id_riwayat', riwayat.getDeleteRiwayat);
+router.get('/getSiswaByKelas/:id_kelas', (req, res) => {
+    const id_kelas = req.params.id_kelas;
+
+    const query = 'SELECT id_siswa, nama_siswa FROM siswa WHERE id_kelas = ?';
+    db.query(query, [id_kelas], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database query error' });
+        }
+        res.json(results);
+    });
+});
 
 
 module.exports = router;

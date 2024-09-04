@@ -11,7 +11,7 @@ const jadwal = {
         error: req.flash("error"),
       };
       const row = await jadwalmodel.getSenin();
-      res.render("admin/jadwal/senin", { row, messages });
+      res.render("admin/jadwal/senin", { row, messages, currentPath : '/admin/data_jadwal', currentPath : '/admin/data_jadwal' });
     } catch (error) {
       console.error("Error rendering the page:", error);
       res.status(400).json("Internal Server Error");
@@ -24,7 +24,7 @@ const jadwal = {
         error: req.flash("error"),
       };
       const row = await jadwalmodel.getSelasa();
-      res.render("admin/jadwal/selasa", { row, messages });
+      res.render("admin/jadwal/selasa", { row, messages, currentPath : '/admin/data_jadwal' });
     } catch (error) {
       console.error("Error rendering the page:", error);
       res.status(400).json("Internal Server Error");
@@ -37,7 +37,7 @@ const jadwal = {
         error: req.flash("error"),
       };
       const row = await jadwalmodel.getRabu();
-      res.render("admin/jadwal/rabu", { row, messages });
+      res.render("admin/jadwal/rabu", { row, messages, currentPath : '/admin/data_jadwal' });
     } catch (error) {
       console.error("Error rendering the page:", error);
       res.status(400).json("Internal Server Error");
@@ -50,7 +50,7 @@ const jadwal = {
         error: req.flash("error"),
       };
       const row = await jadwalmodel.getKamis();
-      res.render("admin/jadwal/kamis", { row, messages });
+      res.render("admin/jadwal/kamis", { row, messages, currentPath : '/admin/data_jadwal' });
     } catch (error) {
       console.error("Error rendering the page:", error);
       res.status(400).json("Internal Server Error");
@@ -63,7 +63,7 @@ const jadwal = {
         error: req.flash("error"),
       };
       const row = await jadwalmodel.getJumat();
-      res.render("admin/jadwal/jumat", { row, messages });
+      res.render("admin/jadwal/jumat", { row, messages, currentPath : '/admin/data_jadwal' });
     } catch (error) {
       console.error("Error rendering the page:", error);
       res.status(400).json("Internal Server Error");
@@ -86,6 +86,7 @@ const jadwal = {
         kelas,
         mapel,
         hari,
+        currentPath : '/admin/jadwal'
       });
     } catch (error) {
       console.error("Error rendering the page:", error);
@@ -133,6 +134,7 @@ const jadwal = {
         mapel,
         hari,
         messages,
+        currentPath : '/admin/jadwal/edit/:idj'
       });
     } catch (error) {
       console.error("Error rendering the update page:", error);

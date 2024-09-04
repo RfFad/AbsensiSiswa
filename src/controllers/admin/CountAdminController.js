@@ -11,6 +11,7 @@ const getCountData = async (req, res) => {
       countGuru,
       countMapel,
       countSiswa,
+      currentPath : '/admin'
     });
   } catch (error) {
     res.status(400).json(error);

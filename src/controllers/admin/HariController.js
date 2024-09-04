@@ -13,7 +13,7 @@ const getDataHari = async (req, res) => {
       error: req.flash("error"),
     };
     const row = await getHari();
-    res.render("admin/hari", { row, index: 1, messages }); // Removed the leading slash
+    res.render("admin/hari", { row, index: 1, messages, currentPath : '' }); // Removed the leading slash
   } catch (error) {
     res.status(420).json(error);
   }
@@ -36,7 +36,7 @@ const getPageHari = async (req, res) => {
       success: req.flash("success"),
       error: req.flash("error"),
     };
-    res.render("admin/crud_hari", { messages });
+    res.render("admin/crud_hari", { messages, currentPath : '' });
   } catch (error) {
     console.error("Error rendering the page:", error);
     res.status(500).send("Server Error");
@@ -54,7 +54,7 @@ const getUpdatePageHari = async (req, res) => {
       success: req.flash("success"),
       error: req.flash("error"),
     };
-    res.render("admin/edit_hari", { hari, messages });
+    res.render("admin/edit_hari", { hari, messages, currentPath : '' });
   } catch (error) {
     console.error("Error rendering the update page:", error);
     res.status(400).send("Server Error");

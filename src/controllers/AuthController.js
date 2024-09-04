@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
-const md5 = require('md5'); // Import the MD5 module
+const md5 = require('md5');
+const {getSekolah} = require('../models/models_sekolah') // Import the MD5 module
 
 const connect = mysql.createPool({
     host: "localhost",
@@ -10,12 +11,22 @@ const connect = mysql.createPool({
 });
 
 module.exports = {
-    login(req, res) {
+   async login(req, res) {
+        try {
+            const sekolah = await getSekolah();
         res.render("login", {
+            sekolah,
             colorFlash: req.flash('color'),
             statusFlash: req.flash('status'),
             pesanFlash: req.flash('message'),
         });
+        } catch (error) {
+            console.error('Error in getting data:', error);
+            res.status(500).json({
+                status: 'error',
+                message: 'Internal server error'})
+        }
+        
     },
 
     async loginAuth(req, res) {

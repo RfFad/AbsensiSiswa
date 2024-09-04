@@ -13,8 +13,33 @@
   <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+  <style>
+    body {
+      background-image: url('/kelas_bg-enhanced.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      height: 100vh;
+
+    }
+    .animasi-text {
+      display: flex;
+      position: absolute;
+      width: 360px;
+      top: 100px; /* Adjust this value to position the text closer to the top */
+      left: 50%; /* Centering the text horizontally */
+      transform: translateX(-50%);
+    }
+    .animasi-text h2{
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body class="hold-transition login-page">
+  <div class="animasi-text">
+  <marquee behavior="" direction=""><h2 class="text-white">Selamat datang di website absensi <%= sekolah.nama %></h2></marquee>
+</div>
 <div class="login-box">
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">
@@ -22,7 +47,7 @@
       <a href="#" class="h1"><b>Login</b>Page</a>
     </div>
     <div class="card-body">
-      <p class="login-box-msg">Sign in to start your session</p>
+     
 
       <!-- Display flash messages if any -->
       
@@ -45,28 +70,13 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="remember" name="remember">
-              <label for="remember">
-                Remember Me
-              </label>
-            </div>
-          </div>
           <!-- /.col -->
-          <div class="col-4">
+          <div class="col-12">
             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
           </div>
           <!-- /.col -->
         </div>
       </form>
-
-      <p class="mb-1">
-        <a href="/forgot-password">I forgot my password</a>
-      </p>
-      <p class="mb-0">
-        <a href="/register" class="text-center">Register a new membership</a>
-      </p>
     </div>
     <!-- /.card-body -->
   </div>

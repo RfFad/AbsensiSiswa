@@ -38,6 +38,7 @@ module.exports = {
 
                         if (results.length > 0) {
                             res.render('guru/index', {
+                                currentPath: '/guru' ,
                                 rows,
                                 guru: results[0], // Passing the guru profile data to the view
                                 colorFlash: req.flash('color'),
