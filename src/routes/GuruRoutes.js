@@ -13,5 +13,12 @@ router.get('/', checkRole('guru'), authHeader, getDashboard)
 router.get('/jadwal', checkRole('guru'), jadwal_guru.jadwalmengajar)
 router.get('/absen/:idj/:id_kelas', absen.getabsenbyid)
 router.post('/input_absen', absen.inputAbsen)
+router.get('/pageguru', async(req, res)=> {
+    try {
+        res.render("guru/newpage")
+    } catch (error) {
+        res.status(500).send({msg: "ada kesalahan", err : error})
+    }
+})
 
 module.exports = router;

@@ -1,0 +1,211 @@
+<%- include("./Componen/header") %>
+<style>
+    .carousel-caption h5 {
+  font-size: 1.5rem; /* default font size for mobile */
+}
+
+.carousel-caption p {
+  font-size: 1rem;
+}
+
+@media (min-width: 768px) {
+  .carousel-caption h5 {
+    font-size: 2rem; /* larger font size for tablets and above */
+  }
+
+  .carousel-caption p {
+    font-size: 1.25rem;
+  }
+}
+/* Menggelapkan gambar */
+.carousel-item {
+  position: relative;
+}
+
+.carousel-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Warna hitam dengan transparansi 50% */
+  z-index: 1;
+}
+
+.carousel-item img {
+  z-index: 0; /* Gambar di belakang overlay */
+}
+
+/* Menambahkan bayangan pada teks */
+.text-shadow {
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Efek bayangan */
+}
+
+.carousel-caption {
+  z-index: 2; /* Teks berada di depan overlay */
+}
+
+  </style>
+<%- include("./Componen/sidebar") %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container">
+        <div class="row mb-2">
+          
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container">
+        <div class="bgimg row justify-content-center mb-3">
+            <div class="col-lg-8 col-12">
+              <div id="carouselExampleCaptions" class="carousel slide h-100" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                  <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                  <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                  <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <div class="carousel-overlay"></div> <!-- Overlay untuk menggelapkan gambar -->
+                    <img src="/smpn1ka.jpg" class="d-block w-100 h-100 carousel-image" alt="...">
+                    <div class="carousel-caption">
+                      <h5 class="display-6 text-shadow">First slide label</h5>
+                      <p class="lead text-shadow">Some representative placeholder content for the first slide.</p>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="carousel-overlay"></div> <!-- Overlay untuk menggelapkan gambar -->
+                    <img src="/smpn1ka.jpg" class="d-block w-100 h-100 carousel-image" alt="...">
+                    <div class="carousel-caption">
+                      <h5 class="display-6 text-shadow">Second slide label</h5>
+                      <p class="lead text-shadow">Some representative placeholder content for the second slide.</p>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="carousel-overlay"></div> <!-- Overlay untuk menggelapkan gambar -->
+                    <img src="/smpn1ka.jpg" class="d-block w-100 h-100 carousel-image" alt="...">
+                    <div class="carousel-caption">
+                      <h5 class="display-6 text-shadow">Third slide label</h5>
+                      <p class="lead text-shadow">Some representative placeholder content for the third slide.</p>
+                    </div>
+                  </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          
+          <div class="row justify-content-center">
+            <!-- ./col -->
+            <div class="col-lg-2 col-6">
+              
+              <div class="info-box">
+                <span class="info-box-icon bg-success"><i class="fas fa-chart-pie"></i></span>
+  
+                <div class="info-box-content">
+                  <span class="info-box-text">Jadwal Mengajar</span>
+                  <span class="info-box-number">410</span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-2 col-6">
+              <!-- small box -->
+              <div class="info-box">
+                <span class="info-box-icon bg-warning"><i class="far fa-user"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Daftar Murid</span>
+                  <span class="info-box-number">13,648</span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-2 col-6">
+              <!-- small box -->
+              <div class="info-box">
+                <span class="info-box-icon bg-danger"><i class="far fa-copy"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Uploads</span>
+                  <span class="info-box-number">13,648</span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-2 col-6">
+              <!-- small box -->
+              <div class="info-box">
+                <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Uploads</span>
+                  <span class="info-box-number">13,648</span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+            </div>
+            <!-- ./col -->
+          </div>
+          <hr class="featurette-divider">
+          <h2 style="display: flex; justify-content: center; margin-bottom: 50px; ">ABOUT GURU PAGES</h2>
+          <div class="row featurette justify-content-center mb-3">
+            <div class="col-md-5">
+              <h2 class="featurette-heading">First featurette heading. <span class="text-muted">It’ll blow your mind.</span></h2>
+              <p class="lead">Some great placeholder content for the first featurette here. Imagine some exciting prose here.</p>
+            </div>
+            <div class="col-md-3">
+              <img src="/yuji.jpeg" class="featurette-image img-fluid mx-auto" alt="Feature image 1" style="object-fit: cover; width: 100%; height: 100%;">
+            </div>
+          </div>
+          
+          <div class="row featurette justify-content-center mb-3">
+            <div class="col-md-5 order-md-2">
+              <h2 class="featurette-heading">Oh yeah, it’s that good. <span class="text-muted">See for yourself.</span></h2>
+              <p class="lead">Another featurette? Of course. More placeholder content here to give you an idea of how this layout would work with some actual real-world content in place.</p>
+            </div>
+            <div class="col-md-3 order-md-1">
+              <img src="/kelas_bg.jpg" class="featurette-image img-fluid mx-auto" alt="Feature image 2" style="object-fit: cover; width: 100%; height: 100%;">
+            </div>
+          </div>
+          
+          <div class="row featurette justify-content-center">
+            <div class="col-md-5">
+              <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
+              <p class="lead">And yes, this is the last block of representative placeholder content. Again, not really intended to be actually read, simply here to give you a better view of what this would look like with some actual content. Your content.</p>
+            </div>
+            <div class="col-md-3">
+              <img src="/kelas_bg.jpg" class="featurette-image img-fluid mx-auto" alt="Feature image 3" style="object-fit: cover; width: 100%; height: 100%;">
+            </div>
+          </div>
+          
+      
+      
+          <!-- /END THE FEATURETTES -->
+          <!-- /.row -->  
+    <!-- /.content -->
+  </div>
+  </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+  
+
+  <!-- Main Footer -->
+  <%- include("./Componen/footer") %>
