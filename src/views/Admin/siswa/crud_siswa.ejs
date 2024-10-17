@@ -2,96 +2,160 @@
 <title>Admin | Create siswa</title>
 <%- include("../../Componen/sideNavbar") %>
 
-
 <div class="content-wrapper">
-<div class="container-fluid">
-    <div class="row mb-2">
-      <div class="col-sm-6">
-        <h1>Insert Data</h1>
-      </div>
-    </div>
-  </div><!-- /.container-fluid -->
-</section>
-
-<!-- Main content -->
-<section class="content">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-12">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title">DataTable with minimal features & hover style</h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-              <% if (messages.success) { %>
-                <div class="alert alert-success">
-                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <%= messages.success %>
-                </div>
-            <% } %>
-            <% if (messages.error) { %>
-              <div class="alert alert-danger">
-                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <%= messages.error %>
-                </div>
-            <% } %>
-           
-              <form action="/admin/insert_siswa" method="post">
-                <div class="row">
-                  <div class="col-md-6">
-                    <label for="nis">nis</label>
-                <div class="form-group mb-3">
-                    <input type="text" class="form-control" name="nis" placeholder="Masukkan nis" required>
-                </div>
-                    <label for="Nama_siswa">Nama siswa</label>
-                <div class="form-group mb-3">
-                    <input type="text" class="form-control" name="nama_siswa" placeholder="Masukkan nama siswa" required>
-                </div>
-                <div class="form-group">
-                 <label for="kelas"> KELAS </label>
-                 <select class="form-control" name="id_kelas" id="">
-                   <% row.forEach ((kelas )=> { %>
-                  <option value="<%= kelas.id_kelas %>"><%= kelas.nama_kelas %></option>
-                  <% }) %>
-                 </select>
-      
-                </div>
-                <label for="gender">Jenis Kelamin</label>
-                <div class="form-group mb-3">
-                    <select class="form-control" name="jk">
-                      <option value="laki-laki">laki-laki</option>
-                      <option value="perempuan">Perempuan</option>
-                      </select>
-                </div>
-                  </div>
-                  <div class="col-md-6">
-                
-                <label for="Nama Wali">Nama Wali</label>
-                <div class="form-group mb-3">
-                    <input type="text" class="form-control" name="nama_wali" placeholder="Masukkan Nama Wali" required>
-                </div>
-                <label for="alamat">Alamat</label>
-                <div class="form-group mb-3">
-                    <input type="text" class="form-control" name="alamat" placeholder="Masukkan alamat" required>
-                </div>
-                <label for="password">Password</label>
-                <div class="form-group mb-3">
-                    <input type="password" class="form-control" name="password" placeholder="Masukkan password" required>
-                </div>
-                  </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Tambahkan Data</button>
-              </form>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
+  <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Insert Data</h1>
         </div>
       </div>
-    </div>
+    </div><!-- /.container-fluid -->
   </section>
+
+  <!-- Main content -->
+  <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Insert Data Form</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <% if (messages.success) { %>
+                  <div class="alert alert-success">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                      <%= messages.success %>
+                  </div>
+              <% } %>
+              <% if (messages.error) { %>
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                      <%= messages.error %>
+                  </div>
+              <% } %>
+             
+                <form action="/admin/insert_siswa" method="post" enctype="multipart/form-data">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label for="nis">NIS</label>
+                  <div class="form-group mb-3">
+                      <input type="text" class="form-control" name="nis" placeholder="Masukkan NIS" required>
+                  </div>
+                      <label for="Nama_siswa">Nama Siswa</label>
+                  <div class="form-group mb-3">
+                      <input type="text" class="form-control" name="nama_siswa" placeholder="Masukkan Nama Siswa" required>
+                  </div>
+                  <div class="form-group">
+                   <label for="kelas">Kelas</label>
+                   <select class="form-control" name="id_kelas" id="">
+                     <% row.forEach(kelas => { %>
+                    <option value="<%= kelas.id_kelas %>"><%= kelas.nama_kelas %></option>
+                    <% }) %>
+                   </select>
+                  </div>
+                  <div class="form-group">
+                   <label for="Tahun Ajaran">Tahun Ajaran</label>
+                   <select class="form-control" name="idth" required>
+                    <option value="" disabled selected>--SELECT TAHUN_AJAR--</option>
+                    <% tahun_ajaran.forEach(tahun => { %>
+                      <option value="<%= tahun.idth %>"><%= tahun.nama_ajaran %></option>
+                    <% }) %>
+                  </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="jk">Jenis Kelamin</label>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="jk" id="jkLaki" value="laki-laki" required>
+                      <label class="form-check-label" for="jkLaki">Laki-Laki</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="jk" id="jkPerempuan" value="perempuan" required>
+                      <label class="form-check-label" for="jkPerempuan">Perempuan</label>
+                    </div>
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">+64</span>
+                    </div>
+                    <input type="text" class="form-control" name="tlp" placeholder="No tlp">
+                  </div>
+                 
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Date masks:</label>
+      
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                          </div>
+                          <input type="date" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask name="tgl_lahir">
+                        </div>
+                        <!-- /.input group -->
+                      </div>
+                  <label for="Nama Wali">Nama Wali</label>
+                  <div class="form-group mb-3">
+                      <input type="text" class="form-control" name="nama_wali" placeholder="Masukkan Nama Wali" required>
+                  </div>
+                  <label for="alamat">Alamat</label>
+                  <div class="form-group mb-3">
+                      <input type="text" class="form-control" name="alamat" placeholder="Masukkan Alamat" required>
+                  </div>
+                  <label for="pekerjaan_wali">Pekerjaan Wali</label>
+                  <div class="form-group mb-3">
+                      <input type="text" class="form-control" name="pekerjaan_wali" placeholder="Masukkan Pekerjaan Wali" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="foto">Foto Siswa</label>
+                    <input type="file" name="foto" class="form-control" id="foto" accept="image/*" onchange="previewFoto(event)">
+                  </div>
+        
+                  <!-- Tempat untuk menampilkan preview foto yang dipilih -->
+                  <div class="form-group">
+                    <img id="fotoPreview" src="" alt="Preview Foto Siswa" style="display: none; width: 150px; margin-top: 10px;" />
+                  </div>
+                  <label for="password">Password</label>
+                  <div class="form-group mb-3">
+                      <input type="password" class="form-control" name="password" placeholder="Masukkan Password" required>
+                  </div>
+                  
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Tambahkan Data</button>
+                </form>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+      </div>
+    </section>
   
 </div>
+ <!--script -->
+ <script src="/plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script>
+  function previewFoto(event){
+    const fotoInput = event.target
+    const fotoPreview = $("#fotoPreview")
 
+    //
+    if(fotoInput.files && fotoInput.files[0]){
+      const reader = new FileReader();
+
+      reader.onload = function(e){
+        fotoPreview.attr('src', e.target.result);
+        fotoPreview.show() 
+      }
+      reader.readAsDataURL(fotoInput.files[0])
+    }else{
+      fotoPreview.hide()
+    }
+  }
+</script>
 <%- include("../../Componen/footer") %>

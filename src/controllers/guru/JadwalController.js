@@ -10,8 +10,8 @@ const jadwal_guru = {
                 error: req.flash('error')
             };
             const rows = await gurumodel.getguru(req, res);
-            const row = await jadwalmodel.getJadwal(req, res);
-            res.render("guru/jadwal/jadwal_mengajar", {row, rows,currentPath: '/guru/jadwal',messages}) ;
+            const {results} = await jadwalmodel.getJadwal(req, res);
+            res.render("guru/jadwal/jadwal", {row : results, rows,currentPath: '/guru/jadwal',messages}) ;
         } catch (error) {
             console.error("Error rendering the page:", error);
       res.status(400).json("Internal Server Error");

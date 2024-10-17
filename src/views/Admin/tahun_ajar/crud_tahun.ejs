@@ -1,0 +1,29 @@
+<%- include("../../Componen/header") %>
+<title>Admin | Create Kelas</title>
+<%- include("../../Componen/sideNavbar") %>
+<div class="content-wrapper d-flex justify-content-center align-items-start" style="min-height: 100vh; padding-top: 50px;">
+    <!-- Display flash messages -->
+   
+    <!-- Card for adding class -->
+    <div class="card w-50 shadow">
+        <div class="card-header">
+            <h2 class="card-title">Tambahkan Kelas</h2>
+        </div>
+        <div class="card-body">
+            <% if (messages.error) { %>
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                      <%= messages.error %>
+                  </div>
+            <% } %>
+            <form action="/admin/simpan_tahun" method="post">
+                <label for="Tahun">Tahun Ajar</label>
+                <div class="form-group mb-3">
+                    <input type="text" class="form-control" name="nama_ajaran" placeholder="Masukkan Tahun Ajar" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Tambahkan Data</button>
+            </form>
+        </div>
+    </div>
+</div>
+<%- include("../../Componen/footer") %>

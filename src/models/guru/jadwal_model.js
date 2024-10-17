@@ -1,6 +1,11 @@
 const connection = require('../../configs/Databases');
 
 const jadwalmodel = {
+    updateIdMapelByGuruId : async (id_guru, idm) => {
+        const query = 'UPDATE jadwal SET idm = ? WHERE idg = ?';
+        return db.query(query, [idm, id_guru]);
+      },
+      
     getJadwal: async (req, res) => {
         const id_guru = req.session.username;
         return new Promise((resolve, reject) => {
@@ -19,10 +24,13 @@ const jadwalmodel = {
                 if (error) {
                     return reject(error);
                 }
-                resolve(result);
+                // Resolving with an object that contains both the results and their length
+                resolve({ results: result, count: result.length });
             });
         });
     },
+
+    
 
     jadwalById: async (idj) => {
         return new Promise((resolve, reject) => {

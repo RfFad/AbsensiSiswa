@@ -4,7 +4,10 @@ const {
   getGuruById,
   UpdateGuru,
   DeleteGuru,
+  getInfoGuru
 } = require("../../models/models_guru");
+const {getMapel} = require("../../models/models_mapel");
+const jadwal = require("../../models/models_jadwal")
 const md5 = require("md5"); // Import the MD5 module
 
 const getGuruData = async (req, res) => {
@@ -19,14 +22,28 @@ const getGuruData = async (req, res) => {
     res.status(500).json(error);
   }
 };
-
-const getPageGuru = async (req, res) => {
+const getInfoGuruNip = async(req, res) => {
+  const {nip} = req.params
   try {
+    const guru = await getInfoGuru(nip)
     const messages = {
       success: req.flash("success"),
       error: req.flash("error"),
     };
-    res.render("admin/guru/crud_guru", { messages, currentPath: '/admin/guru' });
+    res.status(200).json ({guru, messages})
+  } catch (error) {
+    console.error("Error rendering the update page:", error);
+    res.status(500).json({ error: "Server Error" });
+  }
+}
+const getPageGuru = async (req, res) => {
+  try {
+    const mapel = await getMapel()
+    const messages = {
+      success: req.flash("success"),
+      error: req.flash("error"),
+    };
+    res.render("admin/guru/crud_guru", { messages, currentPath: '/admin/guru', mapel });
   } catch (error) {
     console.error("Error rendering the page:", error);
     res.status(400).send("Server Error");
@@ -34,10 +51,10 @@ const getPageGuru = async (req, res) => {
 };
 
 const getInsertGuru = async (req, res) => {
-  const { nip, nama_guru, jk, jabatan, alamat, password } = req.body;
+  const { nip, nama_guru, idm, jk, jabatan, alamat, tlp, password } = req.body;
   try {
     const hashedPassword = md5(password); // Hash the password using MD5
-    await InsertGuru(nip, nama_guru, jk, jabatan, alamat, hashedPassword); // Use the hashed password
+    await InsertGuru(nip, nama_guru, idm, jk, jabatan, alamat, tlp, hashedPassword); // Use the hashed password
     req.flash("success", "Berhasil menambahkan data!");
     return res.redirect("/admin/data_guru");
   } catch (error) {
@@ -49,6 +66,7 @@ const getInsertGuru = async (req, res) => {
 const getUpdatePage = async (req, res) => {
   const { id_guru } = req.params;
   try {
+    const mapel = await getMapel()
     const guru = await getGuruById(id_guru);
     if (!guru) {
       req.flash("error", "Data guru tidak ditemukan!");
@@ -58,7 +76,7 @@ const getUpdatePage = async (req, res) => {
       success: req.flash("success"),
       error: req.flash("error"),
     };
-    res.render("admin/guru/edit_guru", { guru, messages, currentPath : '/admin/guru/edit/:id_guru' });
+    res.render("admin/guru/edit_guru", { mapel, guru, messages, currentPath : '/admin/guru/edit/:id_guru' });
   } catch (error) {
     console.error("Error rendering the update page:", error);
     res.status(400).send("Server Error");
@@ -67,18 +85,31 @@ const getUpdatePage = async (req, res) => {
 
 const updateGuru = async (req, res) => {
   const { id_guru } = req.params;
-  const { nip, nama_guru, jk, jabatan, alamat, password } = req.body;
+  const { nip, nama_guru, idm, jk, jabatan, alamat, tlp, password } = req.body;
+
   try {
-    const hashedPassword = md5(password); // Hash the password using MD5
+    // Ambil data guru berdasarkan id_guru
+    let guru = await getGuruById(id_guru);
+
+    // Hash password hanya jika ada perubahan password
+    const hashedPassword = password ? md5(password) : guru.password;
+
+    // Update data di tabel guru
     await UpdateGuru(
       id_guru,
       nip,
       nama_guru,
+      idm, // id_mapel baru untuk guru
       jk,
       jabatan,
       alamat,
+      tlp,
       hashedPassword
-    ); // Use the hashed password
+    );
+
+    // Update juga id_mapel di tabel jadwal berdasarkan id_guru
+    await jadwal.updateIdMapelByGuruId(id_guru, idm);
+
     req.flash("success", "Berhasil memperbarui data!");
     return res.redirect("/admin/data_guru");
   } catch (error) {
@@ -86,6 +117,7 @@ const updateGuru = async (req, res) => {
     return res.redirect(`/admin/guru/edit/${id_guru}`);
   }
 };
+
 
 const getDeleteGuru = async (req, res) => {
   const { id_guru } = req.params;
@@ -106,4 +138,5 @@ module.exports = {
   getUpdatePage,
   updateGuru,
   getDeleteGuru,
+  getInfoGuruNip
 };

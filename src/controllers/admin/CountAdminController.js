@@ -2,6 +2,7 @@ const getCount = require("../../models/models_count");
 
 const getCountData = async (req, res) => {
   try {
+
     const countKelas = await getCount.CountKelas();
     const countGuru = await getCount.CountGuru();
     const countMapel = await getCount.CountMapel();
@@ -11,7 +12,8 @@ const getCountData = async (req, res) => {
       countGuru,
       countMapel,
       countSiswa,
-      currentPath : '/admin'
+      currentPath : '/admin',
+      messages:"hello"
     });
   } catch (error) {
     res.status(400).json(error);

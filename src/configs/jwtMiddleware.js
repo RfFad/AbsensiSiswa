@@ -12,10 +12,7 @@ const authHeader = (req, res, next) => {
 
     jwt.verify(token, 'SECRET', (err, decoded) => {
         if (err) {
-            return console.log({
-                status: 'error',
-                message: 'Failed to authenticate token',
-            },res.redirect('/login'));
+            res.redirect('/login')
         }
 
         // Check if the token is about to expire (e.g., within the next 10 minutes)

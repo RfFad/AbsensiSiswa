@@ -1,5 +1,22 @@
 const connection = require('../configs/Databases')
 const jadwalmodel = {
+    updateIdMapelByGuruId :  async (id_guru, idm) => {
+        const query = 'UPDATE jadwal SET idm = ? WHERE idg = ?';
+        return connection.query(query, [idm, id_guru]);
+      },
+      
+getIdMapelByGuruId: async (idg) => {
+        const query = 'SELECT idm FROM guru WHERE id_guru = ?';
+        return new Promise((resolve, reject) => {
+          connection.query(query, [idg], (error, results) => {
+            if (error) {
+              return reject(error);
+            }
+            resolve(results);
+          });
+        });
+      },
+      
 InsertJadwal : async (idh, idg, idk, idm, jam_mulai, jam_selesai) => {
     return new Promise((resolve, reject) => {
             connection.query(`
@@ -54,7 +71,7 @@ DeleteJadwal : async (idj) => {
  getSenin : async () => {
     return new Promise((resolve, reject) => {
         connection.query(`
-          SELECT jadwal.idj,hari.hari as hari, guru.nama_guru as nama_guru, kelas.nama_kelas as nama_kelas, mata_pelajaran.nama_mp as nama_mp, jadwal.jam_mulai, jadwal.jam_selesai FROM jadwal, hari, guru, kelas, mata_pelajaran WHERE jadwal.idh = hari.idh AND jadwal.idg = guru.id_guru AND jadwal.idk = kelas.id_kelas AND jadwal.idm =mata_pelajaran.idm AND hari.idh = 1 ORDER BY jadwal.jam_mulai  `, (error, result) => {
+          SELECT jadwal.idj,hari.hari as hari, guru.nama_guru as nama_guru, guru.idm AS mapel_ajar, kelas.nama_kelas as nama_kelas, mata_pelajaran.nama_mp as nama_mp, jadwal.jam_mulai, jadwal.jam_selesai FROM jadwal, hari, guru, kelas, mata_pelajaran WHERE jadwal.idh = hari.idh AND jadwal.idg = guru.id_guru AND jadwal.idk = kelas.id_kelas AND jadwal.idm =mata_pelajaran.idm AND hari.idh = 1 ORDER BY jadwal.jam_mulai  `, (error, result) => {
             if (error) {
                 return reject(error);
             }

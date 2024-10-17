@@ -4,7 +4,7 @@ const gurumodel = {
         const id_guru = req.session.username
         return new Promise((resolve, reject) => {
             connection.query(`
-             SELECT * FROM guru WHERE nip = '${id_guru}'`, (error, result) => {
+             SELECT guru.*, mata_pelajaran.nama_mp AS nama_mp FROM guru JOIN mata_pelajaran ON guru.idm = mata_pelajaran.idm  WHERE nip = '${id_guru}'`, (error, result) => {
                 if (error) {
                     return reject(error);
                 }

@@ -52,8 +52,23 @@
                 <div class="form-group mb-3">
                     <input type="text" class="form-control" name="jabatan" placeholder="Masukkan jabatan" required>
                 </div>
+                <label for="tlp">No Telepon</label>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">+64</span>
+                  </div>
+                  <input type="text" class="form-control" name="tlp" placeholder="No tlp">
+                </div>
                   </div>
                   <div class="col-md-6">
+                    <div class="form-group mb-3">
+                      <label for="kelas">Mapel</label>
+                      <select class="form-control" name="idm" id="">
+                        <% mapel.forEach(row => { %>
+                       <option value="<%= row.idm %>"><%= row.nama_mp %></option>
+                       <% }) %>
+                      </select>
+                     </div>
                     <label for="alamat">alamat</label>
                 <div class="form-group mb-3">
                     <input type="text" class="form-control" name="alamat" placeholder="Masukkan alamat" required>

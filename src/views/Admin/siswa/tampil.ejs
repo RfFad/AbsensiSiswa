@@ -1,0 +1,66 @@
+<%- include("../../Componen/header") %>
+<title>Admin | Create siswa</title>
+<%- include("../../Componen/sideNavbar") %>
+
+
+<div class="content-wrapper">
+<div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Insert Data</h1>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">DataTable with minimal features & hover style</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <% if (messages.success) { %>
+                <div class="alert alert-success">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <%= messages.success %>
+                </div>
+            <% } %>
+            <% if (messages.error) { %>
+              <div class="alert alert-danger">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <%= messages.error %>
+                </div>
+            <% } %>
+           
+              <form action="/admin/insert_siswa" method="post">
+                <div class="row">
+                  <div class="col-md-6">
+                <div class="form-group">
+                 <label for="kelas"> KELAS </label>
+                 <select class="form-control" name="id_kelas" id="">
+                   <% row.forEach ((kelas )=> { %>
+                  <option value="<%= kelas.id_kelas %>"><%= kelas.nama_kelas %></option>
+                  <% }) %>
+                 </select>
+                </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Tambahkan Data</button>
+              </form>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+    </div>
+  </section>
+  
+</div>
+
+<%- include("../../Componen/footer") %>

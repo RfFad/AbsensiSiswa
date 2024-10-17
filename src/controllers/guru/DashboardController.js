@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const gurumodel = require('../../models/guru/models_guru');
+const jadwal = require('../../models/guru/jadwal_model')
 
 const connect = mysql.createPool({
     host: "localhost",
@@ -14,7 +15,7 @@ module.exports = {
 
         try {
             const rows = await gurumodel.getguru(req, res);
-
+            const { results, count } = await jadwal.getJadwal(req, res);
             connect.getConnection(function (err, connection) {
                 if (err) {
                     console.error('Database connection error:', err);
@@ -37,9 +38,10 @@ module.exports = {
                         }
 
                         if (results.length > 0) {
-                            res.render('guru/index', {
+                            res.render('guru/newpage', {
                                 currentPath: '/guru' ,
                                 rows,
+                                jdwl : count,
                                 guru: results[0], // Passing the guru profile data to the view
                                 colorFlash: req.flash('color'),
                                 statusFlash: req.flash('status'),

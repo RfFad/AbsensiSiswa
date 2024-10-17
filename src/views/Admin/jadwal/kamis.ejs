@@ -67,14 +67,14 @@
             <div class="table-responsive">
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
-                  <tr>
+                  <tr class="bg-dark">
                     <th style="width: 1%;">No</th>
                     <th>HARI</th>
                     <th>KELAS</th>
                     <th>NAMA GURU</th>
                     <th>MAPEL</th>
                     <th>JAM PELAJARAN</th>
-                    <th>Action</th>
+                    <th style="width: 120px;">Action</th>
 
                   </tr>
                 </thead>
@@ -90,9 +90,9 @@
                     <td><%= jadwal.jam_mulai.slice(0, 5) %> - <%= jadwal.jam_selesai.slice(0, 5) %></td>
                    
                     <td>
-                      <a href="/admin/jadwal/edit/<%= jadwal.idj %>" class="btn btn-warning"><i class="fas fa-edit">Edit</i></a>
+                      <a href="/admin/jadwal/edit/<%= jadwal.idj %>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
                       <form action="/admin/jadwal/delete/<%= jadwal.idj %>?_method=DELETE" method="post" style="display:inline;" class="delete-form">
-                        <button type="button" class="btn btn-danger" onclick="confirmDelete(this)"><i class='fas fa-trash-alt'></i>Hapus</button>
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete(this)"><i class='fas fa-trash-alt'></i></button>
                       </form>     
                     </td>
                   </tr>

@@ -51,8 +51,25 @@
                     <div class="form-group mb-3">
                       <input type="text" class="form-control" name="jabatan" placeholder="Masukkan jabatan" value="<%= guru.jabatan %>" required>
                     </div>
+                    <div class="form-group mb-3">
+                      <label for="tlp">No Telepon</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">+62</span>
+                        </div>
+                        <input type="text" class="form-control" name="tlp" placeholder="Masukkan No Telepon" value="<%= guru.tlp %>">
+                      </div>
+                    </div>
                   </div>
                   <div class="col-md-6">
+                    <div class="form-group mb-3">
+                      <label for="kelas">Mapel</label>
+                      <select class="form-control" name="idm" id="">
+                        <% mapel.forEach(row => { %>
+                       <option value="<%= row.idm %>" <%= guru.idm === row.idm ? 'selected' : '' %>><%= row.nama_mp %></option>
+                       <% }) %>
+                      </select>
+                     </div>
                     <label for="alamat">Alamat</label>
                     <div class="form-group mb-3">
                       <input type="text" class="form-control" name="alamat" placeholder="Masukkan alamat" value="<%= guru.alamat %>" required>
@@ -64,9 +81,9 @@
                         <option value="perempuan" <%= guru.jk === 'perempuan' ? 'selected' : '' %>>Perempuan</option>
                       </select>
                     </div>
-                    <label for="password">Password</label>
-                    <div class="form-group mb-3">
-                      <input type="password" class="form-control" name="password" placeholder="Masukkan password" value="<%= guru.password %>" required>
+                    <div class="form-group">
+                      <label for="password">Password (Kosongkan jika tidak ingin mengubah)</label>
+                      <input type="password" class="form-control" name="password" placeholder="Masukkan password baru jika ingin mengubah">
                     </div>
                   </div>
                 </div>

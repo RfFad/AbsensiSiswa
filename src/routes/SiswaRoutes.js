@@ -7,7 +7,8 @@ const {authHeader} = require('../configs/jwtMiddleware');  // assuming authHeade
 
 router.get('/', checkRole('siswa'), authHeader, async(req, res)=>{
     try {
-        res.render('Siswa/index')
+        
+        res.render('Siswa/index', {messages:"halo"})
     } catch (error) {
         res.status(400).json(error);
     }

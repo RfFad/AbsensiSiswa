@@ -48,15 +48,7 @@
                        <% }) %>
                       </select>
                      </div>
-                     <div class="form-group">
-                        <label for="mapel"> Mapel </label>
-                        <select class="form-control" name="idm" id="">
-                          <% mapel.forEach ((row )=> { %>
-                         <option value="<%= row.idm %>" <%= jadwal.idm === row.idm ? 'selected' : ''%>><%= row.nama_mp %></option>
-                         <% }) %>
-                        </select>
-             
-                       </div>
+                     
                 <div class="form-group">
                  <label for="kelas"> KELAS </label>
                  <select class="form-control" name="idk" id="">

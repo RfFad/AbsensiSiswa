@@ -2,7 +2,6 @@
 <title>Admin | Create Jadwal</title>
 <%- include("../../Componen/sideNavbar") %>
 
-
 <div class="content-wrapper">
 <div class="container-fluid">
     <div class="row mb-2">
@@ -11,7 +10,6 @@
       </div>
     </div>
   </div><!-- /.container-fluid -->
-</section>
 
 <!-- Main content -->
 <section class="content">
@@ -20,72 +18,67 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">DataTable with minimal features & hover style</h3>
+              <h3 class="card-title">Tambah Jadwal</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <% if (messages.success) { %>
+              <% if (messages && messages.success) { %>
                 <div class="alert alert-success">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                     <%= messages.success %>
                 </div>
-            <% } %>
-            <% if (messages.error) { %>
+              <% } %>
+              <% if (messages && messages.error) { %>
               <div class="alert alert-danger">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                     <%= messages.error %>
                 </div>
-            <% } %>
-           
+              <% } %>
+
               <form action="/admin/insert_jadwal" method="post">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="hari"> HARI </label>
+                      <label for="hari">Hari</label>
                       <select class="form-control" name="idh" id="">
-                        <% hari.forEach ((row )=> { %>
-                       <option value="<%= row.idh %>"><%= row.hari %></option>
-                       <% }) %>
+                        <% hari.forEach((row) => { %>
+                          <option value="<%= row.idh %>"><%= row.hari %></option>
+                        <% }) %>
                       </select>
-                     </div>
-                     <div class="form-group">
-                        <label for="mapel"> Mapel </label>
-                        <select class="form-control" name="idm" id="">
-                          <% mapel.forEach ((row )=> { %>
-                         <option value="<%= row.idm %>"><%= row.nama_mp %></option>
-                         <% }) %>
-                        </select>
-             
-                       </div>
-                <div class="form-group">
-                 <label for="kelas"> KELAS </label>
-                 <select class="form-control" name="idk" id="">
-                   <% kelas.forEach ((row )=> { %>
-                  <option value="<%= row.id_kelas %>"><%= row.nama_kelas %></option>
-                  <% }) %>
-                 </select>
-                </div>
-                  </div>
-                  <div class="col-md-6">
-                
+                    </div>
+
                     <div class="form-group">
-                        <label for="guru"> GURU </label>
-                        <select class="form-control" name="idg" id="">
-                          <% guru.forEach ((row )=> { %>
-                         <option value="<%= row.id_guru %>"><%= row.nama_guru %></option>
-                         <% }) %>
-                        </select>
-                       </div>
-                       <div class="form-group">
-                        <label>Jam mulai</label>
-                        <input type="time" class="form-control"  name="jam_mulai">
-                </div>
-                <div class="form-group">
-                    <label>Jam selesai</label>
-                    <input type="time" class="form-control"  name="jam_selesai">
-            </div>
+                      <label for="kelas">Kelas</label>
+                      <select class="form-control" name="idk" id="">
+                        <% kelas.forEach((row) => { %>
+                          <option value="<%= row.id_kelas %>"><%= row.nama_kelas %></option>
+                        <% }) %>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="guru">Guru</label>
+                      <select class="form-control" name="idg" id="">
+                        <% guru.forEach((row) => { %>
+                          <option value="<%= row.id_guru %>"><%= row.nama_guru %></option>
+                        <% }) %>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="jam_mulai">Jam Mulai</label>
+                      <input type="time" class="form-control" name="jam_mulai">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="jam_selesai">Jam Selesai</label>
+                      <input type="time" class="form-control" name="jam_selesai">
+                    </div>
                   </div>
                 </div>
+
                 <button type="submit" class="btn btn-primary">Tambahkan Data</button>
               </form>
             </div>
@@ -95,8 +88,8 @@
         </div>
       </div>
     </div>
-  </section>
-  
+</section>
+
 </div>
 
 <%- include("../../Componen/footer") %>

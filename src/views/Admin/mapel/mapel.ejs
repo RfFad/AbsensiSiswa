@@ -46,10 +46,10 @@
               <div class="table-responsive">
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
-                    <tr>
+                    <tr class="bg-dark">
                       <th style="width: 1%;">No</th>
                       <th>Nama Mapel</th>
-                      <th>Action</th>
+                      <th style="width: 200px;">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -59,9 +59,9 @@
                       <td><%= index + 1 %></td>
                       <td><%= mapel.nama_mp %></td>
                       <td>
-                        <a href="/admin/mapel/edit/<%= mapel.idm %>" class="btn btn-warning"><i class="fas fa-edit">Edit</i></a>
+                        <a href="/admin/mapel/edit/<%= mapel.idm %>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
                         <form action="/admin/mapel/delete/<%= mapel.idm %>?_method=DELETE" method="post" style="display:inline;" class="delete-form">
-                          <button type="button" class="btn btn-danger" onclick="confirmDelete(this)"><i class='fas fa-trash-alt'></i>Hapus</button>
+                          <button type="button" class="btn btn-danger" onclick="confirmDelete(this)"><i class='fas fa-trash-alt'></i></button>
                         </form>
                       </td>
                     </tr>

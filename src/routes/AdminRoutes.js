@@ -6,18 +6,20 @@ const verifyUser = require('../configs/verify');
 const {authHeader} = require('../configs/jwtMiddleware')  // assuming authHeader is another middleware
 // const {getInsertSiswa, pageInsert} = require('../controllers/AdminCrudController')
 const {getPageKelas, getInsertKelas, getDataKelas, getUpdateKelas, getUpdatePageKelas, getDeleteKelas} = require('../controllers/admin/KelasController')
-const {getInsertGuru, getPageGuru, getGuruData, getUpdatePage, updateGuru, getDeleteGuru} = require ('../controllers/admin/GuruController')
+const {getInsertGuru, getPageGuru, getGuruData, getUpdatePage, updateGuru, getDeleteGuru, getInfoGuruNip} = require ('../controllers/admin/GuruController')
 const{getCountData} = require ('../controllers/admin/CountAdminController');
 const {getInsertMapel, getDataMapel, getPageMapel, getUpdateMapel, getUpdatePageMapel, getDeleteMapel} = require('../controllers/admin/MapelController')
 const {getInsertHari, getPageHari, getDataHari, getDeleteHari, getUpdateHari, getUpdatePageHari} = require ('../controllers/admin/HariController');
 // const {getInsertHari, getPageHari} = require ('../controllers/admin/HariController');
-const { getInsertSiswa, getPageSiswa, getSiswaData, getUpdatePageSiswa, updateSiswa, getDeleteSiswa } = require('../controllers/admin/SiswaController') 
+const { getInsertSiswa, getPageSiswa, getSiswaData, getUpdatePageSiswa, updateSiswa, getDeleteSiswa, getInfoSiswaNis } = require('../controllers/admin/SiswaController') 
 const {getUpdatePageSekolah, updateSekolahData, getDataSekolah} = require('../controllers/admin/SekolahController')
+const TahunAjaranCont= require("../controllers/admin/TahunAjarController");
 const jadwal = require ('../controllers/admin/JadwalController');
-const riwayat = require ('../controllers/admin/RiwayatController')
-
+const riwayat = require ('../controllers/admin/RiwayatController');
+const TahunAjarCont = require('../controllers/admin/TahunAjarController');
+const upload = require("../configs/foto")
 //router
-router.get('/', checkRole('admin'), authHeader, getCountData)
+router.get('/', verifyUser.isLogin, getCountData)
 
 // //
 // router.get('/insert_siswa', pageInsert)
@@ -43,6 +45,7 @@ router.post('/insert_guru', getInsertGuru);
 router.get('/guru/edit/:id_guru', getUpdatePage)
 router.post('/guru/update/:id_guru', updateGuru);
 router.post('/guru/delete/:id_guru', getDeleteGuru);
+router.get('/info_guru/:nip', getInfoGuruNip);
 //hari
 router.get('/hari', getPageHari);
 router.post('/hari/create', getInsertHari);
@@ -57,6 +60,7 @@ router.get('/siswa', getPageSiswa);
 router.get('/data_siswa', getSiswaData)
 router.post('/insert_siswa', getInsertSiswa);
 router.get('/siswa/edit/:id_siswa', getUpdatePageSiswa)
+router.get('/info_siswa/:nis', getInfoSiswaNis)
 router.post('/siswa/update/:id_siswa', updateSiswa);
 router.post('/siswa/delete/:id_siswa', getDeleteSiswa);
 //sekolah
@@ -92,6 +96,11 @@ router.get('/getSiswaByKelas/:id_kelas', (req, res) => {
         res.json(results);
     });
 });
-
-
+// Tahun Ajaran
+router.get("/tahun_ajaran", TahunAjaranCont.TahunAjar)
+router.get("/tambah_tahun", TahunAjaranCont.PageInsert)
+router.post("/simpan_tahun", TahunAjaranCont.InsertTahun)
+router.post("/delete_ajaran/:idth", TahunAjarCont.DeleteTahun)
+router.get("/tahun_ajaranId/:idth", TahunAjarCont.GetAjaranId)
+router.post("/update_ajaran/:idth", TahunAjarCont.UpdateTahunAjar)
 module.exports = router;

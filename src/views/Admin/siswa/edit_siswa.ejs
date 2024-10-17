@@ -18,24 +18,24 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">DataTable with minimal features & hover style</h3>
+              <h3 class="card-title">Edit Data Siswa</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <% if (messages.success) { %>
+              <% if (messages && messages.success) { %>
                 <div class="alert alert-success">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                   <%= messages.success %>
                 </div>
               <% } %>
-              <% if (messages.error) { %>
+              <% if (messages && messages.error) { %>
                 <div class="alert alert-danger">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                   <%= messages.error %>
                 </div>
               <% } %>
-           
-              <form action="/admin/siswa/update/<%= siswa.id_siswa %>" method="post">
+
+              <form action="/admin/siswa/update/<%= siswa.id_siswa %>" method="post" enctype="multipart/form-data">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group mb-3">
@@ -56,6 +56,15 @@
                         <% }) %>
                       </select>
                     </div>
+                    <div class="form-group">
+                      <label for="Tahun Ajaran">Tahun Ajaran</label>
+                      <select class="form-control" name="idth" required>
+                       <option value="" disabled selected>--SELECT TAHUN_AJAR--</option>
+                       <% tahun_ajaran.forEach(tahun => { %>
+                         <option value="<%= tahun.idth %>" <%= siswa.idth === tahun.idth ? 'selected' : '' %>><%= tahun.nama_ajaran %></option>
+                       <% }) %>
+                     </select>
+                     </div>
                     <div class="form-group mb-3">
                       <label for="jk">Jenis Kelamin</label>
                       <select class="form-control" name="jk" required>
@@ -63,10 +72,30 @@
                         <option value="perempuan" <%= siswa.jk === 'perempuan' ? 'selected' : '' %>>Perempuan</option>
                       </select>
                     </div>
+
+                    <div class="form-group mb-3">
+                      <label for="tlp">No Telepon</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">+62</span>
+                        </div>
+                        <input type="text" class="form-control" name="tlp" placeholder="Masukkan No Telepon" value="<%= siswa.tlp %>">
+                      </div>
+                    </div>
                   </div>
 
                   <div class="col-md-6">
-                    
+                    <div class="form-group">
+                      <label>Date masks:</label>
+    
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                        </div>
+                        <input type="date" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask name="tgl_lahir" value="<%= siswa.tgl_lahir %>">
+                      </div>
+                      <!-- /.input group -->
+                    </div>
 
                     <div class="form-group mb-3">
                       <label for="nama_wali">Nama Wali</label>
@@ -78,9 +107,27 @@
                       <input type="text" class="form-control" name="alamat" placeholder="Masukkan Alamat" value="<%= siswa.alamat %>" required>
                     </div>
 
-                    <label for="password">Password</label>
                     <div class="form-group mb-3">
-                        <input type="password" class="form-control" name="password" placeholder="Masukkan password"  value="<%= siswa.password %>" required>
+                      <label for="pekerjaan_wali">Pekerjaan Wali</label>
+                      <input type="text" class="form-control" name="pekerjaan_wali" placeholder="Masukkan Pekerjaan Wali" value="<%= siswa.pekerjaan_wali %>" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="foto">Foto Siswa</label>
+                      <% if (siswa.foto) { %>
+                        <div class="mb-2">
+                          <img src="/images/<%= siswa.foto %>" alt="Foto Siswa" width="150" id="foto-old">
+                        </div>
+                      <% } %>
+                      <div class="form-group">
+                        <img id="fotoPreview" src="" alt="Preview Foto Siswa" style="display: none; width: 150px; margin-top: 10px;" />
+                      </div>
+                      <input type="file" name="foto" class="form-control" id="foto">
+                      <p class="help-block">Unggah foto siswa jika ingin mengganti.</p>
+                    </div>
+          
+                    <div class="form-group">
+                      <label for="password">Password (Kosongkan jika tidak ingin mengubah)</label>
+                      <input type="password" class="form-control" name="password" placeholder="Masukkan password baru jika ingin mengubah">
                     </div>
                   </div>
                 </div>
@@ -95,5 +142,40 @@
     </div>
   </section>
 </div>
+
+<script>
+  let date = new Date("<%= siswa.tgl_lahir %>");
+  let formattedDate = date.toISOString().split('T')[0];
+  document.querySelector('input[name="tgl_lahir"]').value = formattedDate;
+</script>
+<!--script -->
+<script src="/plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script>
+  // Fungsi untuk menampilkan preview foto baru
+  function previewFoto(event) {
+    const fotoInput = event.target;
+    const fotoPreview = $("#fotoPreview");
+    const fotoOld = $("#foto-old");
+
+    if (fotoInput.files && fotoInput.files[0]) {
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        fotoPreview.attr('src', e.target.result); // Ganti src dengan foto baru
+        fotoPreview.show(); // Tampilkan preview foto baru
+      };
+
+      reader.readAsDataURL(fotoInput.files[0]); // Baca file foto baru
+      fotoOld.hide(); // Sembunyikan foto lama
+    } else {
+      fotoPreview.hide(); // Jika tidak ada file baru, sembunyikan preview
+    }
+  }
+
+  // Event listener untuk input foto
+  document.getElementById("foto").addEventListener("change", previewFoto);
+</script>
 
 <%- include("../../Componen/footer") %>

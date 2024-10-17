@@ -25,13 +25,6 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <ul class="nav nav-tabs">
-              <li role="presentation" class="active "><a href="#">Senin</a></li>
-              <li role="presentation" class="ml-2"><a href="#">Selasa</a></li>
-              <li role="presentation"><a href="#">Rabu</a></li>
-              <li role="presentation"><a href="media.php?module=kamis">Kamis</a></li>
-              <li role="presentation"><a href="media.php?module=jumat">Jum'at</a></li>
-            </ul>
             <h3 class="card-title">DataTable with minimal features & hover style</h3>
           </div>
           <!-- /.card-header -->
@@ -59,10 +52,10 @@
             <div class="table-responsive">
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
-                  <tr>
+                  <tr class="bg-dark">
                     <th style="width: 1%;">No</th>
                     <th>Nama Kelas</th>
-                    <th>Action</th>
+                    <th style="width: 120px;">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -73,9 +66,9 @@
                     <td><%= index + 1 %></td>
                     <td><%= kelas.nama_kelas %></td>
                     <td>
-                      <a href="/admin/kelas/edit/<%= kelas.id_kelas %>" class="btn btn-warning"><i class="fas fa-edit">Edit</i></a>
+                      <a href="/admin/kelas/edit/<%= kelas.id_kelas %>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
                       <form action="/admin/kelas/delete/<%= kelas.id_kelas %>?_method=DELETE" method="post" style="display:inline;" class="delete-form">
-                        <button type="button" class="btn btn-danger" onclick="confirmDelete(this)"><i class='fas fa-trash-alt'></i>Hapus</button>
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete(this)"><i class='fas fa-trash-alt'></i></button>
                       </form>                    
                     </td>
                   </tr>

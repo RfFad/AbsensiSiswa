@@ -94,8 +94,10 @@ const jadwal = {
     }
   },
   getInsertJadwal: async (req, res) => {
-    const { idh, idg, idk, idm, jam_mulai, jam_selesai } = req.body;
+    const { idh, idg, idk, jam_mulai, jam_selesai } = req.body;
     try {
+      const [guru] = await jadwalmodel.getIdMapelByGuruId(idg);
+      const idm = guru.idm
       await jadwalmodel.InsertJadwal(
         idh,
         idg,
@@ -143,8 +145,10 @@ const jadwal = {
   },
   getUpdateInsert: async (req, res) => {
     const { idj } = req.params;
-    const { idh, idg, idk, idm, jam_mulai, jam_selesai } = req.body;
+    const { idh, idg, idk, jam_mulai, jam_selesai } = req.body;
     try {
+      const [guru] = await jadwalmodel.getIdMapelByGuruId(idg)
+      const idm = guru.idm
       await jadwalmodel.UpdateJadwal(
         idj,
         idh,

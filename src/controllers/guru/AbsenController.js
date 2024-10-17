@@ -2,6 +2,7 @@ const jadwalmodel = require('../../models/guru/jadwal_model');
 const { GetSiswaKelas } = require('../../models/models_siswa');
 const Attendance = require('../../models/guru/models_absen');
 const hariIna = require('../../configs/hari');
+const guru = require('../../models/guru/models_guru');
 
 const absen = {
     getabsenbyid: async (req, res) => {
@@ -46,7 +47,7 @@ const absen = {
             }
 
             const dateToday = new Date().toISOString().slice(0, 10);
-
+            const rows = await guru.getguru(req, res);
             // Get siswa data with attendance status
             const siswaData = await Promise.all(siswaList.map(async (siswa) => {
                 const absenRecord = await Attendance.getAttendanceByDateAndJadwal(siswa.id_siswa, dateToday, idj);
@@ -65,7 +66,7 @@ const absen = {
             }));
 
             // Render the attendance page
-            res.render('guru/absen/index', { jadwal, siswa: siswaData, dateToday });
+            res.render('guru/absen/index', { jadwal, rows, siswa: siswaData, dateToday });
 
         } catch (error) {
             console.error("Error rendering the page:", error);

@@ -8,9 +8,11 @@ const http = require('http');
 const socketIO = require('socket.io');
 const cookieParser = require('cookie-parser');
 
+
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
+
 
 
 // Definisi lokasi file router
@@ -33,7 +35,7 @@ app.use(session({
     name: 'secretName',
     cookie: {
         sameSite: true,
-        maxAge: 60000
+        maxAge: 10 * 60 *1000
     },
 }))
 app.use(flash());
