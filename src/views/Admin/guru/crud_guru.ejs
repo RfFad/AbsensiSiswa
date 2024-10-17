@@ -37,7 +37,7 @@
                 </div>
             <% } %>
            
-              <form action="/admin/insert_guru" method="post">
+              <form action="/admin/insert_guru" method="post" enctype="multipart/form-data">
                 <div class="row">
                   <div class="col-md-6">
                     <label for="Nip">Nip</label>
@@ -80,6 +80,15 @@
                       <option value="perempuan">Perempuan</option>
                       </select>
                 </div>
+                <div class="form-group">
+                  <label for="foto">Foto Guru</label>
+                  <input type="file" name="foto" class="form-control" id="foto" accept="image/*" onchange="previewFoto(event)">
+                </div>
+      
+                <!-- Tempat untuk menampilkan preview foto yang dipilih -->
+                <div class="form-group">
+                  <img id="fotoPreview" src="" alt="Preview Foto Siswa" style="display: none; width: 150px; margin-top: 10px;" />
+                </div>
                 <label for="password">Password</label>
                 <div class="form-group mb-3">
                     <input type="password" class="form-control" name="password" placeholder="Masukkan password" required>
@@ -98,5 +107,24 @@
   </section>
   
 </div>
+<script src="/plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script>
+  function previewFoto(event){
+    const fotoInput = event.target
+    const fotoPreview = $("#fotoPreview")
 
+    if(fotoInput.files && fotoInput.files[0]){
+      const reader = new FileReader();
+      reader.onload = function(e){
+        fotoPreview.attr('src', e.target.result);
+        fotoPreview.show()
+      }
+      reader.readAsDataURL(fotoInput.files[0])
+    }else{
+      fotoPreview.hide()
+    }
+  }
+</script>
 <%- include("../../Componen/footer") %>

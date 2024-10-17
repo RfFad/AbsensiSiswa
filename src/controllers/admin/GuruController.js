@@ -8,8 +8,25 @@ const {
 } = require("../../models/models_guru");
 const {getMapel} = require("../../models/models_mapel");
 const jadwal = require("../../models/models_jadwal")
-const md5 = require("md5"); // Import the MD5 module
-
+const md5 = require("md5");
+const tahun_ajar = require("../../models/models_tahunajar");
+const path = require('path');
+const multer = require('multer');
+const fs = require('fs');
+//untuk upload foto
+if (!fs.existsSync(path.join(__dirname,'..', '..', 'public', 'fp_guru'))) {
+  fs.mkdirSync(path.join(__dirname, '..','..', 'public', 'fp_guru'), { recursive: true });
+}
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '..','..', 'public', 'fp_guru')); // Tentukan folder penyimpanan
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)); // Menambahkan timestamp ke nama file
+  }
+});
+const upload = multer({ storage: storage }).single('foto');
+//metod guru
 const getGuruData = async (req, res) => {
   try {
     const messages = {
@@ -51,16 +68,23 @@ const getPageGuru = async (req, res) => {
 };
 
 const getInsertGuru = async (req, res) => {
+  upload(req, res, async (err) => { 
+    if (err) {
+      return res.status(500).json({ message: 'Error uploading file', error: err });
+    }
+
   const { nip, nama_guru, idm, jk, jabatan, alamat, tlp, password } = req.body;
+  let foto = req.file ? req.file.filename : null;
   try {
     const hashedPassword = md5(password); // Hash the password using MD5
-    await InsertGuru(nip, nama_guru, idm, jk, jabatan, alamat, tlp, hashedPassword); // Use the hashed password
+    await InsertGuru(nip, nama_guru, idm, jk, jabatan, alamat, tlp, hashedPassword, foto); // Use the hashed password
     req.flash("success", "Berhasil menambahkan data!");
     return res.redirect("/admin/data_guru");
   } catch (error) {
     req.flash("error", `Gagal menambahkan data! ${error.message}`);
     return res.redirect("/admin/guru");
   }
+});
 };
 
 const getUpdatePage = async (req, res) => {
@@ -84,13 +108,27 @@ const getUpdatePage = async (req, res) => {
 };
 
 const updateGuru = async (req, res) => {
+  upload(req, res, async (err) => { 
   const { id_guru } = req.params;
   const { nip, nama_guru, idm, jk, jabatan, alamat, tlp, password } = req.body;
-
-  try {
+  let foto = req.file ? req.file.filename : null;
+  try {   
     // Ambil data guru berdasarkan id_guru
     let guru = await getGuruById(id_guru);
-
+    if (!foto) {
+      foto = guru.foto; // Gunakan foto lama jika tidak ada foto baru
+    } else {
+    if (guru.foto) {
+      const oldFotoPath = path.join(__dirname, '..', '..', 'public', 'fp_guru', guru.foto);
+      if (fs.existsSync(oldFotoPath)) {
+        // Cek apakah foto bukan default, jika ada logika default image
+        if (guru.foto !== 'default.jpg') { 
+          fs.unlinkSync(oldFotoPath); // Hapus foto lama
+          console.log("Foto lama berhasil dihapus:", oldFotoPath);
+        }
+      }
+    }
+  }
     // Hash password hanya jika ada perubahan password
     const hashedPassword = password ? md5(password) : guru.password;
 
@@ -104,7 +142,8 @@ const updateGuru = async (req, res) => {
       jabatan,
       alamat,
       tlp,
-      hashedPassword
+      hashedPassword,
+      foto
     );
 
     // Update juga id_mapel di tabel jadwal berdasarkan id_guru
@@ -113,9 +152,11 @@ const updateGuru = async (req, res) => {
     req.flash("success", "Berhasil memperbarui data!");
     return res.redirect("/admin/data_guru");
   } catch (error) {
+    console.log(error)
     req.flash("error", `Gagal memperbarui data! ${error.message}`);
     return res.redirect(`/admin/guru/edit/${id_guru}`);
   }
+})
 };
 
 

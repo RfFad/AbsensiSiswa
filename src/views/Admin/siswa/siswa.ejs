@@ -126,7 +126,7 @@
                       <th>Nama Wali</th>
                       <th>Alamat</th>
                       <th>Pekerjaan Wali</th>
-                      <th>Tahun Ajaran</th>
+                      <th style="width: 7%;">Tahun Ajaran</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -229,6 +229,15 @@
                                                     <h6 class="mb-0">Kelas</h6>
                                                 </div>
                                                 <div class="col-md-8 text-secondary" id="modal-kelas">
+                                                    
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <h6 class="mb-0">Tahun Ajaran</h6>
+                                                </div>
+                                                <div class="col-md-8 text-secondary" id="modal-ajaran">
                                                     
                                                 </div>
                                             </div>
@@ -341,6 +350,7 @@
             var data = response.siswa; // Ambil data siswa
             $('#modal-nis').text(data.nis); // Tampilkan NIS
             $('#modal-nama').text(data.nama_siswa); // Tampilkan nama siswa
+            $('#modal-ajaran').text(data.nama_ajaran); // Tampilkan nama siswa
             $('#nama').text(data.nama_siswa); // Tampilkan nama siswa
             $('#modal-kelas').text(data.nama_kelas); // Tampilkan kelas siswa, pastikan ini ada dalam data
             $('#kelas').text(data.nama_kelas); // Tampilkan kelas siswa, pastikan ini ada dalam data

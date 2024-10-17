@@ -36,7 +36,7 @@
                 </div>
               <% } %>
 
-              <form action="/admin/guru/update/<%= guru.id_guru %>" method="post">
+              <form action="/admin/guru/update/<%= guru.id_guru %>" method="post" enctype="multipart/form-data">
                 <div class="row">
                   <div class="col-md-6">
                     <label for="Nip">Nip</label>
@@ -82,6 +82,19 @@
                       </select>
                     </div>
                     <div class="form-group">
+                      <label for="foto">Foto Guru</label>
+                      <% if (guru.foto) { %>
+                        <div class="mb-2">
+                          <img src="/fp_guru/<%= guru.foto %>" alt="Foto Siswa" width="150" id="foto-old">
+                        </div>
+                      <% } %>
+                      <div class="form-group">
+                        <img id="fotoPreview" src="" alt="Preview Foto Siswa" style="display: none; width: 150px; margin-top: 10px;" />
+                      </div>
+                      <input type="file" name="foto" class="form-control" id="foto">
+                      <p class="help-block">Unggah foto siswa jika ingin mengganti.</p>
+                    </div>
+                    <div class="form-group">
                       <label for="password">Password (Kosongkan jika tidak ingin mengubah)</label>
                       <input type="password" class="form-control" name="password" placeholder="Masukkan password baru jika ingin mengubah">
                     </div>
@@ -96,5 +109,32 @@
     </div>
   </section>
 </div>
+<script src="/plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script>
+  // Fungsi untuk menampilkan preview foto baru
+  function previewFoto(event) {
+    const fotoInput = event.target;
+    const fotoPreview = $("#fotoPreview");
+    const fotoOld = $("#foto-old");
 
+    if (fotoInput.files && fotoInput.files[0]) {
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        fotoPreview.attr('src', e.target.result); // Ganti src dengan foto baru
+        fotoPreview.show(); // Tampilkan preview foto baru
+      };
+
+      reader.readAsDataURL(fotoInput.files[0]); // Baca file foto baru
+      fotoOld.hide(); // Sembunyikan foto lama
+    } else {
+      fotoPreview.hide(); // Jika tidak ada file baru, sembunyikan preview
+    }
+  }
+
+  // Event listener untuk input foto
+  $("#foto").change(previewFoto)
+</script>
 <%- include("../../Componen/footer") %>

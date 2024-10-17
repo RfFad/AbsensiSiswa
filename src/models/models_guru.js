@@ -43,7 +43,7 @@ const getGuruById = async (id_guru) => {
     });
 }
 
-const InsertGuru = async (nip, nama_guru, idm, jk, jabatan, alamat, tlp, password) => {
+const InsertGuru = async (nip, nama_guru, idm, jk, jabatan, alamat, tlp, password, foto) => {
     return new Promise((resolve, reject) => {
         connection.query(`
             SELECT * FROM guru WHERE nip = ?
@@ -55,8 +55,8 @@ const InsertGuru = async (nip, nama_guru, idm, jk, jabatan, alamat, tlp, passwor
             }
             // Insert data
             connection.query(`
-                INSERT INTO guru (nip, nama_guru, idm, jk, jabatan, alamat, tlp, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            `, [nip, nama_guru, idm, jk, jabatan, alamat, tlp, password], (insertError, insertResults) => {
+                INSERT INTO guru (nip, nama_guru, idm, jk, jabatan, alamat, tlp, password, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `, [nip, nama_guru, idm, jk, jabatan, alamat, tlp, password, foto], (insertError, insertResults) => {
                 if (insertError) return reject(insertError);
                 resolve(insertResults);
             });
@@ -64,7 +64,7 @@ const InsertGuru = async (nip, nama_guru, idm, jk, jabatan, alamat, tlp, passwor
     });
 }
 
-const UpdateGuru = async (id_guru, nip, nama_guru, idm, jk, jabatan, alamat, tlp, password) => {
+const UpdateGuru = async (id_guru, nip, nama_guru, idm, jk, jabatan, alamat, tlp, password, foto) => {
     return new Promise((resolve, reject) => {
         connection.query(`
             SELECT * FROM guru WHERE id_guru = ?
@@ -78,9 +78,9 @@ const UpdateGuru = async (id_guru, nip, nama_guru, idm, jk, jabatan, alamat, tlp
             // Update data
             connection.query(`
                 UPDATE guru 
-                SET nip = ?, nama_guru = ?, idm = ?, jk = ?, jabatan = ?, alamat = ?, tlp = ?, password = ? 
+                SET nip = ?, nama_guru = ?, idm = ?, jk = ?, jabatan = ?, alamat = ?, tlp = ?, password = ?, foto = ? 
                 WHERE id_guru = ?
-            `, [nip, nama_guru, idm, jk, jabatan, alamat, tlp, password, id_guru], (updateError, updateResults) => {
+            `, [nip, nama_guru, idm, jk, jabatan, alamat, tlp, password, foto, id_guru], (updateError, updateResults) => {
                 if (updateError) return reject(updateError);
                 resolve(updateResults);
             });

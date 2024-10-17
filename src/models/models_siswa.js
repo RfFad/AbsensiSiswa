@@ -48,9 +48,9 @@ const getSiswaById = async (id_siswa) => {
 const getInfoSiswa = async (nis) => {
     return new Promise((resolve, reject) => {
         connection.query(`
-         SELECT siswa.*, kelas.nama_kelas as nama_kelas 
+         SELECT siswa.*, kelas.nama_kelas as nama_kelas, tahun_ajaran.nama_ajaran AS nama_ajaran 
           FROM siswa 
-          JOIN kelas ON siswa.id_kelas = kelas.id_kelas WHERE nis = ?
+          JOIN kelas ON siswa.id_kelas = kelas.id_kelas JOIN tahun_ajaran ON siswa.idth = tahun_ajaran.idth WHERE nis = ?
         `, [nis], (error, result) => {
             if (error) {
                 return reject(error);
