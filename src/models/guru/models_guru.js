@@ -12,6 +12,29 @@ const gurumodel = {
             });
         });
     },
+     UpdateGuru : async (id_guru, nama_guru, jk, jabatan, alamat, tlp, foto) => {
+        return new Promise((resolve, reject) => {
+            connection.query(`
+                SELECT * FROM guru WHERE id_guru = ?
+            `, [id_guru], (error, results) => {
+                if (error) return reject(error);
+    
+                if (results.length === 0) {
+                    return reject(new Error('Data guru tidak ditemukan'));
+                }
+    
+                // Update data
+                connection.query(`
+                    UPDATE guru 
+                    SET nama_guru = ?, jk = ?, jabatan = ?, alamat = ?, tlp = ?, foto = ? 
+                    WHERE id_guru = ?
+                `, [ nama_guru, jk, jabatan, alamat, tlp, foto, id_guru], (updateError, updateResults) => {
+                    if (updateError) return reject(updateError);
+                    resolve(updateResults);
+                });
+            });
+        });
+    }
 }
 
 module.exports = gurumodel

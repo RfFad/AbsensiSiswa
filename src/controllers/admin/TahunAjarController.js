@@ -62,7 +62,7 @@ GetAjaranId : async (req, res) => {
         const messages = {
             error: req.flash("error")  
         };
-        res.render("Admin/tahun_ajar/edit_ajaran", {tahun, messages, currentPath : "/admin/tahun_ajaranId"})
+        res.render("Admin/tahun_ajar/edit_ajaran", {tahun, messages, currentPath : "/admin/tahun_ajaranId/:idth"})
     } catch (error) {
         console.log(error)
         res.status(400).send("internal serve error");

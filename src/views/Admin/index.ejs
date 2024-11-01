@@ -91,8 +91,40 @@
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
+
+      <!-- Row for Grafik -->
+      <div class="row">
+        <div class="col-12">
+          <div class="grafik">
+      
+          </div>
+        </div>
+      </div>
     </section>
     <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-  <%- include("../Componen/footer") %>
+</div>
+<!-- /.content-wrapper -->
+
+<!-- jQuery -->
+<script src="/plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- AJAX Load Grafik -->
+<script>
+  $(document).ready(function() {
+    function loadGrafik() {
+      // Memuat halaman grafik ke dalam class 'grafik'
+      $(".grafik").load('/admin/grafik', function(response, status, xhr) {
+        if (status == "error") {
+          // Tampilkan pesan error jika gagal memuat
+          $('.grafik').html("<p>Error memuat halaman grafik: " + xhr.status + " " + xhr.statusText + "</p>");
+        }
+      });
+    }
+
+    // Panggil fungsi loadGrafik saat halaman selesai dimuat
+    loadGrafik();
+  });
+</script>
+
+<%- include("../Componen/footer") %>

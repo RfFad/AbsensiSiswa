@@ -35,9 +35,10 @@ app.use(session({
     name: 'secretName',
     cookie: {
         sameSite: true,
-        maxAge: 10 * 60 *1000
+        maxAge: 60 * 60 * 1000 // 1 jam dalam milidetik
     },
-}))
+}));
+
 app.use(flash());
 
 // Setting folder views
