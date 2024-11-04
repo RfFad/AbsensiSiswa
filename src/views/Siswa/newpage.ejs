@@ -1,0 +1,142 @@
+<%- include("./Componen/header") %>
+<style>
+    .carousel-caption h5 {
+  font-size: 1.5rem; /* default font size for mobile */
+}
+
+.carousel-caption p {
+  font-size: 1rem;
+}
+
+@media (min-width: 768px) {
+  .carousel-caption h5 {
+    font-size: 2rem; /* larger font size for tablets and above */
+  }
+
+  .carousel-caption p {
+    font-size: 1.25rem;
+  }
+}
+/* Menggelapkan gambar */
+.carousel-item {
+  position: relative;
+}
+
+.carousel-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Warna hitam dengan transparansi 50% */
+  z-index: 0;
+}
+
+.carousel-item img {
+  z-index: -1; /* Gambar di belakang overlay */
+}
+
+/* Menambahkan bayangan pada teks */
+.text-shadow {
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Efek bayangan */
+}
+
+.carousel-caption {
+  z-index: 0; /* Teks berada di depan overlay */
+}
+
+  </style>
+<%- include("./Componen/sidebar") %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container">
+        <div class="row mb-2">
+          
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container">
+          <div class="row justify-content-center">
+            <!-- ./col -->
+            <div class="col-lg-2 col-6">
+              <div class="info-box d-flex flex-column align-items-center">
+                <a href="/siswa/jadwal" class="d-flex justify-content-center align-items-center flex-column text-reset text-decoration-none">
+                  <span class="info-box-icon bg-success d-flex justify-content-center align-items-center" style="width: 90px; height: 80px;">
+                    <i class="fas fa-chart-pie" style="font-size: 2rem;"></i>
+                  </span>
+                  <div class="info-box-content text-center mt-2">
+                    <span class="info-box-text">Jadwal Mengajar</span>
+                    <span class="info-box-number"></span>
+                  </div>
+                </a>
+              </div>
+            </div>
+            
+            <!-- ./col -->
+            <div class="col-lg-2 col-6">
+              <div class="info-box d-flex flex-column align-items-center">
+                <a href="/siswa/jadwal" class="d-flex justify-content-center align-items-center flex-column text-reset text-decoration-none">
+                  <span class="info-box-icon bg-danger d-flex justify-content-center align-items-center" style="width: 90px; height: 80px;">
+                    <i class="far fa-user" style="font-size: 2rem;"></i>
+                  </span>
+                  <div class="info-box-content text-center mt-2">
+                    <span class="info-box-text">Daftar Murid</span>
+                    <span class="info-box-number"></span>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-2 col-6">
+              <div class="info-box d-flex flex-column align-items-center">
+                <a href="/siswa/jadwal" class="d-flex justify-content-center align-items-center flex-column text-reset text-decoration-none">
+                  <span class="info-box-icon bg-warning d-flex justify-content-center align-items-center" style="width: 90px; height: 80px;">
+                    <i class="far fa-user" style="font-size: 2rem;"></i>
+                  </span>
+                  <div class="info-box-content text-center mt-2">
+                    <span class="info-box-text">Daftar</span>
+                    <span class="info-box-number"></span>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-2 col-6">
+              <div class="info-box d-flex flex-column align-items-center">
+                <a href="/siswa/jadwal" class="d-flex justify-content-center align-items-center flex-column text-reset text-decoration-none">
+                  <span class="info-box-icon bg-primary d-flex justify-content-center align-items-center" style="width: 90px; height: 80px;">
+                    <i class="far fa-user" style="font-size: 2rem;"></i>
+                  </span>
+                  <div class="info-box-content text-center mt-2">
+                    <span class="info-box-text">Daftar</span>
+                    <span class="info-box-number"></span>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <!-- ./col -->
+          </div>
+
+
+          
+      
+      
+          <!-- /END THE FEATURETTES -->
+          <!-- /.row -->  
+    <!-- /.content -->
+  </div>
+  </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+  
+
+  <!-- Main Footer -->
+  <%- include("./Componen/footer") %>
