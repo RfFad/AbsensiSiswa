@@ -92,7 +92,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                         </div>
-                        <input type="date" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask name="tgl_lahir" value="<%= siswa.tgl_lahir %>">
+                        <input type="date" class="form-control"  data-inputmask-inputformat="dd/mm/yyyy"  name="tgl_lahir" >
                       </div>
                       <!-- /.input group -->
                     </div>
@@ -144,9 +144,9 @@
 </div>
 
 <script>
-  let date = new Date("<%= siswa.tgl_lahir %>");
-  let formattedDate = date.toISOString().split('T')[0];
-  document.querySelector('input[name="tgl_lahir"]').value = formattedDate;
+  // let date = new Date("<%= siswa.tgl_lahir %>");
+  // let formattedDate = date.toISOString().split('T')[0];
+  // document.querySelector('input[name="tgl_lahir"]').value = formattedDate;
 </script>
 <!--script -->
 <script src="/plugins/jquery/jquery.min.js"></script>
@@ -154,6 +154,10 @@
 <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
 <script>
   // Fungsi untuk menampilkan preview foto baru
+  let tgl_lahir = "<%= siswa.tgl_lahir %>";
+  let tgl = new Date(tgl_lahir)
+  let format = tgl.toLocaleDateString('en-CA')
+  $("[name = 'tgl_lahir']").val(format)
   function previewFoto(event) {
     const fotoInput = event.target;
     const fotoPreview = $("#fotoPreview");

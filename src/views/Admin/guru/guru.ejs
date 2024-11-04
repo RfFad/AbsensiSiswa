@@ -70,6 +70,35 @@
 <!-- Main content -->
 <section class="content">
   <div class="container-fluid">
+    <div class="row" style="display: none;" id="filter">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                <input type="text" class="form-control" placeholder="Nama Guru" id="namaSearch">
+              </div>
+              <div class="form-group">
+                <select class="form-control" id="genderSelect">
+                  <option value="semua">Pilih Gender</option>
+                  <option value="semua">Semua</option>
+                  <option value="laki-laki">Laki-laki</option>
+                  <option value="perempuan">Perempuan</option>
+                </select>
+              </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Alamat" id="alamatSearch">
+                </div>
+              </div>
+              <button id="filterButton" class="btn btn-secondary ml-2 mt-3" style="height: 35px;">Search</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="col-12">
         <div class="card">
@@ -86,10 +115,10 @@
                   <span>Tambahkan data</span>
                 </a>
                 </span>
-                <button id="exportButton" type="button" class="btn btn-primary col-12 col-md-3 mb-2 mb-md-0 start"><a href="/admin/export/guru" style="color: inherit;">
+                <button id="exportButton" type="button" class="btn btn-primary col-12 col-md-3 mb-2 mb-md-0 start">
                   <i class="fas fa-upload"></i>
                   <span>Export Data</span>
-                </a>
+                
               </button>
               
                 <button type="reset" class="btn btn-warning col-12 col-md-3 mb-2 mb-md-0 cancel">
@@ -289,6 +318,62 @@
 <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
 <script>
   $(document).ready(function(){
+    $("#filter-btn").click(function(){
+      if($("#filter").is(":visible")){
+        $("#filter").hide("");
+        $("#filter-btn").text("Filter");
+      }else{
+        $("#filter").show("");
+        $("#filter-btn").text("Tutup");
+      }
+    });
+    $("#exportButton").on("click", function(){
+      Swal.fire({
+      title: "Export Data Siswa?",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if(result.isConfirmed){
+        let params = new URLSearchParams(window.location.search);
+        let url = `/admin/export/guru?${params.toString()}`;
+        window.location.href = url;
+
+
+        
+      }
+    })
+    })
+    $("#filterButton").on("click", function(){
+      const namaSeacrh = $("#namaSearch").val();
+      const alamatSeacrh = $("#alamatSearch").val();
+      const genderSeacrh = $("#genderSelect").val();
+
+      let url = "/admin/data_guru";
+      let params = [];
+      if(namaSeacrh && namaSeacrh !== "semua"){
+        params.push(`nama_guru=${namaSeacrh}`);
+      }
+      if(alamatSeacrh && alamatSeacrh !== "semua"){
+        params.push(`alamat=${alamatSeacrh}`);
+      }
+      if(genderSeacrh && genderSeacrh !== "semua"){
+        params.push(`jk=${genderSeacrh}`);
+      }
+
+      if(params.length > 0){
+        url += "?" + params.join("&");
+      }
+      window.location.href  = url; 
+    });
+
+    function tutup_filter(){
+      $("#filter-btn").click(function(){
+        $("#filter").hide("");
+      })
+    }
     $(".info-btn").click(function(){
       var nip = $(this).data("nip")
       $.ajax({
@@ -317,3 +402,4 @@
   })
 </script>
 <%- include("../../Componen/footer") %>
+

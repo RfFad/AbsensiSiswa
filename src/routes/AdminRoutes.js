@@ -17,7 +17,7 @@ const TahunAjaranCont= require("../controllers/admin/TahunAjarController");
 const jadwal = require ('../controllers/admin/JadwalController');
 const riwayat = require ('../controllers/admin/RiwayatController');
 const TahunAjarCont = require('../controllers/admin/TahunAjarController');
-const upload = require("../configs/foto")
+
 //router
 router.get('/', verifyUser.isLogin, getCountData)
 

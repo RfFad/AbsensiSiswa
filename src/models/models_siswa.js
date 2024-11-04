@@ -22,7 +22,7 @@ const getGrafikSiswa = async () => {
         });
     });
 };
-const getSiswa = async (id_kelas = null, idth = null) => {
+const getSiswa = async (id_kelas = null, idth = null, jk = null, tgl_lahir = null, nama_siswa = null, alamat = null, nama_wali = null, pekerjaan_wali = null) => {
     return new Promise((resolve, reject) => {
         let query = `
           SELECT siswa.*, kelas.nama_kelas AS nama_kelas, tahun_ajaran.nama_ajaran AS nama_ajaran 
@@ -32,25 +32,55 @@ const getSiswa = async (id_kelas = null, idth = null) => {
         `;
 
         const params = [];
+        const condition = [];
 
         // Filter by class if `id_kelas` is provided
         if (id_kelas) {
-            query += ` WHERE siswa.id_kelas = ?`;
+            condition.push (` siswa.id_kelas = ?`);
             params.push(id_kelas);
         }
 
         // Filter by year if `idth` is provided
         if (idth) {
-            if (params.length > 0) {
-                query += ` AND siswa.idth = ?`;
-            } else {
-                query += ` WHERE siswa.idth = ?`;
-            }
+            
+                condition.push( `  siswa.idth = ?`);
+           
             params.push(idth);
         }
+        if(jk){
+           
+                condition.push(`siswa.jk = ?`)
+            params.push(jk);
+        }
+        if(tgl_lahir){
+           
+                condition.push(`siswa.tgl_lahir = ?`)
+            params.push(tgl_lahir);
+        }
 
-        query += ` ORDER BY siswa.id_siswa`;
+        if(nama_siswa){
+            condition.push(`siswa.nama_siswa LIKE ?`);
+            params.push(`%${nama_siswa}%`);
+        }
 
+        if(alamat){
+            condition.push(`siswa.alamat LIKE ?`)
+            params.push(`%${alamat}%`);
+        }
+        if(nama_wali){
+            condition.push(`siswa.nama_wali LIKE ?`)
+            params.push(`%${nama_wali}%`);
+        }
+        if(pekerjaan_wali){
+            condition.push(`siswa.pekerjaan_wali LIKE ?`)
+            params.push(`%${pekerjaan_wali}%`);
+        }
+
+        if(condition.length > 0){
+            query += `WHERE ` + condition.join(" AND ")
+        }
+        query += ` ORDER BY siswa.nis`;
+        
         // Execute the query
         connection.query(query, params, (error, result) => {
             if (error) {

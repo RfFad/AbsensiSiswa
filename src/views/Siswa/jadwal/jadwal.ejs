@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Font dan Style dari AdminLTE -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
+    <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
+</head>
+<body onload="list()">
+    <div class="body">
+        <!-- Konten tabel akan dimuat di sini -->
+    </div>
+
+    <!-- Skrip dari AdminLTE dan Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="/plugins/jquery/jquery.min.js"></script>
+    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/dist/js/adminlte.min.js"></script>
+    
+    <script>
+        function list(){
+            let html = "";
+            $.ajax({
+                url: "/siswa/data_jadwal",
+                type: "GET",
+                success: function(result) {
+                    const val = result.data;
+                    if (result.count > 0) {
+                        html += "<table class='table table-bordered'>";
+                        html += "<thead class='bg-dark'>";
+                        html += "<tr><th>Nama Guru</th></tr>";
+                        html += "</thead><tbody>";
+                        $.each(val, function(index, row) {
+                            html += `<tr id='data' kode='${row.idj}'>`;
+                            html += `<td>${row.nama_guru}</td>`;
+                            html += "</tr>";
+                        });
+                        html += "</tbody></table>";
+                    } else {
+                        html = "<p>No data available</p>";
+                    }
+                    $(".body").html(html);
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", status, error);
+                    $(".body").html("<p>Error loading data</p>");
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -38,7 +38,13 @@ try {
   
   const kelas = req.query.id_kelas || null;
   const tahunAjar = req.query.idth || null;
-  const siswaData = await getSiswa(kelas, tahunAjar);
+  const jk = req.query.jk || null ;
+  const tgl_lahir = req.query.tgl_lahir || null ;
+  const nama_siswa = req.query.nama_siswa || null;
+  const alamat = req.query.alamat || null;
+  const nama_wali = req.query.nama_wali || null;
+  const pekerjaan_wali = req.query.pekerjaan_wali || null;
+  const siswaData = await getSiswa(kelas, tahunAjar, jk, tgl_lahir, nama_siswa, alamat, nama_wali, pekerjaan_wali);
 
   const workbook =new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('Data Siswa');
@@ -47,6 +53,10 @@ try {
     {header: 'NIS', key:'nis', width: 15},
     {header: 'Nama Siswa', key:'nama_siswa', width: 25},
     {header: 'Kelas', key:'nama_kelas', width: 15},
+    {header: 'Gender', key:'jk', width: 10},
+    {header: 'Tanggal Lahir', key:'tgl_lahir', width: 15},
+    {header: 'Nama Wali', key:'nama_wali', width: 25},
+    {header: 'Pekerjaan Wali', key:'pekerjaan_wali', width: 25},
     {header: 'Tahun Ajaran', key:'nama_ajaran', width: 20},
   ];
   siswaData.forEach((siswa)=>{
@@ -54,6 +64,10 @@ try {
       nis: siswa.nis,
       nama_siswa: siswa.nama_siswa,
       nama_kelas: siswa.nama_kelas,
+      jk: siswa.jk,
+      tgl_lahir: siswa.tgl_lahir,
+      nama_wali: siswa.nama_wali,
+      pekerjaan_wali: siswa.pekerjaan_wali,
       nama_ajaran: siswa.nama_ajaran
     })
   });
@@ -111,9 +125,14 @@ const getSiswaData = async (req, res) => {
     // Ambil parameter kelas dari query, atau null jika tidak ada
     const kelas = req.query.id_kelas || null;
     const tahunAjar = req.query.idth || null;
-
+    const jk = req.query.jk || null ;
+    const tgl_lahir = req.query.tgl_lahir || null ;
+    const nama_siswa = req.query.nama_siswa || null;
+    const alamat = req.query.alamat || null;
+    const nama_wali = req.query.nama_wali || null;
+    const pekerjaan_wali = req.query.pekerjaan_wali || null;
     // Ambil data siswa berdasarkan kelas (jika dipilih) atau semua siswa
-    const siswakelas = await getSiswa(kelas, tahunAjar);
+    const siswakelas = await getSiswa(kelas, tahunAjar, jk, tgl_lahir, nama_siswa, alamat, nama_wali, pekerjaan_wali);
 
     // Render ke view 'siswa'
     res.render("admin/siswa/siswa", {

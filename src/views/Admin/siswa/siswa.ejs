@@ -71,12 +71,26 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <select class="form-control" id="kelasSelect">
-                      <option value="">Pilih Kelas</option>
+                      <option value="semua">Pilih Kelas</option>
                       <option value="semua">Semua</option>
                       <% datakelas.forEach(k => { %>
                         <option value="<%= k.id_kelas %>"><%= k.nama_kelas %></option>
                       <% }); %>
                     </select>
+                  </div>
+                  <div class="form-group">
+                    <select class="form-control" id="genderSelect">
+                      <option value="semua">Pilih Gender</option>
+                      <option value="semua">Semua</option>
+                      <option value="laki-laki">Laki-laki</option>
+                      <option value="perempuan">Perempuan</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="siswaSelect" placeholder="Nama Siswa">
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="waliSelect" placeholder="Nama Wali">
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -88,6 +102,15 @@
                         <option value="<%= t.idth %>"><%= t.nama_ajaran %></option>
                       <% }); %>
                     </select>
+                  </div>
+                  <div class="form-group mb-3">
+                    <input type="date" class="form-control" id="dateSelect">
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="alamatSelect" placeholder="Alamat">
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="pekerjaanSelect" placeholder="Pekerjaan Wali">
                   </div>
                 </div>
                 <button id="filterButton" class="btn btn-secondary ml-2" style="height: 35px;">Search</button>
@@ -146,7 +169,7 @@
                       <th>Nis</th>
                       <th>Nama Siswa</th>
                       <th>Kelas</th>
-                      <th>Jk</th>
+                      <th style="width: 3%;">Jk</th>
                       <th>Nama Wali</th>
                       <th>Alamat</th>
                       <th>Pekerjaan Wali</th>
@@ -351,35 +374,88 @@
 <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
 <script>
   $(document).ready(function() {
+    const storedTahun = localStorage.getItem("tahunSelect");
+    const storedKelas = localStorage.getItem("kelasSelect");
+    const storedGender = localStorage.getItem("genderSelect");
+    if (storedTahun) $("#tahunSelect").val(storedTahun);
+    if (storedKelas) $("#kelasSelect").val(storedKelas);
+    if (storedGender) $("#genderSelect").val(storedGender);
+
+    // if (storedTahun || storedKelas || storedGender) {
+    //     $("#filter").show();
+    // }
     // Toggle filter section on button click
     $("#filter-btn").click(function() {
+      
       $("#filter").slideToggle();
     });
     $("#filterButton").on("click", function() {
     const tahunSelected = $("#tahunSelect").val();
     const selectedKelas = $("#kelasSelect").val();
+    const genderSelect = $("#genderSelect").val();
+    const dateSelect = $("#dateSelect").val();
+    const siswaSelect = $("#siswaSelect").val();
+    const alamatSelect = $("#alamatSelect").val();
+    const waliSelect = $("#waliSelect").val();
+    const pekerjaanSelect = $("#pekerjaanSelect").val();
     let url = "/admin/data_siswa";
     let params = [];
-    if (selectedKelas && tahunSelected !== "semua") {
-        params.push(`idth=${tahunSelected}`); // Filter tahun ajaran
+
+    localStorage.setItem("tahunSelect", tahunSelected);
+    localStorage.setItem("kelasSelect", selectedKelas);
+    localStorage.setItem("genderSelect", genderSelect);
+    // Cek dan tambahkan parameter filter jika ada
+    if (tahunSelected && tahunSelected !== "semua") {
+        params.push(`idth=${tahunSelected}`); 
     }
-    if (tahunSelected && selectedKelas !== "semua") {
-        params.push(`id_kelas=${selectedKelas}`); // Filter kelas
+    if (selectedKelas && selectedKelas !== "semua") {
+        params.push(`id_kelas=${selectedKelas}`); 
     }
+    if (genderSelect && genderSelect !== "semua") {
+        params.push(`jk=${genderSelect}`); 
+    }
+    if ( dateSelect && dateSelect !== "semua") {
+        params.push(`tgl_lahir=${dateSelect}`); 
+    }
+    if ( siswaSelect && siswaSelect !== "semua") {
+        params.push(`nama_siswa=${siswaSelect}`); 
+    }
+    if(alamatSelect && alamatSelect !== "semua"){
+      params.push(`alamat=${alamatSelect}`)
+    }
+    if(waliSelect && waliSelect !== "semua"){
+      params.push(`nama_wali=${waliSelect}`)
+    }
+    if(pekerjaanSelect && pekerjaanSelect !== "semua"){
+      params.push(`pekerjaan_wali=${pekerjaanSelect}`)
+    }
+
+    // Gabungkan parameter jika ada filter yang dipilih
     if (params.length > 0) {
         url += "?" + params.join("&");
     }
-
-    // Redirect to filter data
+    // Redirect ke URL yang sudah difilter
     window.location.href = url;
 });
 
 $("#exportButton").on("click", function() {
-    const tahunSelected = $("#tahunSelect").val();
-    const selectedKelas = $("#kelasSelect").val();
-    let exportParams = new URLSearchParams(window.location.search); // Mengambil query params yang ada
-    let exportUrl = `/admin/export/siswa?${exportParams.toString()}`;
-    window.location.href = exportUrl;
+  Swal.fire({
+      title: "Export Data Siswa?",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if(result.isConfirmed){
+        const tahunSelected = $("#tahunSelect").val();
+        const selectedKelas = $("#kelasSelect").val();
+        let exportParams = new URLSearchParams(window.location.search); // Mengambil query params yang ada
+        let exportUrl = `/admin/export/siswa?${exportParams.toString()}`;
+        window.location.href = exportUrl;
+  }
+    })
+    
 });
 
     // Handle click event for the info button

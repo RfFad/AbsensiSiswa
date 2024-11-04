@@ -31,9 +31,10 @@ const upload = multer({ storage: storage }).single('foto');
 const ExportDataGuru = async (req, res) =>{
   try {
     
-    //const kelas = req.query.id_kelas || null;
-    //const tahunAjar = req.query.idth || null;
-    const guruData = await getGuru();
+    const nama_guru = req.query.nama_guru || null;
+    const alamat = req.query.alamat || null;
+    const jk = req.query.jk || null;
+    const guruData = await getGuru(nama_guru, alamat, jk);
   
     const workbook =new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Data guru');
@@ -82,7 +83,10 @@ const getGuruData = async (req, res) => {
       success: req.flash("success"),
       error: req.flash("error"),
     };
-    const row = await getGuru();
+    const jk = req.query.jk || null;
+    const nama_guru = req.query.nama_guru || null;
+    const alamat = req.query.alamat || null;
+    const row = await getGuru(nama_guru, alamat, jk);
     res.render("admin/guru/guru", { row, index: 1, messages, currentPath: '/admin/data_guru'});
   } catch (error) {
     res.status(500).json(error);

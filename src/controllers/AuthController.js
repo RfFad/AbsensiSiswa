@@ -59,7 +59,8 @@ module.exports = {
                         if (results.length > 0) {
                             const tokenPayload = {
                                 username: results[0].username,
-                                role: results[0].role
+                                role: results[0].role,
+                                
                             };
     
                             const accessToken = jwt.sign(tokenPayload, 'SECRET', { expiresIn: "1h" });
@@ -67,8 +68,10 @@ module.exports = {
                             req.session.loggedin = true;
                             req.session.username = tokenPayload.username;
                             req.session.role = tokenPayload.role;
+                            
     
                             res.cookie('token', accessToken, { httpOnly: true });
+                            
                             res.redirect('/admin');
                         } else {
                             // If not found in `auth`, check `siswa`
@@ -88,7 +91,8 @@ module.exports = {
                                     if (results.length > 0) {
                                         const tokenPayload = {
                                             username: results[0].nis,
-                                            role: 'siswa'
+                                            role: 'siswa',
+                                            id_kelas: results[0].id_kelas
                                         };
     
                                         const accessToken = jwt.sign(tokenPayload, 'SECRET', { expiresIn: "1h" });
@@ -96,6 +100,7 @@ module.exports = {
                                         req.session.loggedin = true;
                                         req.session.username = tokenPayload.username;
                                         req.session.role = tokenPayload.role;
+                                        req.session.id_kelas = tokenPayload.id_kelas;
     
                                         res.cookie('token', accessToken, { httpOnly: true });
                                         res.redirect('/siswa');
@@ -140,8 +145,11 @@ module.exports = {
                                 }
                             );
                         }
+                        
                     }
-                );
+                    
+                );//
+                
             });
         } else {
             req.flash('color', 'danger');

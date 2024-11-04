@@ -1,12 +1,32 @@
 const connection = require('../configs/Databases');
 
-const getGuru = async () => {
+const getGuru = async (nama_guru = null, alamat = null, jk = null) => {
     return new Promise((resolve, reject) => {
-        connection.query(`
-          SELECT guru.*, mata_pelajaran.nama_mp FROM guru JOIN mata_pelajaran ON guru.idm = mata_pelajaran.idm  ORDER BY id_guru
-        `, (error, result) => {
-            if (error) {
-                return reject(error);
+       let query = ` SELECT guru.*, mata_pelajaran.nama_mp FROM guru JOIN mata_pelajaran ON guru.idm = mata_pelajaran.idm `
+
+       const params = [];
+       const condition = [];
+
+       if(nama_guru){
+        condition.push(`guru.nama_guru LIKE ?`)
+        params.push(`%${nama_guru}%`);
+       }
+       if(alamat){
+        condition.push(`guru.alamat LIKE ?`)
+        params.push(`%${alamat}%`);
+       }
+       if(jk){
+        condition.push(`guru.jk LIKE ?`)
+        params.push(`%${jk}%`);
+       }
+       if(condition.length > 0){
+        query += `WHERE ` + condition.join (" AND ");
+       }
+       query += ` ORDER BY guru.id_guru `;
+
+        connection.query(query, params, (error, result) => {
+            if(error){
+                return reject(error)
             }
             resolve(result);
         });
