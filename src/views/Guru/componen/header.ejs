@@ -178,6 +178,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="col-md-8">
                             <div class="card mb-3">
                                 <div class="card-body">
+                                  <form action="/guru/update/<%= rows.id_guru %>" method="POST" enctype="multipart/form-data">
                                     <div class="row">
                                         <div class="col-md-6">
                                           <div class="row">
@@ -185,31 +186,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <h6 class="mb-0">Mapel Ajar</h6>
                                             </div>
                                             <div class="col-md-8 text-secondary">
-                                              <%= rows.nama_mp %>
+                                              <%= rows.nip %>
                                             </div>
                                         </div>
-                                            <hr>
+                                            <hr>  
                                             <div class="form-group row">
-                                              <label for="nip" class="col-md-4 col-form-label">Nama</label>
+                                              <label for="nama_guru" class="col-md-4 col-form-label">Nama</label>
                                               <div class="col-md-8">
-                                                  <input type="text" id="nip" class="form-control border-0 border-bottom" name="nama_guru" value="<%= rows.nama_guru %>" required>
+                                                  <input type="text" id="nama_guru" class="form-control border-0 border-bottom" name="nama_guru" value="<%= rows.nama_guru %>" required>
                                               </div>
                                           </div>                                          
                                             <hr>
                                             <div class="form-group row">
-                                              <label for="nip" class="col-md-4 col-form-label">Jabatan</label>
+                                              <label for="jabatan" class="col-md-4 col-form-label">Jabatan</label>
                                               <div class="col-md-8">
-                                                  <input type="text" id="nip" class="form-control border-0 border-bottom" name="jabatan" value="<%= rows.jabatan %>" required>
+                                                  <input type="text" id="jabatan" class="form-control border-0 border-bottom" name="jabatan" value="<%= rows.jabatan %>" required>
                                               </div>
                                           </div>   
                                             <hr>
                                             <div class="form-group row">
-                                              <label for="nip" class="col-md-4 col-form-label">Gender</label>
+                                              <label for="jk" class="col-md-4 col-form-label">Gender</label>
                                               <div class="col-md-8">
-                                                <select id="gender" name="jk" class="form-control border-0 border-bottom" disabled>
-                                                  <option value="Male" <%= rows.gender === 'Male' ? 'selected' : '' %>>Male</option>
-                                                  <option value="Female" <%= rows.gender === 'Female' ? 'selected' : '' %>>Female</option>
-                                              </select>
+                                                <select id="jk" name="jk" class="form-control border-0 border-bottom">
+                                                  <option value="laki-laki" <%= rows.jk === 'laki-laki' ? 'selected' : '' %>>Male</option>
+                                                  <option value="perempuan" <%= rows.jk === 'perempuan' ? 'selected' : '' %>>Female</option>
+                                                </select>
                                               </div>
                                           </div>   
                                             <hr>
@@ -222,32 +223,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <div class="col-md-8 text-secondary">
                                               <%= rows.nama_mp %>
                                             </div>
-                                        </div>
-                                        <hr>
-                                        <div class="form-group row">
-                                          <label for="nip" class="col-md-4 col-form-label">Tlp</label>
-                                          <div class="col-md-8">
-                                              <input type="text" id="nip" class="form-control border-0 border-bottom" name="tlp" value="<%= rows.tlp %>" required>
                                           </div>
-                                      </div>   
-                                            <hr>
-                                            <div class="form-group row">
-                                              <label for="nip" class="col-md-4 col-form-label">Alamat</label>
+                                          <hr>
+                                          <div class="form-group row">
+                                              <label for="tlp" class="col-md-4 col-form-label">Tlp</label>
                                               <div class="col-md-8">
-                                                  <input type="text" id="nip" class="form-control border-0 border-bottom" name="alamat" value="<%= rows.alamat %>" required>
+                                                  <input type="text" id="tlp" class="form-control border-0 border-bottom" name="tlp" value="<%= rows.tlp %>" required>
                                               </div>
                                           </div>   
-                                            <hr>
-                                            
-                                        
-                                            <div class="row">
-                                                <div class="col-md-12 text-right">
-                                                    <a class="btn btn-info" target="__blank" href="#">Edit</a>
-                                                </div>
-                                            </div>
+                                          <hr>
+                                          <div class="form-group row">
+                                              <label for="alamat" class="col-md-4 col-form-label">Alamat</label>
+                                              <div class="col-md-8">
+                                                  <input type="text" id="alamat" class="form-control border-0 border-bottom" name="alamat" value="<%= rows.alamat %>" required>
+                                              </div>
+                                          </div>   
+                                          <hr>
+                                          <div class="form-group row">
+                                              <label for="foto" class="col-md-4 col-form-label">Foto</label>
+                                              <div class="col-md-8">
+                                                  <input type="file" id="foto" class="form-control border-0 border-bottom" name="foto">
+                                              </div>
+                                          </div>   
+                                          <hr>
+                                          <div class="row">
+                                              <div class="col-md-12 text-right">
+                                                  <button type="submit" class="btn btn-info">Edit</button>
+                                              </div>
+                                          </div>
                                         </div>
                                     </div>
                                     <hr>
+                                  </form>
                                 </div>
                             </div>
                         </div>
@@ -261,6 +268,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
         <!-- /.modal-content -->
     </div>
+</div>
+
     <!-- /.modal-dialog -->
   </div>
   <style>
@@ -313,12 +322,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
   }
   </style>
 
-  
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="/plugins/jquery/jquery.min.js"></script>
   <!-- jQuery UI 1.11.4 -->
   <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
   <script>
     $(document).ready(function(){
+    //   $('#edit').on('submit', function(e) {
+    //   e.preventDefault(); // Mencegah form submit secara normal
+
+    //   // Ambil data dari form
+    //   var formData = new FormData(this);
+    //   var id = "<%= rows.id_guru %>"
+    //   // Kirim data ke server menggunakan AJAX
+    //   $.ajax({
+    //     url: `/guru/update/${id}`,  // Endpoint untuk update profile
+    //     method: 'POST',
+    //     data: formData,
+    //     contentType: false, // Penting untuk pengiriman file
+    //     processData: false,
+    //     success: function(response) {
+    //         $("#modal-info").modal("hide");
+    //     }
+    //     },
+    //    );
+    // });
       $("#profile-link").click(function(){
         $("#modal-info").modal("show")
       })

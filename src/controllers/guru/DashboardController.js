@@ -1,7 +1,31 @@
 const mysql = require('mysql');
 const gurumodel = require('../../models/guru/models_guru');
-const jadwal = require('../../models/guru/jadwal_model')
-
+const jadwal = require('../../models/guru/jadwal_model');
+const {
+    
+    getGuruById,
+    
+  } = require("../../models/models_guru");
+const path = require('path');
+const multer = require('multer');
+const fs = require('fs');
+//untuk upload foto
+if (!fs.existsSync(path.join(__dirname,'..', '..', 'public', 'fp_guru'))) {
+    fs.mkdirSync(path.join(__dirname, '..','..', 'public', 'fp_guru'), { recursive: true });
+  }
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, path.join(__dirname, '..','..', 'public', 'fp_guru')); // Tentukan folder penyimpanan
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + path.extname(file.originalname)); // Menambahkan timestamp ke nama file
+    }
+  });
+  const upload = multer({ storage: storage }).single('foto');
+  //
+const {
+    getSekolah
+  } = require("../../models/models_sekolah");
 const connect = mysql.createPool({
     host: "localhost",
     user: "root",
@@ -10,10 +34,56 @@ const connect = mysql.createPool({
 });
 
 module.exports = {
+    async updateGuru(req, res) {
+        upload(req, res, async (err) => { 
+            if (err) {
+                return res.status(500).json({ message: 'Error uploading file', error: err });
+              }
+          
+        const { id_guru } = req.params;
+        const { nama_guru, jk, jabatan, alamat, tlp } = req.body;
+        let foto = req.file ? req.file.filename : null; // Ambil nama file jika ada
+    
+        try {
+            let guru = await getGuruById(id_guru); // Ambil data guru berdasarkan ID
+    
+            // Jika tidak ada foto baru, gunakan foto lama
+            if (!foto) {
+                foto = guru.foto;
+            } else {
+                // Jika ada foto lama dan foto bukan default, hapus foto lama
+                if (guru.foto && guru.foto !== 'default.jpg') {
+                    const oldFotoPath = path.join(__dirname, '..', '..', 'public', 'fp_guru', guru.foto);
+                    if (fs.existsSync(oldFotoPath)) {
+                        fs.unlinkSync(oldFotoPath); // Hapus foto lama
+                        console.log("Foto lama berhasil dihapus:", oldFotoPath);
+                    }
+                }
+            }
+    
+            // Update data guru dengan data yang baru
+            await gurumodel.UpdateGuru(id_guru, nama_guru, jk, jabatan, alamat, tlp, foto);
+    
+            // Flash message sukses dan redirect
+            req.flash("success", "Berhasil memperbarui data!");
+            return res.redirect(`/guru`); // Redirect ke halaman detail guru atau yang sesuai
+        } catch (error) {
+            // Flash message error dan redirect
+            console.log(error)
+            req.flash("error", `Gagal memperbarui data! ${error.message}`);
+            return res.redirect(`/guru`); // Redirect ke halaman yang sesuai
+        }
+    })
+    },
     async getDashboard(req, res) {
         const username = req.session.username; // Assuming the username is the NIP of the guru
 
         try {
+            const messages = {
+                success: req.flash("success"),
+                error: req.flash("error"),
+              };
+            const sekolah = await getSekolah();
             const rows = await gurumodel.getguru(req, res);
             const { results, count } = await jadwal.getJadwal(req, res);
             connect.getConnection(function (err, connection) {
@@ -41,6 +111,8 @@ module.exports = {
                             res.render('guru/newpage', {
                                 currentPath: '/guru' ,
                                 rows,
+                                sekolah,
+                                messages,
                                 jdwl : count,
                                 guru: results[0], // Passing the guru profile data to the view
                                 colorFlash: req.flash('color'),

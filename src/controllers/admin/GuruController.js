@@ -13,6 +13,7 @@ const tahun_ajar = require("../../models/models_tahunajar");
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
+const ExcelJS = require('exceljs');
 //untuk upload foto
 if (!fs.existsSync(path.join(__dirname,'..', '..', 'public', 'fp_guru'))) {
   fs.mkdirSync(path.join(__dirname, '..','..', 'public', 'fp_guru'), { recursive: true });
@@ -27,6 +28,54 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage }).single('foto');
 //metod guru
+const ExportDataGuru = async (req, res) =>{
+  try {
+    
+    //const kelas = req.query.id_kelas || null;
+    //const tahunAjar = req.query.idth || null;
+    const guruData = await getGuru();
+  
+    const workbook =new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Data guru');
+  
+    worksheet.columns = [
+      {header: 'NIP', key:'nip', width: 15},
+      {header: 'Nama guru', key:'nama_guru', width: 25},
+      {header: 'Jabatan', key:'jabatan', width: 20},
+      {header: 'Mapel Ajar', key:'nama_mp', width: 20},
+      {header: 'Tlp', key:'tlp', width: 20},
+      {header: 'Alamat', key:'alamat', width: 30},
+      {header: 'Gender', key:'jk', width: 15},
+    ];
+    guruData.forEach((guru)=>{
+      worksheet.addRow({
+        nip: guru.nip,
+        nama_guru: guru.nama_guru,
+        jabatan: guru.jabatan,
+        nama_mp: guru.nama_mp,
+        tlp :guru.tlp,
+        alamat : guru.alamat,
+        jk: guru.jk
+      })
+    });
+    const filePath = path.join(__dirname, '..','..', 'public', 'excel', 'Data_Guru.xlsx');
+  
+    await workbook.xlsx.writeFile(filePath);
+    res.download(filePath, 'Data_Guru.xlsx', (err) => {
+      if (err) {
+          res.status(500).send('Terjadi kesalahan saat mengekspor data');
+      }
+  
+      // Hapus file setelah diunduh
+      fs.unlink(filePath, (err) => {
+          if (err) console.error(err);
+      });
+  });
+  } catch (error) {
+    res.status(500).send('Terjadi kesalahan saat mengambil data siswa');
+    console.log(error)
+  }
+  }
 const getGuruData = async (req, res) => {
   try {
     const messages = {
@@ -179,5 +228,6 @@ module.exports = {
   getUpdatePage,
   updateGuru,
   getDeleteGuru,
-  getInfoGuruNip
+  getInfoGuruNip,
+  ExportDataGuru
 };

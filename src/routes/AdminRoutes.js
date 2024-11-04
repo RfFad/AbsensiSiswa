@@ -6,12 +6,12 @@ const verifyUser = require('../configs/verify');
 const {authHeader} = require('../configs/jwtMiddleware')  // assuming authHeader is another middleware
 // const {getInsertSiswa, pageInsert} = require('../controllers/AdminCrudController')
 const {getPageKelas, getInsertKelas, getDataKelas, getUpdateKelas, getUpdatePageKelas, getDeleteKelas} = require('../controllers/admin/KelasController')
-const {getInsertGuru, getPageGuru, getGuruData, getUpdatePage, updateGuru, getDeleteGuru, getInfoGuruNip} = require ('../controllers/admin/GuruController')
+const {getInsertGuru, ExportDataGuru, getPageGuru, getGuruData, getUpdatePage, updateGuru, getDeleteGuru, getInfoGuruNip} = require ('../controllers/admin/GuruController')
 const{getCountData} = require ('../controllers/admin/CountAdminController');
 const {getInsertMapel, getDataMapel, getPageMapel, getUpdateMapel, getUpdatePageMapel, getDeleteMapel} = require('../controllers/admin/MapelController')
 const {getInsertHari, getPageHari, getDataHari, getDeleteHari, getUpdateHari, getUpdatePageHari} = require ('../controllers/admin/HariController');
 // const {getInsertHari, getPageHari} = require ('../controllers/admin/HariController');
-const { getInsertSiswa, getPageSiswa, getSiswaData, getUpdatePageSiswa, updateSiswa, getDeleteSiswa, getInfoSiswaNis } = require('../controllers/admin/SiswaController') 
+const { getInsertSiswa, getPageSiswa, getSiswaData, getUpdatePageSiswa, updateSiswa, getDeleteSiswa, getInfoSiswaNis, getGrafik, ExportDataSiswa } = require('../controllers/admin/SiswaController') 
 const {getUpdatePageSekolah, updateSekolahData, getDataSekolah} = require('../controllers/admin/SekolahController')
 const TahunAjaranCont= require("../controllers/admin/TahunAjarController");
 const jadwal = require ('../controllers/admin/JadwalController');
@@ -46,6 +46,7 @@ router.get('/guru/edit/:id_guru', getUpdatePage)
 router.post('/guru/update/:id_guru', updateGuru);
 router.post('/guru/delete/:id_guru', getDeleteGuru);
 router.get('/info_guru/:nip', getInfoGuruNip);
+router.get('/export/guru', ExportDataGuru)
 //hari
 router.get('/hari', getPageHari);
 router.post('/hari/create', getInsertHari);
@@ -56,6 +57,7 @@ router.post('/hari/delete/:idh', getDeleteHari);
 router.post('/hari/update/:idh', getUpdateHari);
 
 //siswa
+router.get('/grafik', getGrafik)
 router.get('/siswa', getPageSiswa);
 router.get('/data_siswa', getSiswaData)
 router.post('/insert_siswa', getInsertSiswa);
@@ -63,6 +65,7 @@ router.get('/siswa/edit/:id_siswa', getUpdatePageSiswa)
 router.get('/info_siswa/:nis', getInfoSiswaNis)
 router.post('/siswa/update/:id_siswa', updateSiswa);
 router.post('/siswa/delete/:id_siswa', getDeleteSiswa);
+router.get('/export/siswa', ExportDataSiswa)
 //sekolah
 router.get('/sekolah', getDataSekolah)
 router.get('/sekolah/edit/:id_sekolah', getUpdatePageSekolah);

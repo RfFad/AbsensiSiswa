@@ -4,7 +4,8 @@ const {
   getSiswaById,
   UpdateSiswa,
   DeleteSiswa,
-  getInfoSiswa 
+  getInfoSiswa,
+  getGrafikSiswa 
 } = require("../../models/models_siswa");
 const { getKelas } = require("../../models/models_kelas");
 const md5 = require("md5");
@@ -12,6 +13,7 @@ const tahun_ajar = require("../../models/models_tahunajar");
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
+const ExcelJS=require('exceljs');
 
 // Membuat folder public/images jika belum ada
 if (!fs.existsSync(path.join(__dirname,'..', '..', 'public', 'images'))) {
@@ -31,6 +33,48 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage }).single('foto');
 
 // Method untuk menambahkan siswa
+const ExportDataSiswa = async (req, res) =>{
+try {
+  
+  const kelas = req.query.id_kelas || null;
+  const tahunAjar = req.query.idth || null;
+  const siswaData = await getSiswa(kelas, tahunAjar);
+
+  const workbook =new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('Data Siswa');
+
+  worksheet.columns = [
+    {header: 'NIS', key:'nis', width: 15},
+    {header: 'Nama Siswa', key:'nama_siswa', width: 25},
+    {header: 'Kelas', key:'nama_kelas', width: 15},
+    {header: 'Tahun Ajaran', key:'nama_ajaran', width: 20},
+  ];
+  siswaData.forEach((siswa)=>{
+    worksheet.addRow({
+      nis: siswa.nis,
+      nama_siswa: siswa.nama_siswa,
+      nama_kelas: siswa.nama_kelas,
+      nama_ajaran: siswa.nama_ajaran
+    })
+  });
+  const filePath = path.join(__dirname, '..','..', 'public', 'excel', 'Data_Siswa.xlsx');
+
+  await workbook.xlsx.writeFile(filePath);
+  res.download(filePath, 'Data_Siswa.xlsx', (err) => {
+    if (err) {
+        res.status(500).send('Terjadi kesalahan saat mengekspor data');
+    }
+
+    // Hapus file setelah diunduh
+    fs.unlink(filePath, (err) => {
+        if (err) console.error(err);
+    });
+});
+} catch (error) {
+  res.status(500).send('Terjadi kesalahan saat mengambil data siswa');
+  console.log(error)
+}
+}
 const getInsertSiswa = async (req, res) => {
   upload(req, res, async (err) => {
     if (err) {
@@ -63,12 +107,13 @@ const getSiswaData = async (req, res) => {
 
     // Ambil daftar kelas untuk select option
     const datakelas = await getKelas();
-
+    const dataTahun = await tahun_ajar.getTahunAjar();
     // Ambil parameter kelas dari query, atau null jika tidak ada
     const kelas = req.query.id_kelas || null;
+    const tahunAjar = req.query.idth || null;
 
     // Ambil data siswa berdasarkan kelas (jika dipilih) atau semua siswa
-    const siswakelas = await getSiswa(kelas);
+    const siswakelas = await getSiswa(kelas, tahunAjar);
 
     // Render ke view 'siswa'
     res.render("admin/siswa/siswa", {
@@ -78,6 +123,7 @@ const getSiswaData = async (req, res) => {
       currentPath: '/admin/data_siswa', 
       selectedKelas: kelas, // Kelas yang dipilih
       datakelas, // Daftar kelas untuk dropdown
+      dataTahun
     });
   } catch (error) {
     res.status(500).json(error);
@@ -221,7 +267,19 @@ const getDeleteSiswa = async (req, res) => {
     return res.redirect("/admin/data_siswa");
   }
 };
-
+const getGrafik = async(req, res) => {
+  try {
+    const SiswaGrafik = await getGrafikSiswa();
+    const TahunAjaran = SiswaGrafik.map(row => row.tahun_ajaran)
+    const JumlahSiswa = SiswaGrafik.map(row => row.jumlah_siswa)
+    console.log('Tahun Ajaran:', TahunAjaran);
+    console.log('Jumlah Siswa:', JumlahSiswa);
+    res.render('Admin/grafik', {TahunAjaran, JumlahSiswa, currentPath : '', messages:''})
+  } catch (error) {
+    console.log(error)
+    return res.status(404)
+  }
+}
 module.exports = {
   getInsertSiswa,
   getPageSiswa,
@@ -229,5 +287,7 @@ module.exports = {
   getUpdatePageSiswa,
   updateSiswa,
   getDeleteSiswa,
-  getInfoSiswaNis
+  getInfoSiswaNis,
+  getGrafik,
+  ExportDataSiswa
 };

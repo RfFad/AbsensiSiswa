@@ -81,7 +81,13 @@
                 </div>
                 <div class="col-md-6">
                   <div class="form-group mb-3">
-                    <input type="text" class="form-control" name="alamat" placeholder="Masukkan alamat" required>
+                    <select class="form-control" id="tahunSelect">
+                      <option value="">Pilih Tahun Ajar</option>
+                      <option value="semua">Semua</option>
+                      <% dataTahun.forEach(t => { %>
+                        <option value="<%= t.idth %>"><%= t.nama_ajaran %></option>
+                      <% }); %>
+                    </select>
                   </div>
                 </div>
                 <button id="filterButton" class="btn btn-secondary ml-2" style="height: 35px;">Search</button>
@@ -98,13 +104,31 @@
             </div>
             <div class="card-body">
               <div class="d-flex flex-column flex-md-row justify-content-between mb-2">
-                <a href="/admin/siswa" class="btn btn-success mb-2 mb-md-0" style="height: 35px;">Tambahkan Data +</a>
+                <div class="btn-group w-100 flex-md-row mb-2 mb-md-0">
+                  <span class="btn btn-success col-12 col-md-3 fileinput-button mb-2 mb-md-0"><a href="/admin/siswa" style="color: inherit;">
+                    <i class="fas fa-plus"></i>
+                    <span>Tambahkan data</span>
+                  </a>
+                  </span>
+                  <button id="exportButton" type="button" class="btn btn-primary col-12 col-md-3 mb-2 mb-md-0 start">
+                    <i class="fas fa-upload"></i>
+                    <span>Export Data</span>
+                </button>
+                
+                  <button type="reset" class="btn btn-warning col-12 col-md-3 mb-2 mb-md-0 cancel">
+                    <i class="fas fa-times-circle"></i>
+                    <span>Cancel upload</span>
+                  </button>
+                </div>
+              
                 <div class="d-flex justify-content-end">
                   <input type="text" class="form-control" name="table_search" style="width: 160px;">
                   <button type="submit" class="btn btn-secondary ml-2">Search</button>
                   <a href="#" class="btn btn-warning ml-2" id="filter-btn">Filter</a>
                 </div>
               </div>
+              
+              
 
              
               <% if (messages.error) { %>
@@ -332,13 +356,32 @@
       $("#filter").slideToggle();
     });
     $("#filterButton").on("click", function() {
+    const tahunSelected = $("#tahunSelect").val();
     const selectedKelas = $("#kelasSelect").val();
-    if (selectedKelas === "semua") {
-      window.location.href = "/admin/data_siswa"; // Redirect to show all data
-    } else {
-      window.location.href = `/admin/data_siswa?id_kelas=${selectedKelas}`; // Redirect with class filter
+    let url = "/admin/data_siswa";
+    let params = [];
+    if (selectedKelas && tahunSelected !== "semua") {
+        params.push(`idth=${tahunSelected}`); // Filter tahun ajaran
     }
-  });
+    if (tahunSelected && selectedKelas !== "semua") {
+        params.push(`id_kelas=${selectedKelas}`); // Filter kelas
+    }
+    if (params.length > 0) {
+        url += "?" + params.join("&");
+    }
+
+    // Redirect to filter data
+    window.location.href = url;
+});
+
+$("#exportButton").on("click", function() {
+    const tahunSelected = $("#tahunSelect").val();
+    const selectedKelas = $("#kelasSelect").val();
+    let exportParams = new URLSearchParams(window.location.search); // Mengambil query params yang ada
+    let exportUrl = `/admin/export/siswa?${exportParams.toString()}`;
+    window.location.href = exportUrl;
+});
+
     // Handle click event for the info button
     $(".info-btn").click(function() {
       var nis = $(this).data("nis"); // Ambil NIS dari data-nis

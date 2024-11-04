@@ -170,25 +170,25 @@
        
 
         <!-- Hari Section -->
-        <li class="nav-item">
-          <a href="#" class="nav-link">
+        <li class="nav-item <%= (currentPath === '/admin/tambah_tahun' || currentPath ==='/admin/tahun_ajaran' ) ? 'menu-open' : ''%>">
+          <a href="#" class="nav-link <%= (currentPath === '/admin/tahun_ajaran' || currentPath ==='/admin/tahun_ajaranId/:idth' || currentPath === '/admin/tambah_tahun') ? 'active' : ''%>">
             <i class="nav-icon fas fa-copy"></i>
             <p>
-              Hari
+              Tahun Ajaran
               <i class="fas fa-angle-left right"></i>
             </p>
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="/admin/data_hari" class="nav-link">
+              <a href="/admin/tahun_ajaran" class="nav-link <%= currentPath === '/admin/tahun_ajaran' ? 'active' : '' %>">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Data Hari</p>
+                <p>Data Tahun</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="/admin/hari" class="nav-link">
+              <a href="/admin/tambah_tahun" class="nav-link <%= currentPath === '/admin/tambah_tahun' ? 'active' : '' %>">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Insert Hari</p>
+                <p>Insert Tahun</p>
               </a>
             </li>
           </ul>
