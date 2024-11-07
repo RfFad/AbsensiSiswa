@@ -9,8 +9,9 @@
         <div class="container-fluid mt-3">
           <div class="callout callout-info">
             <h5><i class="fas fa-info"></i> Note:</h5>
-            <h5>MATA PELAJARAN : <%= jadwal.nama_mp %></h5>
-            <h5>KELAS : <%= jadwal.nama_kelas %></h5>
+            <!--
+            
+            -->
           </div>
         </div>
         <div class="container-body">
@@ -22,9 +23,7 @@
             <!-- Start form -->
             <form action="/guru/input_absen" method="POST">
               <!-- Include necessary hidden fields -->
-              <input type="hidden" name="idk" value="<%= jadwal.id_kelas %>">
-              <input type="hidden" name="tgl" value="<%= dateToday %>">
-              <input type="hidden" name="idj" value="<%= jadwal.idj %>">
+              <input type="hidden" name="id_jadwal" value="<%= id_jadwal %>">
 
               <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover table-sm table-striped table-responsive">
@@ -32,68 +31,52 @@
                     <tr>
                       <th style="width: 1%;">NIS</th>
                       <th>NAMA</th>
+                      <th style="width : 1%">KELAS</th>
                       <th>KETERANGAN</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <% siswa.forEach((row) => { %>
-                    <tr>
-                      <td><%= row.nis %></td>
-                      <td><%= row.nama %></td>
-                      <td class="text-center">
-                        <div class="form-group">
-                          <!-- Ensure radio button names and values match controller expectations -->
-                          <label class="radio-inline mr-3">
-                            <input type="radio" name="<%= row.ids %>" value="A" <%= (row.keterangan === 'A') ? 'checked' : '' %>> A
-                          </label>
-                          <label class="radio-inline mr-3">
-                            <input type="radio" name="<%= row.ids %>" value="I" <%= (row.keterangan === 'I') ? 'checked' : '' %>> I
-                          </label>
-                          <label class="radio-inline mr-3">
-                            <input type="radio" name="<%= row.ids %>" value="S" <%= (row.keterangan === 'S') ? 'checked' : '' %>> S
-                          </label>
-                          <label class="radio-inline mr-3">
-                            <input type="radio" name="<%= row.ids %>" value="M" <%= (row.keterangan === 'M') ? 'checked' : '' %>> M
-                          </label>
-                          <label class="radio-inline">
-                            <input type="radio" name="<%= row.ids %>" value="N" <%= (row.keterangan === 'N') ? 'checked' : '' %>> N
-                          </label>
-                        </div>
-                      </td>
-                    </tr>
-                    <% }) %>
+                    <% students.forEach((student) => { %>
+                      <tr>
+                          <td><%= student.nis %></td>
+                          <td><%= student.nama_siswa %></td>
+                          <td><%= student.nama_kelas %></td>
+                          <td>
+                              <select name="status_<%= student.id_siswa %>" class="form-control">
+                                  <option value="hadir">Hadir</option>
+                                  <option value="izin">Izin</option>
+                                  <option value="sakit">Sakit</option>
+                                  <option value="alpa">Alpa</option>
+                              </select>
+                          </td>
+                      </tr>
+                  <% }); %>
                   </tbody>
                   <tfoot>
                     <tr>
                       <th>NIS</th>
                       <th>NAMA</th>
+                      <th style="width: 1%;">KELAS</th>
                       <th>KETERANGAN</th>
                     </tr>
                   </tfoot>
                 </table>
+                <center><button type="submit" style="width: 50%;" class="btn btn-primary mt-3">Simpan Absensi</button></center>
               </div>
-              <button type="submit" class="btn btn-primary">Simpan Absensi</button>
-              </form>
-              <!-- Card footer with description -->
-              <div class="card-footer">
-                <div class="keterangan bg-primary text-white rounded p-3">
-                  <h4 class="keterangan-notes">Keterangan Absensi</h4>
-                  <ul class="list-unstyled mb-0">
-                    <li><strong>A =</strong> Tidak Masuk Tanpa Keterangan</li>
-                    <li><strong>I =</strong> Tidak Masuk Ada Surat Ijin Atau Pemberitahuan</li>
-                    <li><strong>S =</strong> Tidak Masuk Ada Surat Dokter Atau Pemberitahuan</li>
-                    <li><strong>M =</strong> Hadir</li>
-                    <li><strong>N =</strong> Belum di Absen</li>
-                  </ul>
-                </div>
+            </form>
+            <!-- Card footer with attendance legend -->
+            <div class="card-footer">
+              <div class="keterangan bg-primary text-white rounded p-3">
+                <h4 class="keterangan-notes">Keterangan Absensi</h4>
+                <ul class="list-unstyled mb-0">
+                  <li><strong>A =</strong> Tidak Masuk Tanpa Keterangan</li>
+                  <li><strong>I =</strong> Tidak Masuk Ada Surat Ijin Atau Pemberitahuan</li>
+                  <li><strong>S =</strong> Tidak Masuk Ada Surat Dokter Atau Pemberitahuan</li>
+                  <li><strong>M =</strong> Hadir</li>
+                  <li><strong>N =</strong> Belum di Absen</li>
+                </ul>
               </div>
-              
-              <!-- Submit button -->
-              <div class="card-footer text-right">
-                
-              </div>
-            
-            <!-- End form -->
+            </div>
           </div>
         </div>
       </div>

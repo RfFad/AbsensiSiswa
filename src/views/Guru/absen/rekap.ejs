@@ -1,0 +1,166 @@
+<%- include("../Componen/header") %>
+<title>Admin | Edit Riwayat</title>
+<style>
+  .keterangan {
+    text-align: center;
+  }
+  .pembatas{
+    width: 100%;
+    height: 4px;
+    background-color: black;
+  }
+  .information label{
+    font-size: 20px;
+  }
+  .information span{
+    left: 20px;
+    font-size: 20px;
+  }
+</style>
+<%- include("../Componen/sidebar") %>
+
+<div class="content-wrapper">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="container-fluid mt-3">
+          <div class="callout callout-info">
+            <h5><i class="fas fa-info"></i> Note:</h5>
+            <!--
+            
+            -->
+          </div>
+        </div>
+        <div class="container-body">
+          <div class="card card-primary ml-2 mr-2 border border-primary">
+            <div class="card-header">
+              <h3 class="card-title">Rekap Absen Siswa</h3>
+            </div>
+            <div class="card-body">
+              <% if (mode === 'harian') { %>
+                <!-- Tabel Rekap Harian -->
+                 <div class="keterangan">
+                <h3>Rekap Absensi Harian</h3>
+                 
+                  <h3><b><%= dataSekolah.nama %></b></h3>
+                  <p><%= dataSekolah.alamat %></p>
+              </div>
+              <div class="pembatas">
+
+              </div>
+              <div class="information mt-3">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="group-info">
+                    <label for="">Nama Guru</label>
+                    <span> : </span>
+                  </div>
+                    <div class="group-info">
+                    <label for="">Kelas</label>
+                    <span> : </span>
+                  </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <label for="">Tahun Ajaran</label>
+                    <span> : </span>
+                  </div>
+                </div>
+              </div>
+                <div class="table-responsive mt-3">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead class="bg bg-dark">
+                        <tr>
+                            <th rowspan="2" class="text-center">NIS</th>
+                            <th rowspan="2" class="text-center">Nama Siswa</th>
+                            <th rowspan="2">Tanggal</th>
+                            <th colspan="3" class="text-center">Keterangan</th>
+                        </tr>
+                          <tr>
+                            <th style="width: 2%;">Hadir</th>
+                            <th style="width: 2%;">Izin</th>
+                            <th style="width: 2%;">Sakit</th>
+                          </tr>
+                            <!-- Tambahkan status lain jika diperlukan -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                      
+                        <% for (const [id_siswa, siswaData] of Object.entries(formattedData)) { %>
+                            <% const {  nama_siswa, rekap } = siswaData; %>
+                            <% for (const [tanggal, statuses] of Object.entries(rekap)) { %>
+                              
+                                <tr>
+                                    <td><%= siswaData.nis %></td>
+                                    <td><%= nama_siswa %></td>
+                                    <td><%= new Date(tanggal).toLocaleDateString('en-CA') %></td>
+                                    <td class="text-center">
+                                        <% if(statuses['hadir']){ %>
+                                          <i class="fas fa-check"></i>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <% if(statuses['izin']){ %>
+                                          <i class="fas fa-check"></i>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <% if(statuses['sakit']){ %>
+                                          <i class="fas fa-check"></i>
+                                        <% } %>
+                                    </td>
+                                    
+                                    <!-- Tambahkan kolom lain untuk status lainnya -->
+                                </tr>
+                            <% } %>
+                        <% } %>
+                    </tbody>
+                </table>
+              </div>
+            <% } else if (mode === 'bulanan') { %>
+                <!-- Tabel Rekap Bulanan -->
+                <h2>Rekap Absensi Bulanan</h2>
+                <table table class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nama Siswa</th>
+                            <th>Bulan</th>
+                            <th>Hadir</th>
+                            <th>Izin</th>
+                            <th>Sakit</th>
+                            <!-- Tambahkan status lain jika diperlukan -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (const [id_siswa, siswaData] of Object.entries(formattedData)) { %>
+                            <% const { nama_siswa, rekap } = siswaData; %>
+                            <% for (const [bulan, statuses] of Object.entries(rekap)) { %>
+                                <tr>
+                                    <td><%= nama_siswa %></td>
+                                    <td><%= bulan %></td>
+                                    <td><%= statuses['hadir'] || 0 %></td>
+                                    <td><%= statuses['izin'] || 0 %></td>
+                                    <td><%= statuses['sakit'] || 0 %></td>
+                                    <!-- Tambahkan kolom lain untuk status lainnya -->
+                                </tr>
+                            <% } %>
+                        <% } %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p>Mode tidak valid.</p>
+            <% } %>
+            
+            </div>
+           
+            <!-- Card footer with attendance legend -->
+            <div class="card-footer">
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../../Componen/footer") %>

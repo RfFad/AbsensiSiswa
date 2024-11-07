@@ -1,23 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- Font dan Style dari AdminLTE -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-    <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-    <link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
-    <link rel="stylesheet" href="/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-    <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
-    <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
-</head>
-<body onload="list()">
-    <div class="body">
-        <!-- Konten tabel akan dimuat di sini -->
+<%- include("../Componen/header") %>
+<%- include("../Componen/sidebar") %>
+
+
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h4>Data Jadwal</h4>
+                </div>
+            </div>
+        </div>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="tittle bg bg-dark shadow" style = "display: flex; justify-content: center; width: 150px; height: 90%; border-radius: 10px;">
+                                <h4 class="title-class ">Kelas <%= rows.nama_kelas %></h4>
+                            </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                <div class="body">
+                                    <!-- Konten tabel akan dimuat di sini -->
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <!-- Skrip dari AdminLTE dan Bootstrap -->
@@ -27,7 +41,10 @@
     <script src="/dist/js/adminlte.min.js"></script>
     
     <script>
-        function list(){
+        $(document).ready(function(){
+            list();
+        })
+        function list() {
             let html = "";
             $.ajax({
                 url: "/siswa/data_jadwal",
@@ -35,13 +52,26 @@
                 success: function(result) {
                     const val = result.data;
                     if (result.count > 0) {
-                        html += "<table class='table table-bordered'>";
+                        html += "<table class='table table-bordered table-striped table-hover'>";
                         html += "<thead class='bg-dark'>";
-                        html += "<tr><th>Nama Guru</th></tr>";
+                        html += "<tr>"
+                        html += "<th style = 'width : 1% ;'>No</th>";
+                        html += "<th>Hari</th>";
+                        html += "<th>Nama Guru</th>";
+                        html += "<th>Kelas Ajar</th>";
+                        html += "<th>Pelajaran</th>";
+                        html += "<th>Jam Mulai</th>";
+                        html += "</tr>";
                         html += "</thead><tbody>";
                         $.each(val, function(index, row) {
+                            var jamJadwal = `${row.jam_mulai.slice(0, 5)} - ${row.jam_selesai.slice(0, 5)}`
                             html += `<tr id='data' kode='${row.idj}'>`;
+                            html += `<td> ${index + 1} </td>`
+                            html += `<td>${row.hari}</td>`;
                             html += `<td>${row.nama_guru}</td>`;
+                            html += `<td>${row.nama_kelas}</td>`;
+                            html += `<td>${row.nama_mp}</td>`;
+                            html += `<td>${jamJadwal}</td>`;
                             html += "</tr>";
                         });
                         html += "</tbody></table>";

@@ -32,19 +32,7 @@
                 <input type="text" class="form-control" name="table_search" style="width: 160px;">
               </div>
             </div>
-            <% if (messages.success) { %>
-                
-              <div class="alert alert-success">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                  <%= messages.success %>
-              </div>
-          <% } %>
-          <% if (messages.error) { %>
-              <div class="alert alert-danger">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                  <%= messages.error %>
-              </div>
-          <% } %>
+           
             <div class="table-responsive">
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
@@ -69,7 +57,7 @@
                     <td><%= jadwal.jam_mulai.slice(0, 5) %> - <%= jadwal.jam_selesai.slice(0, 5) %></td>
                    
                     <td>
-                      <a href="/guru/absen/<%= jadwal.idj %>/<%= jadwal.id_kelas %>" class="btn btn-info"><i class="fas fa-edit">Absen</i></a>  
+                      <a href="/guru/absen/<%= jadwal.id_kelas %>" class="btn btn-info"><i class="fas fa-edit">Absen</i></a>  
                       <a href="#" class="btn btn-warning"><i class="fas fa-edit">Rekap Absen</i></a>  
                     </td>
                   </tr>

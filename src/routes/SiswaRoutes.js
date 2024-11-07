@@ -4,6 +4,10 @@ const { checkRole } = require('../controllers/AuthController');
 const verifyUser = require('../configs/verify');
 const {authHeader} = require('../configs/jwtMiddleware');  // assuming authHeader is another middleware
 
+const jadwal_siswa = require("../controllers/siswa/SiswaController")
+
+const {getDashboard} = require ('../controllers/siswa/DashboardController');
+
 
 
 router.get('/', checkRole('siswa'), authHeader, getDashboard)
@@ -15,8 +19,8 @@ router.get('/pagesiswa', async(req, res)=> {
         res.status(500).send({msg: "ada kesalahan", err : error})
     }
 })
-router.get('/jadwal', jadwal_siswa.renderJadwal);
-router.get('/data_jadwal', jadwal_siswa.dataJadwal);
+router.get('/jadwal', checkRole('siswa'), authHeader ,jadwal_siswa.renderJadwal);
+router.get('/data_jadwal', checkRole('siswa'), authHeader, jadwal_siswa.dataJadwal);
 
 
 module.exports = router;
