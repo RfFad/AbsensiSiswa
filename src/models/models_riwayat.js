@@ -3,7 +3,7 @@ const connection = require('../configs/Databases');
 const getRiwayat = async () => {
     return new Promise((resolve, reject) => {
         connection.query(`
-          SELECT riwayat.*, siswa.nama_siswa as nama_siswa FROM riwayat join siswa on riwayat.id_siswa = siswa.id_siswa order by riwayat.id_riwayat 
+          SELECT riwayat.*, siswa.nama_siswa as nama_siswa, kelas.nama_kelas AS nama_kelas FROM riwayat join siswa on riwayat.id_siswa = siswa.id_siswa JOIN kelas ON riwayat.id_kelas = kelas.id_kelas order by riwayat.id_riwayat 
         `, (error, result) => {
             if (error) {
                 return reject(error);
@@ -12,6 +12,41 @@ const getRiwayat = async () => {
         });
     });
 }
+const getRiwayatBySiswa = async (nis) => {
+    // Return a Promise to handle asynchronous database query
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT 
+                riwayat.*, 
+                siswa.nama_siswa AS nama_siswa, 
+                kelas.nama_kelas AS nama_kelas 
+            FROM 
+                riwayat 
+            JOIN 
+                siswa 
+            ON 
+                riwayat.id_siswa = siswa.id_siswa 
+            JOIN 
+                kelas 
+            ON 
+                riwayat.id_kelas = kelas.id_kelas  
+            WHERE 
+                siswa.nis = ? 
+            ORDER BY 
+                riwayat.tanggal
+        `;
+
+        // Perform the database query
+        connection.query(query, [nis], (error, results) => {
+            if (error) {
+                // Reject the Promise with the error if the query fails
+                return reject(error);
+            }
+            // Resolve the Promise with the query results
+            resolve(results);
+        });
+    });
+};
 
 const getRiwayatById = async (id_riwayat) => {
     return new Promise((resolve, reject) => {
@@ -29,12 +64,12 @@ const getRiwayatById = async (id_riwayat) => {
     });
 }
 
-const InsertRiwayat = async (id_siswa, id_kelas, prestasi, pelanggaran, tanggal) => {
+const InsertRiwayat = async (id_siswa, id_kelas, jenis_riwayat, deskripsi, tanggal) => {
     return new Promise((resolve, reject) => {
             // Insert data
             connection.query(`
-                INSERT INTO riwayat (id_siswa, id_kelas, prestasi, pelanggaran, tanggal) VALUES (?, ?, ?, ?, ?)
-            `, [id_siswa, id_kelas, prestasi, pelanggaran, tanggal], (insertError, insertResults) => {
+                INSERT INTO riwayat (id_siswa, id_kelas, jenis_riwayat, deskripsi, tanggal) VALUES (?, ?, ?, ?, ?)
+            `, [id_siswa, id_kelas, jenis_riwayat, deskripsi, tanggal], (insertError, insertResults) => {
                 if (insertError) return reject(insertError);
                 resolve(insertResults);
             });
@@ -42,7 +77,7 @@ const InsertRiwayat = async (id_siswa, id_kelas, prestasi, pelanggaran, tanggal)
     });
 }
 
-const UpdateRiwayat = async (id_riwayat, id_siswa, id_kelas, prestasi, pelanggaran, tanggal) => {
+const UpdateRiwayat = async (id_riwayat, id_siswa, id_kelas, jenis_riwayat, deskripsi, tanggal) => {
     return new Promise((resolve, reject) => {
         // Check if the record exists
         connection.query(`
@@ -57,9 +92,9 @@ const UpdateRiwayat = async (id_riwayat, id_siswa, id_kelas, prestasi, pelanggar
             // Update the record
             connection.query(`
                 UPDATE riwayat 
-                SET id_siswa = ?, id_kelas = ?, prestasi = ?, pelanggaran = ?, tanggal = ?
+                SET id_siswa = ?, id_kelas = ?, jenis_riwayat = ?, deskripsi = ?, tanggal = ?
                 WHERE id_riwayat = ?
-            `, [id_siswa, id_kelas, prestasi, pelanggaran, tanggal, id_riwayat], (updateError, updateResults) => {
+            `, [id_siswa, id_kelas, jenis_riwayat, deskripsi, tanggal, id_riwayat], (updateError, updateResults) => {
                 if (updateError) return reject(updateError);
                 resolve(updateResults);
             });
@@ -81,4 +116,4 @@ const DeleteRiwayat = async (id_riwayat) => {
     })
 }
 
-module.exports = { getRiwayat, getRiwayatById, InsertRiwayat, UpdateRiwayat, DeleteRiwayat };
+module.exports = { getRiwayat, getRiwayatBySiswa, getRiwayatById, InsertRiwayat, UpdateRiwayat, DeleteRiwayat };

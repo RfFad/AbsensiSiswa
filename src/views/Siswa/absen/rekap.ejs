@@ -1,0 +1,244 @@
+<%- include("../Componen/header") %>
+<title>Admin | Edit Riwayat</title>
+<style>
+  .keterangan {
+    text-align: center;
+  }
+  .group-info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.group-info label {
+  width: 120px;
+  font-weight: bold;
+}
+
+.group-info span {
+  margin-right: 10px;
+}
+
+
+</style>
+<%- include("../Componen/sidebar") %>
+
+<div class="content-wrapper">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="container-fluid mt-3">
+          <div class="callout callout-info">
+            <h5><i class="fas fa-info"></i> Note: Pilih terlebih dahulu tahun dan juga bulan untuk menapilkan data rekapnya!</h5>
+            <!--
+            
+            -->
+          </div>
+          <div class="callout callout-success">
+            <div class="title">
+              <h4>Filter Search</h4>
+            </div>
+            <div class="row">
+              <div class="col-lg-4">
+                <select id="semester" class="form-control mb-3" required>
+                  <option value="" disabled selected>Pilih Semester</option>
+                  <option value="1">Semester 1</option>
+                  <option value="2">Semester 2</option>
+                </select>
+              </div>
+              <div class="col-lg-4">
+                <select name="" id="bulan" class="form-control mb-3" required>
+                  <option value="" disabled selected>Select Bulan</option>
+                  <% ['January', 'February', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'].forEach((month, index) => { %>
+                    <option value="<%= index + 1 %>"><%= month %></option>
+                 <% })%>
+                </select>
+                
+              </div>
+              <div class="col-lg-4">
+                <input type="number" id="year" name="year" min="2000" max="2100" placeholder="yyyy" class="form-control" required>
+              </div>
+              <button type="button" id="date-btn" class="btn btn-primary mt-3">Confirm</button>
+            </div>
+          </div>
+        </div>
+        <div class="container-body">
+          <div class="card card-primary ml-2 mr-2 border border-primary">
+            <div class="card-header">
+              <h3 class="card-title">Rekap Absen Siswa</h3>
+              
+            </div>
+            <div id="data-content">
+            <div class="card-body">
+                <!-- Tabel Rekap Harian -->
+                 <div class="keterangan">
+                <h3>Rekap Absensi Siswa</h3>
+                 
+                  <h3><b><%= dataSekolah.nama %></b></h3>
+                  <p><%= dataSekolah.alamat %>, Email : <%= dataSekolah.email %></p>
+              </div>
+              <hr>
+              <div class="information mt-3 mb-3">
+                <div class="row">
+                  <div class="col-lg-6 col-6">
+                    <div class="group-info">
+                      <label>Nama Guru</label>
+                      <span>:</span>
+                      <span> </span>
+                    </div>
+                    <div class="group-info">
+                      <label>Kelas</label>
+                      <span>:</span>
+                      <span> <%= kelas.nama_kelas %></span>
+                    </div>
+                  </div>
+              
+                  <div class="col-lg-6 col-6">
+                    <div class="group-info">
+                      <label>Tahun Ajaran</label>
+                      <span>:</span>
+                      <span> <%= tahun_ajaran.nama_ajaran %></span>
+                    </div>
+                    <div class="group-info">
+                      <label>Mata Pelajaran</label>
+                      <span>:</span>
+                      <span> <%= mp.nama_mp %></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              
+              <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="text-align: center; vertical-align: middle; width: 5%;">Nis</th>
+                        <th rowspan="2" style="text-align: center; vertical-align: middle; width: 20%;">Siswa</th>
+                        <th colspan="<%= dateArray.length %>" style="text-align: center;">Tanggal</th>
+                    </tr>
+                    <tr>
+                      <% dateArray.forEach(date => { %>
+                        <th style="width: 10%;"><%= date %></th>
+                    <% }) %>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% Object.values(formattedData).forEach(siswa => { %>
+                        <tr>
+                            <td><%= siswa.nis %></td>
+                            <td><%= siswa.nama_siswa %></td>
+                            <% dateArray.forEach(date => { %>
+                                <td style="text-align: center;">
+                                    <% if (siswa.rekap[date] === "hadir") { %>
+                                      <i class="fa fa-check" aria-hidden="true" style="color: green;"></i>
+                                      <% } else if (siswa.rekap[date] === "sakit") { %>
+                                      <span style="color: orange;">S</span>
+                                      <% } else if (siswa.rekap[date] === "izin"){ %>
+                                      <span style="color: orange;">Z</span>
+                                      <% } else { %>
+                                      <span style="color: red;">A</span>
+                                      <% } %>
+                                </td>
+                            <% }) %>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+            
+            
+            </div>
+          </div>
+           
+            <!-- Card footer with attendance legend -->
+            <div class="card-footer">
+              <button id="print-btn" class="btn btn-secondary">Print Data</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script>
+  $(document).ready(function(){
+    //print
+    $("#print-btn").on('click', function(){
+      const printContent = $("#data-content").html();
+      const printWindow = window.open("", "", "width=800, height=600");
+      printWindow.document.write(`
+      <html>
+          <head>
+            <title>Print Data Rekap Absen</title>
+            <!-- Link ke CSS Bootstrap -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+            <style>
+              /* Style tambahan untuk memastikan tampilan sesuai dengan container-body */
+               .keterangan {
+    text-align: center;
+  }
+  .group-info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.group-info label {
+  width: 120px;
+  font-weight: bold;
+}
+
+.group-info span {
+  margin-right: 10px;
+}
+            </style>
+          </head>
+          <body>
+            ${printContent} <!-- Menyisipkan konten container-body -->
+          </body>
+      </html>
+      `);
+      printWindow.document.close();
+      printWindow.print()
+    })
+    $("#date-btn").on('click', function() {
+  const bulan = $("#bulan").val();
+  const tahun = $("#year").val();
+  const semester = $("#semester").val();
+
+  // Mendapatkan URL saat ini
+  let urlPath = window.location.pathname;
+  let url = new URL(window.location.href); // Menggunakan URL API untuk mendapatkan query yang ada
+
+  const idKelas = urlPath.split("/").pop();
+
+  // Menghapus query sebelumnya untuk bulan, tahun, dan semester (jika ada)
+  url.searchParams.delete("bulan");
+  url.searchParams.delete("tahun");
+  url.searchParams.delete("semester");
+
+  // Menambahkan parameter bulan, tahun, atau semester sesuai dengan inputan yang ada
+  if (bulan) {
+    url.searchParams.append("bulan", bulan);
+  }
+  if (tahun) {
+    url.searchParams.append("tahun", tahun);
+  }
+  if (semester) {
+    url.searchParams.append("semester", semester);
+  }
+
+  // Menambahkan ID kelas ke path jika diperlukan
+  url.pathname = `/siswa/rekap_absen`;
+
+  // Redirect ke URL baru
+  window.location.href = url.toString();
+});
+
+
+  })
+</script>
+<%- include("../Componen/footer") %>

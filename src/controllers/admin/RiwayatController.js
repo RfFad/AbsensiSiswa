@@ -36,9 +36,9 @@ getPageRiwayat : async (req, res) => {
     }
 },
  getInsertRiwayat : async (req, res) => {
-    const {   id_siswa, id_kelas,  prestasi, pelanggaran, tanggal } = req.body;
+    const {   id_siswa, id_kelas,  jenis_riwayat, deskripsi, tanggal } = req.body;
     try { 
-        await InsertRiwayat(  id_siswa, id_kelas, prestasi, pelanggaran, tanggal); // Use the hashed password
+        await InsertRiwayat(  id_siswa, id_kelas, jenis_riwayat, deskripsi, tanggal); // Use the hashed password
         req.flash('success', 'Berhasil menambahkan data!');
         return res.redirect('/admin/data_riwayat');
     } catch (error) {
@@ -70,9 +70,9 @@ getPageRiwayat : async (req, res) => {
 },
  UpdateRiwayat : async (req, res) => {
     const { id_riwayat } = req.params;
-    const { id_siswa, id_kelas, prestasi, pelanggaran, tanggal } = req.body;
+    const { id_siswa, id_kelas, jenis_riwayat, deskripsi, tanggal } = req.body;
     try { 
-        await UpdateRiwayat(id_riwayat, id_siswa, id_kelas, prestasi, pelanggaran, tanggal); // Use the hashed password
+        await UpdateRiwayat(id_riwayat, id_siswa, id_kelas, jenis_riwayat, deskripsi, tanggal); // Use the hashed password
         req.flash('success', 'Berhasil memperbarui data!');
         return res.redirect('/admin/data_riwayat');
     } catch (error) {

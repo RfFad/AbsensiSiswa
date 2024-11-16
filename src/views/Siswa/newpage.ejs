@@ -1,4 +1,6 @@
-<%- include("./Componen/header") %>
+
+
+       <%- include("./Componen/header") %>
 <style>
     .carousel-caption h5 {
   font-size: 1.5rem; /* default font size for mobile */
@@ -63,16 +65,33 @@
     <!-- Main content -->
     <div class="content">
       <div class="container">
+        <div class="bgimg row justify-content-center mb-3">
+          <div class="col-lg-8 col-12">
+            <div id="carouselExampleCaptions" class="carousel slide h-100" data-bs-ride="carousel">
+              
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <div class="carousel-overlay"></div> <!-- Overlay untuk menggelapkan gambar -->
+                  <img src="/bg/Teacher2.png" class="d-block w-100 carousel-image" alt="...">
+                  <div class="carousel-caption">
+                    <h5 class="display-6 text-shadow">Web Absensi Sekolah</h5>
+                    <p class="lead text-shadow"><%= sekolah.nama %></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
           <div class="row justify-content-center">
             <!-- ./col -->
             <div class="col-lg-2 col-6">
               <div class="info-box d-flex flex-column align-items-center">
                 <a href="/siswa/jadwal" class="d-flex justify-content-center align-items-center flex-column text-reset text-decoration-none">
-                  <span class="info-box-icon bg-success d-flex justify-content-center align-items-center" style="width: 90px; height: 80px;">
-                    <i class="fas fa-chart-pie" style="font-size: 2rem;"></i>
+                  <span class="info-box-icon d-flex justify-content-center align-items-center" style="width: 90px; height: 80px; background-color: rgb(136, 185, 183);">
+                    <img src="/icon/icon_jadwal.png" alt="">
                   </span>
                   <div class="info-box-content text-center mt-2">
-                    <span class="info-box-text">Jadwal Mengajar</span>
+                    <span class="info-box-text">Jadwal Pelajaran</span>
                     <span class="info-box-number"></span>
                   </div>
                 </a>
@@ -82,12 +101,12 @@
             <!-- ./col -->
             <div class="col-lg-2 col-6">
               <div class="info-box d-flex flex-column align-items-center">
-                <a href="/siswa/jadwal" class="d-flex justify-content-center align-items-center flex-column text-reset text-decoration-none">
-                  <span class="info-box-icon bg-danger d-flex justify-content-center align-items-center" style="width: 90px; height: 80px;">
-                    <i class="far fa-user" style="font-size: 2rem;"></i>
+                <a href="/siswa/menu_rekap" class="d-flex justify-content-center align-items-center flex-column text-reset text-decoration-none">
+                  <span class="info-box-icon  d-flex justify-content-center align-items-center" style="width: 90px; height: 80px;">
+                   <img src="/icon/history.png" alt="">
                   </span>
                   <div class="info-box-content text-center mt-2">
-                    <span class="info-box-text">Daftar Murid</span>
+                    <span class="info-box-text">History Absen</span>
                     <span class="info-box-number"></span>
                   </div>
                 </a>
@@ -96,9 +115,9 @@
             <!-- ./col -->
             <div class="col-lg-2 col-6">
               <div class="info-box d-flex flex-column align-items-center">
-                <a href="/siswa/jadwal" class="d-flex justify-content-center align-items-center flex-column text-reset text-decoration-none">
-                  <span class="info-box-icon bg-warning d-flex justify-content-center align-items-center" style="width: 90px; height: 80px;">
-                    <i class="far fa-user" style="font-size: 2rem;"></i>
+                <a href="/siswa/tugas" class="d-flex justify-content-center align-items-center flex-column text-reset text-decoration-none">
+                  <span class="info-box-icon d-flex justify-content-center align-items-center" style="width: 90px; height: 80px;">
+                    <img src="/icon/list.png" alt="">
                   </span>
                   <div class="info-box-content text-center mt-2">
                     <span class="info-box-text">Daftar</span>

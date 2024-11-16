@@ -1,6 +1,7 @@
 const mysql = require('mysql');
 const gurumodel = require('../../models/guru/models_guru');
 const jadwal = require('../../models/guru/jadwal_model');
+const {getSiswa} = require('../../models/models_siswa')
 const {
     
     getGuruById,
@@ -136,4 +137,43 @@ module.exports = {
             });
         }
     },
+    async getSiswa(req, res) {
+        try {
+            let siswa = await getSiswa()
+            res.status(200).json({ data: siswa });
+        } catch (error) {
+            console.error(error);
+            res.status(404).json({ message: "Data siswa tidak ditemukan" });
+        }
+    },
+    
+    async getPageSiswa (req, res) {
+        try {
+            const messages = {
+                success: req.flash("success"),
+                error: req.flash("error"),
+              };
+              const rows = await gurumodel.getguru(req, res);
+            res.render("guru/data_siswa", {title : "Data Siswa Ajar", messages, rows})
+        } catch (error) {
+            console.log(error)
+            res.status(402)
+        }
+    }
 };
+// async getSiswa(req, res) {
+//     const nip = req.session.username;
+//     try {
+//         let siswa = await gurumodel.getDataSiswa(nip);
+        
+//         // Hilangkan duplikat berdasarkan id_siswa
+//         const uniqueSiswa = siswa.filter((value, index, self) =>
+//             index === self.findIndex((t) => t.id_siswa === value.id_siswa)
+//         );
+
+//         res.status(200).json({ data: uniqueSiswa });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(404).json({ message: "Data siswa tidak ditemukan" });
+//     }
+// },

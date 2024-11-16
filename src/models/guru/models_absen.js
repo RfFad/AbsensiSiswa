@@ -33,7 +33,7 @@ const Attendance = {
     // },
     saveAbsen : (entries) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO absen (id_siswa, id_jadwal, tanggal, status) VALUES ?`, [entries], (error, results) => {
+            db.query(`INSERT INTO absen (id_siswa, id_jadwal, id_guru, tanggal, status) VALUES ?`, [entries], (error, results) => {
                 if(error){
                     return reject(error);
                 }
@@ -59,7 +59,46 @@ const Attendance = {
                 }
             );
         });
-    }    
+    },    
+    dataSiswaByid_kelas: (id_kelas) => {
+        return new Promise((resolve, reject) => {
+            db.query(
+                `SELECT siswa.*, kelas.nama_kelas AS nama_kelas, tahun_ajaran.nama_ajaran AS nama_ajaran 
+                 FROM siswa 
+                 JOIN kelas ON siswa.id_kelas = kelas.id_kelas 
+                 JOIN tahun_ajaran ON siswa.idth = tahun_ajaran.idth 
+                 WHERE siswa.id_kelas = ?`, 
+                [id_kelas], 
+                (error, results) => {
+                    if (error) {
+                        return reject(error);
+                    }
+                    resolve(results);
+                }
+            );
+        });
+    },
+    getJadwalById: (id_jadwal) => {
+        return new Promise((resolve, reject) => {
+            const query = `
+                SELECT jadwal.*, mata_pelajaran.nama_mp AS nama_mp, kelas.nama_kelas AS nama_kelas 
+                FROM jadwal 
+                JOIN mata_pelajaran ON jadwal.idm = mata_pelajaran.idm 
+                JOIN kelas ON jadwal.idk = kelas.id_kelas 
+                WHERE idj = ?;
+            `;
+            db.query(query, [id_jadwal], (err, results) => {
+                if (err) return reject(err);
+                if (results.length === 0) {
+                    return reject(new Error('Jadwal Tidak Ditemukan'));
+                }
+                resolve(results[0]);
+            });
+        });
+    }
+    
+    
+       
     // updateAbsen: (ket, ids, tgl, idj) => {
     //     return new Promise((resolve, reject) => {
     //         db.query(`UPDATE absen SET ket = ? WHERE ids = ? AND tgl = ? AND idj = ?`, [ket, ids, tgl, idj], (error, results) => {

@@ -1,60 +1,65 @@
 const rekapModel = require("../../models/guru/models_rekap");
 const guru = require('../../models/guru/models_guru');
 const {getSekolah} = require('../../models/models_sekolah')
-
+const {getKelasById} = require("../../models/models_kelas");
+const {getMapelById} = require("../../models/models_mapel");
+const tahunAjar = require("../../models/models_tahunajar")
 module.exports = {
-    rekapAbsensiKelas: async(req, res) => {
+    rekapAbsensiKelas: async (req, res) => {
         const { id_kelas } = req.params;
-        const 
-        nip = req.session.username;
-        const { tanggal, mode } = req.query;
+        const nip = req.session.username;
+        const { bulan, tahun, idm, idth, semester } = req.query;
 
+    
         try {
-            const dataSekolah = await getSekolah()
+            const dataSekolah = await getSekolah();
             const messages = {
                 success: req.flash("success"),
                 error: req.flash("error"),
             };
+            const tahun_ajaran = await tahunAjar.TahunById(idth)
+            const kelas = await getKelasById(id_kelas);
             const rows = await guru.getguru(req, res);
-            let dataRekap;
+            const mp = await getMapelById(idm); 
 
-            if (mode === "harian") {
-                dataRekap = await rekapModel.rekapHarian(id_kelas, tanggal, nip);
-            } else if (mode === "bulanan") {
-                dataRekap = await rekapModel.rekapBulanan(id_kelas);
-            } else {
-                throw new Error('Mode tidak valid');
-            }
-
-            // Format data agar `nama_siswa` dan `tanggal` atau `bulan` hanya muncul sekali
+            const dataRekap = await rekapModel.rekapBulanan(
+                id_kelas,
+                bulan || null,
+                tahun || null,
+                nip, 
+                idth,
+                semester || null
+            );
+    
             const formattedData = {};
-
+            const uniqueDates = new Set();
+    
             dataRekap.forEach((record) => {
-                const { id_siswa, nis, nama_siswa, tanggal, bulan, tahun, status, jumlah } = record;
+                const { id_siswa, nis, nama_siswa, nama_kelas, nama_ajaran, tanggal, status } = record;
+                uniqueDates.add(tanggal);
+    
                 if (!formattedData[id_siswa]) {
                     formattedData[id_siswa] = {
                         nis,
                         nama_siswa,
-                        tanggal,
+                        nama_kelas,
+                        nama_ajaran,
                         rekap: {}
                     };
                 }
-
-                const key = mode === "harian" ? tanggal : `${tahun}-${bulan}`;
-                if (!formattedData[id_siswa].rekap[key]) {
-                    formattedData[id_siswa].rekap[key] = {};
-                }
-
-                formattedData[id_siswa].rekap[key][status] = jumlah;
+    
+                formattedData[id_siswa].rekap[tanggal] = status;
             });
-
-            res.render('guru/absen/rekap', { formattedData, mode, rows, messages, dataSekolah});
-
+    
+            const dateArray = Array.from(uniqueDates).sort();
+    
+            res.render('guru/absen/rekap', { formattedData, rows, messages, dataSekolah, dateArray, kelas, mp, tahun_ajaran });
         } catch (error) {
             console.error(error);
             res.status(500).send('Server Error');
         }
     },
+    
     menuRekap : async(req, res) => {
         const nip = req.session.username
         try {
@@ -69,5 +74,6 @@ module.exports = {
             console.log(`Terjadi Error : ${error}`)
             res.status(404)
         }
-    }
+    },
+    
 };

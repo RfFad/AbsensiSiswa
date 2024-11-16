@@ -56,20 +56,23 @@
                         <!-- Options will be dynamically loaded here -->
                       </select>
                     </div>
+                    <label for="prestasi">Jenis riwayat</label>
                     <div class="form-group mb-3">
-                      <label for="prestasi">Prestasi</label>
-                      <input type="text" class="form-control" name="prestasi" placeholder="Masukkan Prestasi" value="<%= riwayat.prestasi %>" required>
+                      <select name="jenis_riwayat" class="form-control" id="">
+                        <option value="Prestasi" <%= riwayat.jenis_riwayat === 'Prestasi' ? 'selected' : '' %>> Presetasi </option>
+                        <option value="pelanggaran" <%= riwayat.jenis_riwayat === 'Pelanggaran' ? 'selected' : '' %>>Pelanggaran</option>
+                      </select>
                     </div>
                   
                   </div>
                   <div class="col-md-6">
                     <div class="form-group mb-3">
-                      <label for="pelanggaran">Pelanggaran</label>
-                      <input type="text" class="form-control" name="pelanggaran" placeholder="Masukkan Pelanggaran" value="<%= riwayat.pelanggaran %>" required>
+                      <label for="pelanggaran">Deskripsi</label>
+                      <textarea class="form-control" name="deskripsi" placeholder="Masukkan Pelanggaran"  required> <%= riwayat.deskripsi %> </textarea>
                     </div>
                     <div class="form-group mb-3">
                       <label for="tanggal">Tanggal</label>                            
-                      <input type="date" class="form-control" name="tanggal" value="<%=new Date(riwayat.tanggal).toISOString().split('T')[0] %>" required>
+                      <input type="date" class="form-control" name="tanggal" value="<%= new Date(riwayat.tanggal).toLocaleDateString('en-CA') %>" required>
                     </div>
 
                   </div>
@@ -106,7 +109,6 @@
         $('#nama_siswa').empty().append('<option value="" disabled selected>Pilih Kelas Terlebih Dahulu</option>');
       }
     });
-
     function loadSiswa(kelasId, selectedSiswaId = null) {
       $.ajax({
         url: '/admin/getSiswaByKelas/' + kelasId,
@@ -114,8 +116,8 @@
         success: function(data) {
           $('#nama_siswa').empty().append('<option value="" disabled selected>Pilih Nama Siswa</option>');
           data.forEach(function(siswa) {
-            const selected = selectedSiswaId && selectedSiswaId === siswa.id_siswa ? 'selected' : '';
-            $('#nama_siswa').append('<option value="' + siswa.id_siswa + '" ' + selected + '>' + siswa.nama_siswa + '</option>');
+            const selected = '<%= riwayat.id_siswa %>' === siswa.id_siswa ? 'selected' : '';
+            $('#nama_siswa').append(`<option value="${siswa.id_siswa}" ${selected}>${siswa.nama_siswa}</option>`);
           });
         },
         error: function(err) {

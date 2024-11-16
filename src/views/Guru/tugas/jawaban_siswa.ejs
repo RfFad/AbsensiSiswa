@@ -1,0 +1,187 @@
+<%- include("../Componen/header") %>
+
+<style>
+    .group-info {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 20px;
+    }
+    .group-info label {
+        width: 120px;
+        font-weight: bold;
+    }
+    .group-info span {
+        margin-right: 10px;
+    }
+    .container-detail {
+        padding: 20px;
+    }
+    .header-detail {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .header-detail h2 {
+        font-weight: bold;
+    }
+    .profile-section {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    .profile-section img {
+        width: 90px;
+        height: 90px;
+        border-radius: 10px;
+        border: 4px solid rgb(110, 102, 102);
+        object-fit: cover;
+    }
+    .info-section {
+        margin-bottom: 30px;
+    }
+    .info-section .info-item {
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+    }
+    .file-section img,
+    .file-section .file-link {
+        max-width: 100%;
+        border-radius: 5px;
+    }
+    .file-section img {
+        border: 1px solid #ddd;
+        padding: 5px;
+        margin-top: 10px;
+    }
+    .file-section .file-link {
+        display: inline-block;
+        padding: 10px 15px;
+        color: #fff;
+        background-color: #007bff;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+    .text-answer {
+        background: #e9ecef;
+        padding: 15px;
+        border-radius: 5px;
+        font-size: 1.1rem;
+        white-space: pre-wrap;
+    }
+</style>
+
+<%- include("../Componen/sidebar") %>
+
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6"></div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-outline card-info">
+                        <div class="card-header">
+                            <h4>Data</h4>
+                        </div>
+                        <div class="container-detail">
+                            <!-- Header Section -->
+                            <div class="header-detail">
+                                <h2>Detail Jawaban Siswa</h2>
+                                <p class="text-muted">Informasi tentang jawaban tugas yang telah dikirim</p>
+                            </div>
+                    
+                            <!-- Profile Section -->
+                            <div class="profile-section">
+                                <img src="" alt="Foto Siswa" id="studentPhoto">
+                                <div class="row">
+                                    <div class="col-lg-12 col-6">
+                                        <div class="group-info">
+                                            <label>Nama Siswa</label>
+                                            <span>:</span>
+                                            <span><%= data.nama_siswa %></span>
+                                        </div>
+                                        <div class="group-info">
+                                            <label>Kelas</label>
+                                            <span>:</span>
+                                            <span><%= data.nama_kelas %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                            <!-- Info Section -->
+                            <div class="info-section">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 20%;"><strong>Mata Pelajaran</strong></td>
+                                            <td style="width: 1%;">:</td>
+                                            <td><span id="subjectName"><%= data.nama_mp %></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 20%;"><strong>Tanggal Pengumpulan</strong></td>
+                                            <td style="width: 1%;">:</td>
+                                            <td><span id="subjectName">Matematika</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                    
+                            <!-- File Section -->
+                            <div class="file-section">
+                                <h5>File Tugas</h5>
+                                <!-- Jika file berupa gambar -->
+                                 <div class="file-content">
+                                <img src="/file_jawaban/<%= data.file_jawaban %>" alt="File Tugas" id="taskFileImage" class="img-fluid">
+                            </div>
+                                <!-- Jika file berupa dokumen -->
+                                <p>
+                                    <a href="#" class="file-link mt-3" id="taskFileLink" download>
+                                        <i class="fas fa-file-download"></i> Download Tugas
+                                    </a>
+                                </p>
+                            </div>
+                    
+                            <!-- Text Answer Section -->
+                            <div class="text-answer mt-4">
+                                <h5><%- data.text_jawaban %></h5>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function(){
+       
+        const file = "<%= data.file_jawaban %>";
+        if(!file){
+            $("#taskFileImage").hide();
+            $(".file-content").html("<div id='callout-info' class='alert alert-warning mt-3'>Siswa tidak mengirimkan file</div>")
+        }
+        const textAnswer = document.querySelector(".text-answer");
+        // textAnswer.innerHTML = "<%- data.text_jawaban%>";
+
+        function foto(){
+            const foto = "<%= data.foto %>";
+        if(!foto){
+            $("#studentPhoto").attr('src', '/icon.png')
+        }else{
+            $("#studentPhoto").attr('src', `/images/${foto}`)
+        }
+        }
+        foto()
+    })
+</script>
+<%- include("../Componen/footer") %>

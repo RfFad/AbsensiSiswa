@@ -1,52 +1,53 @@
-<%- include("./Componen/header") %>
+<%- include("./componen/header") %>
 <style>
-    .carousel-caption h5 {
-  font-size: 1.5rem; /* default font size for mobile */
+  .carousel-caption h5 {
+font-size: 1.5rem; /* default font size for mobile */
 }
 
 .carousel-caption p {
-  font-size: 1rem;
+font-size: 1rem;
 }
 
 @media (min-width: 768px) {
-  .carousel-caption h5 {
-    font-size: 2rem; /* larger font size for tablets and above */
-  }
+.carousel-caption h5 {
+  font-size: 2rem; /* larger font size for tablets and above */
+}
 
-  .carousel-caption p {
-    font-size: 1.25rem;
-  }
+.carousel-caption p {
+  font-size: 1.25rem;
+}
 }
 /* Menggelapkan gambar */
 .carousel-item {
-  position: relative;
+position: relative;
 }
 
 .carousel-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Warna hitam dengan transparansi 50% */
-  z-index: 0;
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.5); /* Warna hitam dengan transparansi 50% */
+z-index: 0;
 }
 
 .carousel-item img {
-  z-index: -1; /* Gambar di belakang overlay */
+z-index: -1; /* Gambar di belakang overlay */
 }
 
 /* Menambahkan bayangan pada teks */
 .text-shadow {
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Efek bayangan */
+text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Efek bayangan */
 }
 
 .carousel-caption {
-  z-index: 0; /* Teks berada di depan overlay */
+z-index: 0; /* Teks berada di depan overlay */
 }
 
-  </style>
-<%- include("./Componen/sidebar") %>
+</style>
+
+<%- include("./componen/sidebar") %>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -62,38 +63,19 @@
 
     <!-- Main content -->
     <div class="content">
-      <div class="container-fluid">
+      <div class="container">
         <div class="bgimg row justify-content-center mb-3">
             <div class="col-lg-8 col-12">
               <div id="carouselExampleCaptions" class="carousel slide h-100" data-bs-ride="carousel">
-                <div class="carousel-indicators" style="z-index: 0;">
-                  <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                  <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                  <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                </div>
+                
                 <div class="carousel-inner">
                   <div class="carousel-item active">
                     <div class="carousel-overlay"></div> <!-- Overlay untuk menggelapkan gambar -->
-                    <img src="/smpn1ka.jpg" class="d-block w-100 h-100 carousel-image" alt="...">
+                    <img src="/bg/Teacher2.png" class="d-block w-100 carousel-image"  alt="...">
+
                     <div class="carousel-caption">
-                      <h5 class="display-6 text-shadow">First slide label</h5>
+                      <h5 class="display-6 text-shadow">Web Absensi Sekolah</h5>
                       <p class="lead text-shadow"><%= sekolah.nama %></p>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <div class="carousel-overlay"></div> <!-- Overlay untuk menggelapkan gambar -->
-                    <img src="/smpn1ka.jpg" class="d-block w-100 h-100 carousel-image" alt="...">
-                    <div class="carousel-caption">
-                      <h5 class="display-6 text-shadow">Second slide label</h5>
-                      <p class="lead text-shadow">Some representative placeholder content for the second slide.</p>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <div class="carousel-overlay"></div> <!-- Overlay untuk menggelapkan gambar -->
-                    <img src="/smpn1ka.jpg" class="d-block w-100 h-100 carousel-image" alt="...">
-                    <div class="carousel-caption">
-                      <h5 class="display-6 text-shadow">Third slide label</h5>
-                      <p class="lead text-shadow">Some representative placeholder content for the third slide.</p>
                     </div>
                   </div>
                 </div>
@@ -117,7 +99,7 @@
                 <a href="/guru/jadwal" class="d-flex justify-content-center align-items-center flex-column text-reset text-decoration-none">
                   <span class="info-box-icon d-flex justify-content-center align-items-center" style="width: 90px; height: 80px; background-color: rgb(136, 185, 183);">
                     
-                    <img src="/icon_jadwal.png" alt="">
+                    <img src="/icon/icon_jadwal.png" alt="">
                   </span>
                   <div class="info-box-content text-center mt-2">
                     <span class="info-box-text">Jadwal Mengajar</span>
@@ -130,9 +112,9 @@
             <!-- ./col -->
             <div class="col-lg-2 col-6">
               <div class="info-box d-flex flex-column align-items-center">
-                <a href="/guru/jadwal" class="d-flex justify-content-center align-items-center flex-column text-reset text-decoration-none">
-                  <span class="info-box-icon bg-danger d-flex justify-content-center align-items-center" style="width: 90px; height: 80px; background-color: rgb(136, 185, 183);">
-                    <img src="/siswa.jpg" alt="">
+                <a href="/guru/data_siswa" class="d-flex justify-content-center align-items-center flex-column text-reset text-decoration-none">
+                  <span class="info-box-icon d-flex bg-orange justify-content-center align-items-center" style="width: 90px; height: 80px; ">
+                    <img src="/icon/siswa.png" style="filter: drop-shadow(1px 1px 1px  black);" alt="">
                   </span>
                   <div class="info-box-content text-center mt-2">
                     <span class="info-box-text">Daftar Murid</span>
@@ -145,8 +127,8 @@
             <div class="col-lg-2 col-6">
               <div class="info-box d-flex flex-column align-items-center">
                 <a href="/guru/menu_rekap" class="d-flex justify-content-center align-items-center flex-column text-reset text-decoration-none">
-                  <span class="info-box-icon bg-warning d-flex justify-content-center align-items-center" style="width: 90px; height: 80px;">
-                    <i class="far fa-user" style="font-size: 2rem;"></i>
+                  <span class="info-box-icon bg-lightblue d-flex justify-content-center align-items-center" style="width: 90px; height: 80px;">
+                    <img src="/icon/Programming.png" alt="">
                   </span>
                   <div class="info-box-content text-center mt-2">
                     <span class="info-box-text">Rekap Absen</span>
@@ -158,12 +140,12 @@
             <!-- ./col -->
             <div class="col-lg-2 col-6">
               <div class="info-box d-flex flex-column align-items-center">
-                <a href="/guru/jadwal" class="d-flex justify-content-center align-items-center flex-column text-reset text-decoration-none">
-                  <span class="info-box-icon bg-primary d-flex justify-content-center align-items-center" style="width: 90px; height: 80px;">
-                    <i class="far fa-user" style="font-size: 2rem;"></i>
+                <a href="/guru/tugas" class="d-flex justify-content-center align-items-center flex-column text-reset text-decoration-none">
+                  <span class="info-box-icon d-flex justify-content-center align-items-center" style="width: 90px; height: 80px;">
+                    <img src="/icon/list.png" alt="">
                   </span>
                   <div class="info-box-content text-center mt-2">
-                    <span class="info-box-text">Daftar</span>
+                    <span class="info-box-text">Tugas Siswa</span>
                     <span class="info-box-number"></span>
                   </div>
                 </a>
@@ -171,37 +153,7 @@
             </div>
             <!-- ./col -->
           </div>
-          <hr class="featurette-divider">
-<h2 style="display: flex; justify-content: center; margin-bottom: 50px;">ABOUT GURU PAGE</h2>
-<div class="row featurette justify-content-center mb-3">
-  <div class="col-md-5">
-    <h2 class="featurette-heading">Fitur Unggulan Pertama. <span class="text-muted">Akan mengubah cara Anda bekerja.</span></h2>
-    <p class="lead">Sistem absensi kami memungkinkan guru untuk melacak kehadiran siswa dengan efisien. Dengan fitur yang mudah digunakan, guru dapat menginput absensi dengan akurat, merekap data absensi, dan dengan cepat mendapatkan informasi penting tentang siswa.</p>
-  </div>
-  <div class="col-md-3">
-    <img src="/kelas_bg.jpg" class="featurette-image img-fluid mx-auto" alt="Feature image 1" style="object-fit: cover; width: 100%; height: 100%;">
-  </div>
-</div>
-
-<div class="row featurette justify-content-center mb-3">
-  <div class="col-md-5 order-md-2">
-    <h2 class="featurette-heading">Ya, sebaik itu. <span class="text-muted">Lihat sendiri.</span></h2>
-    <p class="lead">Dengan sistem ini, guru dapat dengan mudah merekap data absensi, memastikan semua ketidakhadiran tercatat dengan baik. Fitur laporan yang lengkap memudahkan guru untuk memantau dan mengelola kehadiran dengan lebih efisien.</p>
-  </div>
-  <div class="col-md-3">
-    <img src="/kelas_bg.jpg" class="featurette-image img-fluid mx-auto" alt="Feature image 2" style="object-fit: cover; width: 100%; height: 100%;">
-  </div>
-</div>
-
-<div class="row featurette justify-content-center">
-  <div class="col-md-5">
-    <h2 class="featurette-heading">Dan terakhir, fitur ini. <span class="text-muted">Pastikan semuanya.</span></h2>
-    <p class="lead">Ini adalah fitur terakhir yang memberi Anda kemudahan dalam mengelola data kehadiran. Dengan fitur-fitur yang ada, pengelolaan absensi menjadi lebih mudah dan cepat, sehingga Anda dapat lebih fokus pada proses belajar mengajar.</p>
-  </div>
-  <div class="col-md-3">
-    <img src="/kelas_bg.jpg" class="featurette-image img-fluid mx-auto" alt="Feature image 3" style="object-fit: cover; width: 100%; height: 100%;">
-  </div>
-</div>
+        
 
           
       
@@ -217,4 +169,4 @@
   
 
   <!-- Main Footer -->
-  <%- include("./Componen/footer") %>
+  <%- include("./componen/footer") %>

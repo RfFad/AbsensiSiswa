@@ -9,7 +9,7 @@ const getMapelById = async (idm) => {
                     return reject(error);
                 }
                 if(result.length === 0){
-                    return reject (new Error('Kelas TIdak Ditemukan'));
+                    return reject (new Error('Mapel TIdak Ditemukan'));
                 }
                 resolve(result[0]);
             })

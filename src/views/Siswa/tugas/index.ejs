@@ -1,0 +1,231 @@
+<%- include("../Componen/header") %>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<%- include("../Componen/sidebar") %>
+
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            
+          </div>
+          
+        </div>
+      </div>
+    
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-outline card-info">
+                            <div class="card-header">
+                                <h4>Data Tugas</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex flex-column flex-md-row justify-content-between mb-2">
+                                    <div class="btn-group w-100 flex-md-row mb-2 mb-md-0" id="btn-tambah">
+                                      <span class="btn btn-success col-12 col-md-3 fileinput-button mb-2 mb-md-0">
+                                        <i class="fas fa-book"></i>
+                                        <span id="countTugas"></span>
+                                      </span>
+                                    </div>
+                                  
+                                    <div class="d-flex justify-content-end">
+                                      <input type="text" class="form-control" name="table_search" style="width: 160px;">
+                                      <button type="submit" class="btn btn-secondary ml-2">Search</button>
+                                      <a href="#" class="btn btn-warning ml-2" id="filter-btn">Filter</a>
+                                    </div>
+                                  </div>
+                                  <div class="table-responsive">
+                                    <ul class="nav nav-tabs nav-tugas-container" id="myTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link nav-tugas active" id="tugas-tab" data-bs-toggle="tab" data-bs-target="#tugas" type="button" role="tab" aria-controls="tugas" aria-selected="true">Tugas aktif</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link nav-tugas" id="nilai-tab" data-bs-toggle="tab" data-bs-target="#nilai" type="button" role="tab" aria-controls="nilai" aria-selected="false">Tugas nilai</button>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content mt-3" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="tugas" role="tabpanel" aria-labelledby="tugas-tab">
+                                        
+                                            <div class="body">
+                                                <!-- Konten tabel akan dimuat di sini -->
+                                            </div>
+                                        
+                                    </div>
+                                    <div class="tab-pane fade" id="nilai" role="tabpanel" aria-labelledby="nilai-tab">
+                                        <div class="nilai">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+</div>
+        <!-- Modal Tambah -->
+       
+    
+
+    <!-- Skrip dari AdminLTE dan Bootstrap -->
+    <script src="/plugins/jquery/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+    
+    <script>
+        $(document).ready(function(){
+            // Menampilkan data tugas
+            list();
+            listNilai();
+
+            // Inisialisasi Select2 saat modal tampil
+           
+
+            // Menampilkan modal tambah data
+            $("#btn-tambah").on('click', function() {
+                $("#modal-tambah").modal("show");
+                
+});
+
+            
+            // Fungsi untuk mengubah nomor hari ke nama hari
+            function Hari(tanggal) {
+                const hariNama = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                return hariNama[tanggal];
+            }
+
+            // Fungsi untuk memuat daftar tugas
+            function list() {
+                let html = "";
+                var id_kelas = "<%= rows.id_kelas %>"
+                $.ajax({
+                    url: `/siswa/data_tugas/${id_kelas}`,
+                    type: "GET",
+                    success: function(result) {
+                        const val = result.data;
+                        const waktu = val.filter(row => row.status === "aktif")
+                        const countTgd = waktu.length;
+                        if (waktu.length > 0) {
+                            html += "<table class='table table-bordered table-striped table-hover'>";
+                            html += "<thead class='bg-dark'>";
+                            html += "<tr>"
+                            html += "<th style='width: 1%;'>No</th>";
+                            html += "<th>Guru</th>";
+                            html += "<th>Judul Tugas</th>";
+                            html += "<th>Mapel</th>";
+                            html += "<th>Dimulai</th>";
+                            html += "<th>Deadline</th>";
+                            html += "<th style = 'width : 8%'>Action</th>";
+                            html += "</tr>";
+                            html += "</thead><tbody>";
+                            $.each(waktu, function(index, row) {
+                                const tanggalDiberikan = new Date(row.tanggal_diberikan);
+                                const tanggalDeadline = new Date(row.tanggal_deadline);
+                                const hariDiberikan = Hari(tanggalDiberikan.getDay());
+                                const hariDeadline = Hari(tanggalDeadline.getDay());
+                                const formatDiberikan = tanggalDiberikan.toLocaleDateString('id-ID').split('/').join('-');
+                                const formatDeadline = tanggalDeadline.toLocaleDateString('id-ID').split('/').join('-');
+                                html += `<tr id='data' kode='${row.id_tugas}'>`;
+                                html += `<td>${index + 1}</td>`;
+                                html += `<td>${row.nama_guru}</td>`;
+                                html += `<td>${row.judul_tugas}</td>`;
+                                html += `<td>${row.nama_mp}</td>`;
+                                html += `<td><label class='label bg-success' style="border-radius: 6px; width: 200px; text-align: center;" id="tanggalMulai"> ${hariDiberikan}, ${formatDiberikan}</label>
+                               </td>`;
+                                html += `<td> <label class='label bg-danger' style="border-radius: 6px; width: 200px; text-align: center;" id="tanggalMulai">${hariDeadline}, ${formatDeadline} ${row.waktu_deadline.slice(0, 5)}</label></td>`;
+                                html += `<td>
+                                    <a href= '/siswa/tugas_detail/${row.id_tugas}' class= 'btn btn-info'>Detail</a>
+                                    </td>`;
+                                html += "</tr>";
+                            });
+                            html += "</tbody></table>";
+                        } else {
+                            html = "<p>No data available</p>";
+                        }
+                        $(".body").html(html);
+                        $("#countTugas").text("Jumlah tugas: " + countTgd)
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("AJAX Error:", status, error);
+                        $(".body").html("<p>Error loading data</p>");
+                    }
+                });
+            }
+            function listNilai() {
+                let html = "";
+                $.ajax({
+                    url: `/siswa/data_nilai`,
+                    type: "GET",
+                    success: function(result) {
+                        const val = result.data;
+                        if (val.length > 0) {
+                            html += "<table class='table table-bordered table-striped table-hover'>";
+                            html += "<thead class='bg-dark'>";
+                            html += "<tr>"
+                            html += "<th style='width: 1%;'>No</th>";
+                            html += "<th>Guru</th>";
+                            html += "<th>Pelajaran</th>";
+                            html += "<th>Judul Tugas</th>";
+                            html += "<th>Nilai</th>";
+                            html += "<th>Status</th>";
+                            html += "<th style = 'width : 8%'>Action</th>";
+                            html += "</tr>";
+                            html += "</thead><tbody>";
+                            $.each(val, function(index, row) {
+                                const nilai = row.nilai !== null  ? `${row.nilai}` : 'belum'
+                                html += `<tr id='data' kode='${row.id_pengumpulan}'>`;
+                                html += `<td>${index + 1}</td>`;
+                                html += `<td>${row.nama_guru}</td>`;
+                                html += `<td>${row.nama_mp}</td>`;
+                                html += `<td>${row.judul_tugas}</td>`;
+                                html += `<td>${nilai}</td>`;
+                                html += `<td>${row.status}</td>`;
+                                html += `<td>
+                                    <a href= '/siswa/jawaban/${row.id_tugas}/${row.id_siswa}' class= 'btn btn-info'>Detail</a>
+                                    </td>`;
+                                html += "</tr>";
+                            });
+                            html += "</tbody></table>";
+                        } else {
+                            html = "<p>No data available</p>";
+                        }
+                        $(".nilai").html(html);
+                        $("#countTugas").text("Jumlah tugas: " + countTgd)
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("AJAX Error:", status, error);
+                        $(".body").html("<p>Error loading data</p>");
+                    }
+                });
+            }
+        });
+        $(document).on('click', '#btn-edit', function(){
+            const id = $(this).data("id");
+            if(id){
+                $.ajax({
+                    url : `/guru/tugasByid/${id}`,
+                    type : 'GET',
+                    success : function(response){
+                        var row = response.data[0];
+                        var tglDiberikan = new Date(row.tanggal_diberikan);
+                        var tglDeadline = new Date(row.tanggal_deadline);
+                        var formattedDiberikan = tglDiberikan.toLocaleDateString('en-CA')
+                        var formattedDeadline = tglDeadline.toLocaleDateString('en-CA')
+                        $("[name='id_tugas']").val(row.id_tugas);
+                        $("[name='judul_tugas']").val(row.judul_tugas);
+                        $("[name='tanggal_diberikan']").val(formattedDiberikan);
+                        $("[name='tanggal_deadline']").val(formattedDeadline);
+                        $("[name='deskripsi']").val(row.deskripsi);
+                        $("[name='id_kelas'] option[value='" + row.id_kelas + "']").prop('selected',true);
+                        
+                        $("#modal-tambah").modal("show") 
+                    }
+                })
+            }
+        })
+    </script>
+<%- include("../componen/footer") %>

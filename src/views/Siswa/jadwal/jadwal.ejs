@@ -17,8 +17,29 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="tittle bg bg-dark shadow" style = "display: flex; justify-content: center; width: 150px; height: 90%; border-radius: 10px;">
-                                <h4 class="title-class ">Kelas <%= rows.nama_kelas %></h4>
-                            </div>
+                                <h4 class="title-class ">Kelas <%= rows.nama_kelas %></h4> 
+                            </div><hr>
+                            <ul class="nav nav-pills mt-3">
+                                <li class="nav-item">
+                                  <a class="nav-link pilih-hari" data-hari = "senin" href="#">SENIN</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link pilih-hari" data-hari = "selasa" href="#">SELASA</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link pilih-hari" data-hari = "rabu" href="#">RABU</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link pilih-hari" data-hari = "kamis" href="#">KAMIS</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link pilih-hari" data-hari = "jumat" href="#">JUMAT</a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link pilih-hari" data-hari = "sabtu" href="#">SABTU</a>
+                                </li>
+                               
+                              </ul>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -42,13 +63,29 @@
     
     <script>
         $(document).ready(function(){
-            list();
+            const hariUrl = localStorage.getItem('hariTerakhir') || 'senin';
+            list(hariUrl);
+
+            $(`.pilih-hari[data-hari="${hariUrl}"]`).addClass('active');
+            
+            $('.pilih-hari').on('click', function(e){
+                e.preventDefault();
+
+                const hari = $(this).data('hari')
+                localStorage.setItem('hariTerakhir', hari)
+
+                list(hari);
+
+                $('.pilih-hari').removeClass('active')
+                $(this).addClass('active')
+            })
         })
-        function list() {
+        function list(hari) {
             let html = "";
             $.ajax({
                 url: "/siswa/data_jadwal",
                 type: "GET",
+                data : {hari : hari},
                 success: function(result) {
                     const val = result.data;
                     if (result.count > 0) {

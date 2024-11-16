@@ -13,6 +13,11 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
+function unescapeHTML(html) {
+    return html.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+}
+
+app.locals.unescape = unescapeHTML;
 
 
 // Definisi lokasi file router

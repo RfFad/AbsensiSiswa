@@ -1,0 +1,255 @@
+<%- include("../Componen/header") %>
+
+
+<style>
+    .custom-file-upload {
+        display: inline-block;
+        width: 250px;
+        padding: 10px;
+        font-size: 16px;
+        color: white;
+        background-color: rgb(40, 180, 40);
+        border: 2px solid rgb(30, 140, 30);
+        border-radius: 5px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .custom-file-upload:hover {
+        background-color: rgb(50, 200, 50);
+    }
+    .table-striped tbody tr:nth-of-type(odd) td {
+        background-color: #61d7df73;
+    }
+    .custom-file-upload input[type="file"] {
+        display: none;
+    }
+    .nav-tugas-container {
+        margin-top: 1rem;
+    }
+    .info-section {
+        margin-bottom: 30px;
+    }
+    .info-section .info-item {
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+    }
+    .file-section img,
+    .file-section .file-link {
+        max-width: 100%;
+        border-radius: 5px;
+    }
+    .file-section img {
+        border: 1px solid #ddd;
+        padding: 5px;
+        margin-top: 10px;
+    }
+    .file-section .file-link {
+        display: inline-block;
+        padding: 10px 15px;
+        color: #fff;
+        background-color: #007bff;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+</style>
+
+<%- include("../Componen/sidebar") %>
+
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6"></div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-outline card-info">
+                        <div class="card-header">
+                            <h4>Data Tugas</h4>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered table-striped table-responsive">
+                                <tbody>
+                                    <tr>
+                                        <td style="width: 20%;">Mata Pelajaran</td>
+                                        <td style="width: 1%;">:</td>
+                                        <td><%= data.nama_mp %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 20%;">Guru Pengampu</td>
+                                        <td style="width: 1%;">:</td>
+                                        <td><%= data.nama_guru %></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 20%;">Tanggal Mulai</td>
+                                        <td style="width: 1%;">:</td>
+                                        <td class="align-middle">
+                                            <label class='label bg-success' style="border-radius: 6px; width: 200px; text-align: center;" id="tanggalMulai"></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 20%;">Tanggal Selesai</td>
+                                        <td style="width: 1%;">:</td>
+                                        <td class="align-middle">
+                                            <label class='label bg-danger' style="border-radius: 6px; width: 200px; text-align: center;" id="tanggalSelesai"></label>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div id="callout-info" class="alert alert-info mt-3" >
+                                Ini adalah informasi tentang <strong>Materi & Soal</strong>
+                            </div>
+                            
+                            <ul class="nav nav-tabs nav-tugas-container" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link nav-tugas active" id="materi-tab" data-bs-toggle="tab" data-bs-target="#materi" type="button" role="tab" aria-controls="materi" aria-selected="true">Materi & Soal</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link nav-tugas" id="jawaban-tab" data-bs-toggle="tab" data-bs-target="#jawaban" type="button" role="tab" aria-controls="jawaban" aria-selected="false">Jawab Klik Disini</button>
+                                </li>
+                            </ul>
+                              
+                            <div class="tab-content mt-3" id="myTabContent">
+                                <div class="tab-pane fade show active" id="materi" role="tabpanel" aria-labelledby="materi-tab">
+                                    <h4 class="mt-3 text-center"><%= data.judul_tugas %></h4>
+                                    <p><%= data.deskripsi %></p>
+                                    <div class="file-section">
+                                        <h5>File Tugas</h5>
+                                        <!-- Jika file berupa gambar -->
+                                         <div class="file-content">
+                                        <img src="/file_tugas/<%= data.file_tugas %>" alt="File Tugas" id="taskFileImage" class="img-fluid">
+                                    </div>
+                                        <!-- Jika file berupa dokumen -->
+                                        <p>
+                                            <a href="#" class="file-link mt-3" id="taskFileLink" download>
+                                                <i class="fas fa-file-download"></i> Download Tugas
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="jawaban" role="tabpanel" aria-labelledby="jawaban-tab">
+                                    <form id="formTugas" enctype="multipart/form-data">
+                                        <input type="hidden" name="id_siswa" value="<%= rows.id_siswa %>">
+                                        <input type="hidden" name="id_tugas" value="<%= data.id_tugas %>">
+                                        <input type="hidden" name="tanggal_pengumpulan" id="tanggal_pengumpulan" value="<%= new Date().toISOString().split('T')[0] %>">
+                                        <h5>Tulis jawaban tugas mu di sini :</h5>
+                                        <textarea id="summernote" name="text_jawaban"></textarea>
+                                        <h5>Klik button dibawah ini untuk mengirim file :</h5>
+                                        <label class="custom-file-upload mb-3">
+                                            <i class="fas fa-file"></i>
+                                            Masukan file tugas disini
+                                            <input type="file" name="file_jawaban">
+                                        </label>
+                                       
+                                </div>
+                                <div class="btn-submit">
+                                <button type='submit' id='btn-tugas' style="display: none;" class='btn btn-primary mt-2'>Kirim Jawaban</button>
+                            </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+<script>
+    $(document).ready(function() {
+       jawab()
+        function Hari(tanggal) {
+            const hariNama = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            return hariNama[tanggal];
+        }
+       
+        var dateMulai = new Date("<%= data.tanggal_diberikan %>");
+        var formattedMulai = dateMulai.toLocaleDateString('id-ID').split('/').join('-');
+        var hariMulai = Hari(dateMulai.getDay());
+        var dateSelesai = new Date("<%= data.tanggal_deadline %>");
+        var formattedSelesai = dateSelesai.toLocaleDateString('id-ID').split('/').join('-');
+        var hariSelesai = Hari(dateSelesai.getDay());
+        var waktuDeadline = `<%= data.waktu_deadline %>`.slice(0, 5)
+
+        $("#tanggalMulai").text(`${hariMulai} ${formattedMulai}`);
+        $("#tanggalSelesai").text(`${hariSelesai} ${formattedSelesai} ${waktuDeadline}`);
+        //
+        const file = "<%= data.file_tugas %>";
+        if(!file){
+            $("#taskFileImage").hide();
+        }
+        $(".nav-tugas").on('click', function(){
+            const callout = $("#callout-info")
+
+            if(this.id === "materi-tab"){
+                callout.removeClass("alert alert-warning")
+                callout.addClass("alert alert-info")
+                $("#btn-tugas").hide("")
+                callout.html("Ini adalah informasi tentang <strong>Materi & Soal</strong>");
+            }else if(this.id === "jawaban-tab"){
+                $("#btn-tugas").show("");
+                callout.removeClass("alert alert-info");
+                callout.addClass("alert alert-warning")
+                callout.text("Jawab lah soal dengan baik dan jujur!")
+        }
+        })
+        function jawab(){
+            const id_tugas= "<%= data.id_tugas %>";
+            const id_siswa = "<%= rows.id_siswa %>";
+            $.ajax({
+                url : `/siswa/detailJawaban/${id_tugas}/${id_siswa}`,
+                type : "GET",
+                success: function(result) {
+    console.log(result); // Tambahkan ini untuk cek data yang masuk
+    const val = result.data;
+    if (val.length > 0) {
+        // Jika ada jawaban yang terkirim, sembunyikan form dan tampilkan pesan
+        $("#formTugas").hide("");
+    }
+    $(".btn-submit").hide("");
+    $("#jawaban").html(`<div class='alert alert-success'><i class='fa fa-check' aria-hidden='true'></i> Anda sudah menyelesaikan soal ini, terima kasih</div> <a href='/siswa/jawaban/${id_tugas}/${id_siswa}' class='btn btn-info'>Check nilai anda</a>`);
+},
+
+            })
+        }
+        
+        $("#formTugas").on('submit', function(e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            $.ajax({
+                url : '/siswa/kirim_tugas',
+                type : "POST",
+                data : formData,
+                processData: false,
+                contentType: false,
+                success : function(response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Tugas Sudah Dikirim',
+                        text: 'Jawaban kamu berhasil disimpan!',
+                    }).then(() =>{
+                        jawab();
+                    })
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal Mengirim',
+                        text: 'Ada masalah saat menyimpan jawaban kamu!',
+                    })
+                }
+            })
+        })
+    });
+</script>
+<%- include("../Componen/footer") %>

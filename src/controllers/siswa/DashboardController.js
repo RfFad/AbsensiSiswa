@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const siswamodel = require('../../models/siswa/models_siswa');
+const {getSekolah} = require('../../models/models_sekolah')
 
 const connect = mysql.createPool({
     host: "localhost",
@@ -14,6 +15,7 @@ module.exports = {
         const username = req.session.username; // Assuming the username is the nis of the siswa
 
         try {
+            const sekolah = await getSekolah();
             const rows = await siswamodel.getsiswa(req, res);
             //const { results, count } = await jadwal.getJadwal(req, res);
             connect.getConnection(function (err, connection) {
@@ -41,6 +43,7 @@ module.exports = {
                             res.render('siswa/newpage', {
                                 currentPath: '/siswa' ,
                                 rows,
+                                sekolah,
                                 //jdwl : count,
                                 siswa: results[0], // Passing the siswa profile data to the view
                                 colorFlash: req.flash('color'),

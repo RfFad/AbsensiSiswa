@@ -51,9 +51,11 @@
                   <tr>
                     <th style="width: 1%;">No</th>
                     <th>Nama Siswa</th>
-                    <th>Prestasi</th>
-                    <th>Pelanggaran</th>
-
+                    <th>Kelas</th>
+                    <th>Jenis Riwayat</th>
+                    <th>Deskripsi</th>
+                    <th>Tanggal</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -62,10 +64,10 @@
                   <tr>
                     <td><%= index + 1 %></td>
                     <td><%= riwayat.nama_siswa %></td>
-                    <td><%= riwayat.kelas%></td>
-                    <td><%= riwayat.prestasi %></td>
-                    <td><%= riwayat.pelanggaran %></td>
-                    <td><%= new Date(riwayat.tanggal).toISOString().split('T')[0]%></td>
+                    <td><%= riwayat.nama_kelas %></td>
+                    <td><%= riwayat.jenis_riwayat %></td>
+                    <td><%= riwayat.deskripsi %></td>
+                    <td><%= new Date(riwayat.tanggal).toLocaleDateString('en-CA')%></td>
                     <td>
                       <a href="/admin/riwayat/edit/<%= riwayat.id_riwayat %>" class="btn btn-warning btn-sm"><i class="fas fa-edit">Edit</i></a>
                       <form action="/admin/riwayat/delete/<%= riwayat.id_riwayat%>?_method=DELETE" method="post" style="display:inline;" class="delete-form">

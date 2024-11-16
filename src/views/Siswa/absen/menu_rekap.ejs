@@ -1,0 +1,38 @@
+<%- include("../Componen/header") %>
+<title>Admin | Edit Riwayat</title>
+<%- include("../Componen/sidebar") %>
+
+<div class="content-wrapper">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="container-fluid mt-3">
+            <% let displayedClasses = {}; %>
+            <% menudata.forEach((data) => { %>
+                <% let key = `${data.nama_mp}` %>
+                <% if(!displayedClasses[key]) { %>
+          <div class="callout callout-info">
+            <div class="info-box shadow-none">
+                <span class="info-box-icon bg-info" style="height: 80px; width: 80px;"><i class="far fa-bookmark"></i></span>
+    
+                <div class="info-box-content">
+                  <span class="info-box-text"><h4><a href="/siswa/rekap_absen?id_kelas=<%= data.idk %>&idm=<%= data.idm %>&idth=<%= rows.idth %>" style="text-decoration: none;">Data rekap kelas : <%= data.nama_mp %></h4></a></span>
+                <span class="info-box-number"></span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+        </div>
+        <% displayedClasses[key] = true %>
+   <% } %>
+   <% }) %>
+          </div>
+        </div>
+        <div class="container-body">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../../Componen/footer") %>
