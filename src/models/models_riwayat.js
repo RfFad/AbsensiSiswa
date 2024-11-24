@@ -47,6 +47,40 @@ const getRiwayatBySiswa = async (nis) => {
         });
     });
 };
+const detailRiwayatBysiswa= async (id_riwayat) => {
+    // Return a Promise to handle asynchronous database query
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT 
+                riwayat.*, 
+                siswa.nama_siswa AS nama_siswa, 
+                kelas.nama_kelas AS nama_kelas 
+            FROM 
+                riwayat 
+            JOIN 
+                siswa 
+            ON 
+                riwayat.id_siswa = siswa.id_siswa 
+            JOIN 
+                kelas 
+            ON 
+                riwayat.id_kelas = kelas.id_kelas  
+            WHERE 
+                riwayat.id_riwayat = ?
+           
+        `;
+
+        // Perform the database query
+        connection.query(query, [id_riwayat], (error, results) => {
+            if (error) {
+                // Reject the Promise with the error if the query fails
+                return reject(error);
+            }
+            // Resolve the Promise with the query results
+            resolve(results[0]);
+        });
+    });
+};
 
 const getRiwayatById = async (id_riwayat) => {
     return new Promise((resolve, reject) => {
@@ -115,5 +149,16 @@ const DeleteRiwayat = async (id_riwayat) => {
             
     })
 }
+const InsertNotification = async (id_siswa, message, type) => {
+    return new Promise((resolve, reject) => {
+        connection.query(`
+            INSERT INTO notifications_riwayat (id_siswa, message, type) VALUES (?, ?, ?)
+        `, [id_siswa, message, type], (error, results) => {
+            if (error) return reject(error);
+            resolve(results);
+        });
+    });
+};
 
-module.exports = { getRiwayat, getRiwayatBySiswa, getRiwayatById, InsertRiwayat, UpdateRiwayat, DeleteRiwayat };
+
+module.exports = { getRiwayat, detailRiwayatBysiswa, InsertNotification, getRiwayatBySiswa, getRiwayatById, InsertRiwayat, UpdateRiwayat, DeleteRiwayat };

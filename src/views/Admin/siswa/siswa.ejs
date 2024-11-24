@@ -74,14 +74,21 @@
 <%- include("../../Componen/sideNavbar") %>
 
 <div class="content-wrapper">
-  <div class="container-fluid">
-    <div class="row mb-2">
-      <div class="col-sm-6">
-        <h1>Data Siswa</h1>
-      </div>
-    </div>
-  </div><!-- /.container-fluid -->
-
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Data Siswa</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/admin">Home</a></li>
+            <li class="breadcrumb-item active">Data Siswa</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
@@ -145,7 +152,10 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">DataTable with minimal features & hover style</h3>
+              <div class="d-flex flex-column flex-md-row justify-content-between">
+                <h3 class="card-title">Data siswa</h3>
+                <a href="#" onclick="Kenaikan(this)" class="btn btn-info">Naikan kelas</a>
+              </div>
             </div>
             <div class="card-body">
               <div class="d-flex flex-column flex-md-row justify-content-between mb-2">
@@ -160,9 +170,11 @@
                     <span>Export Data</span>
                 </button>
                 
-                  <button type="reset" class="btn btn-warning col-12 col-md-3 mb-2 mb-md-0 cancel">
-                    <i class="fas fa-times-circle"></i>
-                    <span>Cancel upload</span>
+                  <button type="reset" class="btn btn-warning col-12 col-md-3 mb-2 mb-md-0 import">
+                   
+                    <i class="fas fa-file-import"></i>
+                    <span>Import data</span>
+                  
                   </button>
                 </div>
               
@@ -183,9 +195,9 @@
                 </div>
               <% } %>
 
-              <div class="table-responsive">
-                <table id="example2" class="table table-bordered table-hover">
-                  <thead class="bg-dark">
+              <div class="table-responsive" style="height: 500px;">
+                <table id="example2" class="table text-nowrap">
+                  <thead class="thead-dark position-sticky top-0">
                     <tr>
                       <th style="width: 1%;">No</th>
                       <th>Nis</th>
@@ -230,6 +242,30 @@
                   </tbody>
                 </table>
               </div>
+              
+              
+              <!-- Pagination -->
+              <nav aria-label="Page navigation">
+                <ul class="pagination">
+                  <!-- Tombol Previous -->
+                  <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                    <a class="page-link prev-page" href="#" data-page="<%= currentPage - 1 %>">Previous</a>
+                  </li>
+              
+                  <!-- Tombol Halaman -->
+                  <% for (let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                      <a class="page-link page-link-item" href="#" data-page="<%= i %>"><%= i %></a>
+                    </li>
+                  <% } %>
+              
+                  <!-- Tombol Next -->
+                  <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                    <a class="page-link next-page" href="#" data-page="<%= currentPage + 1 %>">Next</a>
+                  </li>
+                </ul>
+              </nav>
+              
               <!-- /.table-responsive -->
             </div>
             <!-- /.card-body -->
@@ -263,8 +299,6 @@
                                             <h4 id="nama"></h4>
                                             <p class="text-secondary mb-1" id="kelas"></p>
                                             <p class="text-muted font-size-sm" id="alamat"></p>
-                                            <button class="btn btn-primary">Follow</button>
-                                            <button class="btn btn-outline-primary">Message</button>
                                         </div>
                                     </div>
                                 </div>
@@ -359,8 +393,17 @@
                                             </div>
                                             <hr>
                                             <div class="row">
+                                                <div class="col-md-4">
+                                                    <h6 class="mb-0">Tgl Lahir</h6>
+                                                </div>
+                                                <div class="col-md-8 text-secondary" id="modal-tglLahir">
+                                                   
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
                                                 <div class="col-md-12 text-right">
-                                                    <a class="btn btn-info" target="__blank" href="#">Edit</a>
+                                                    <a class="btn btn-info" target="__blank" id="edit-modal" href="#">Edit</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -388,30 +431,42 @@
   <!-- /.modal -->
 </div>
 <!-- /.content-wrapper -->
+<!--Modal import-->
+<div class="modal fade" id="modal-import" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Upload excel</h5>
+        <button type="button" class="exit" data-bs-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <form enctype="multipart/form-data" action="/admin/import_siswa" method="POST">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+            </div>
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="foto">
+              <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary exit" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
-
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
 <script>
-  $(document).ready(function() {
-    const storedTahun = localStorage.getItem("tahunSelect");
-    const storedKelas = localStorage.getItem("kelasSelect");
-    const storedGender = localStorage.getItem("genderSelect");
-    if (storedTahun) $("#tahunSelect").val(storedTahun);
-    if (storedKelas) $("#kelasSelect").val(storedKelas);
-    if (storedGender) $("#genderSelect").val(storedGender);
-
-    // if (storedTahun || storedKelas || storedGender) {
-    //     $("#filter").show();
-    // }
-    // Toggle filter section on button click
-    $("#filter-btn").click(function() {
-      
-      $("#filter").slideToggle();
-    });
-    $("#filterButton").on("click", function() {
+  // Fungsi untuk membangun parameter filter
+  function buildFilterParams() {
     const tahunSelected = $("#tahunSelect").val();
     const selectedKelas = $("#kelasSelect").val();
     const genderSelect = $("#genderSelect").val();
@@ -420,67 +475,99 @@
     const alamatSelect = $("#alamatSelect").val();
     const waliSelect = $("#waliSelect").val();
     const pekerjaanSelect = $("#pekerjaanSelect").val();
-    let url = "/admin/data_siswa";
+
     let params = [];
-
-    localStorage.setItem("tahunSelect", tahunSelected);
-    localStorage.setItem("kelasSelect", selectedKelas);
-    localStorage.setItem("genderSelect", genderSelect);
-    // Cek dan tambahkan parameter filter jika ada
-    if (tahunSelected && tahunSelected !== "semua") {
-        params.push(`idth=${tahunSelected}`); 
-    }
-    if (selectedKelas && selectedKelas !== "semua") {
-        params.push(`id_kelas=${selectedKelas}`); 
-    }
-    if (genderSelect && genderSelect !== "semua") {
-        params.push(`jk=${genderSelect}`); 
-    }
-    if ( dateSelect && dateSelect !== "semua") {
-        params.push(`tgl_lahir=${dateSelect}`); 
-    }
-    if ( siswaSelect && siswaSelect !== "semua") {
-        params.push(`nama_siswa=${siswaSelect}`); 
-    }
-    if(alamatSelect && alamatSelect !== "semua"){
-      params.push(`alamat=${alamatSelect}`)
-    }
-    if(waliSelect && waliSelect !== "semua"){
-      params.push(`nama_wali=${waliSelect}`)
-    }
-    if(pekerjaanSelect && pekerjaanSelect !== "semua"){
-      params.push(`pekerjaan_wali=${pekerjaanSelect}`)
-    }
-
-    // Gabungkan parameter jika ada filter yang dipilih
-    if (params.length > 0) {
-        url += "?" + params.join("&");
-    }
-    // Redirect ke URL yang sudah difilter
-    window.location.href = url;
-});
-
-$("#exportButton").on("click", function() {
-  Swal.fire({
-      title: "Export Data Siswa?",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Ya",
-      cancelButtonText: "Batal",
-    }).then((result) => {
-      if(result.isConfirmed){
-        const tahunSelected = $("#tahunSelect").val();
-        const selectedKelas = $("#kelasSelect").val();
-        let exportParams = new URLSearchParams(window.location.search); // Mengambil query params yang ada
-        let exportUrl = `/admin/export/siswa?${exportParams.toString()}`;
-        window.location.href = exportUrl;
-  }
-    })
     
-});
+    if (tahunSelected && tahunSelected !== "semua") params.push(`idth=${tahunSelected}`);
+    if (selectedKelas && selectedKelas !== "semua") params.push(`id_kelas=${selectedKelas}`);
+    if (genderSelect && genderSelect !== "semua") params.push(`jk=${genderSelect}`);
+    if (dateSelect && dateSelect !== "semua") params.push(`tgl_lahir=${dateSelect}`);
+    if (siswaSelect && siswaSelect !== "semua") params.push(`nama_siswa=${siswaSelect}`);
+    if (alamatSelect && alamatSelect !== "semua") params.push(`alamat=${alamatSelect}`);
+    if (waliSelect && waliSelect !== "semua") params.push(`nama_wali=${waliSelect}`);
+    if (pekerjaanSelect && pekerjaanSelect !== "semua") params.push(`pekerjaan_wali=${pekerjaanSelect}`);
+    
+    return params.length > 0 ? "&" + params.join("&") : "";
+  }
 
-    // Handle click event for the info button
+  // Fungsi untuk mengatur nilai filter berdasarkan query string di URL
+  function setFilterValuesFromURL() {
+    // Ambil parameter query dari URL
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // Set nilai filter berdasarkan parameter URL
+    $("#tahunSelect").val(urlParams.get('idth') || null);
+    $("#kelasSelect").val(urlParams.get('id_kelas') || 'semua');
+    $("#genderSelect").val(urlParams.get('jk') || 'semua');
+    $("#dateSelect").val(urlParams.get('tgl_lahir') || 'semua');
+    $("#siswaSelect").val(urlParams.get('nama_siswa') || null);
+    $("#alamatSelect").val(urlParams.get('alamat') || null);
+    $("#waliSelect").val(urlParams.get('nama_wali') || null);
+    $("#pekerjaanSelect").val(urlParams.get('pekerjaan_wali') || null);
+  }
+
+  $(document).ready(function() {
+    // Memanggil fungsi untuk set nilai filter dari URL saat halaman dimuat
+    setFilterValuesFromURL();
+    $(".import").on('click', function(){
+      $("#modal-import").modal("show")
+    })
+
+    // Toggle filter visibility
+    $("#filter-btn").click(function(){
+      if($("#filter").is(":visible")){
+        $("#filter").hide();
+        $("#filter-btn").text("Filter");
+      } else {
+        $("#filter").show();
+        $("#filter-btn").text("Tutup");
+      }
+    });
+
+    // Menangani klik tombol pagination (Previous, Next, dan Halaman)
+    $(".page-link-item, .prev-page, .next-page").click(function(e) {
+      e.preventDefault(); // Mencegah reload halaman standar
+
+      let currentPage = parseInt($(this).data("page"));
+      const filterParams = buildFilterParams(); // Menambahkan filter
+
+      // Membangun URL dengan filter dan pagination
+      let url = `/admin/data_siswa/?page=${currentPage}${filterParams}`;
+
+      // Redirect ke URL yang sudah difilter dan dipaginasikan
+      window.location.href = url;
+    });
+
+    // Tombol filter (setelah filter diubah, halaman dimulai dari halaman pertama)
+    $("#filterButton").on("click", function() {
+      // Mendapatkan nilai filter yang dipilih
+      const filterParams = buildFilterParams();
+      let url = `/admin/data_siswa/?page=1${filterParams}`; // Set page ke 1 setelah filter diterapkan
+
+      // Redirect ke URL dengan filter yang diterapkan
+      window.location.href = url;
+    });
+
+    // Tombol export data
+    $("#exportButton").on("click", function() {
+      Swal.fire({
+        title: "Export Data Siswa?",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya",
+        cancelButtonText: "Batal",
+      }).then((result) => {
+        if(result.isConfirmed){
+          // Mengambil parameter filter dari URL
+          let exportParams = new URLSearchParams(window.location.search); 
+          let exportUrl = `/admin/export/siswa?${exportParams.toString()}`;
+          window.location.href = exportUrl;
+        }
+      });
+    });
+
+    // Menangani klik untuk tombol informasi siswa
     $(".info-btn").click(function() {
       var nis = $(this).data("nis"); // Ambil NIS dari data-nis
       $.ajax({
@@ -488,36 +575,42 @@ $("#exportButton").on("click", function() {
         method: 'GET',
         success: function(response) {
           if (response.siswa) { // Pastikan data siswa ada
-            var data = response.siswa; // Ambil data siswa
-            $('#modal-nis').text(data.nis); // Tampilkan NIS
-            $('#modal-nama').text(data.nama_siswa); // Tampilkan nama siswa
-            $('#modal-ajaran').text(data.nama_ajaran); // Tampilkan nama siswa
-            $('#nama').text(data.nama_siswa); // Tampilkan nama siswa
-            $('#modal-kelas').text(data.nama_kelas); // Tampilkan kelas siswa, pastikan ini ada dalam data
-            $('#kelas').text(data.nama_kelas); // Tampilkan kelas siswa, pastikan ini ada dalam data
-            $('#modal-jk').text(data.jk); // Tampilkan kelas siswa, pastikan ini ada dalam data
-            $('#modal-alamat').text(data.alamat); // Tampilkan kelas siswa, pastikan ini ada dalam data
-            $('#alamat').text(data.alamat); // Tampilkan kelas siswa, pastikan ini ada dalam data
-            $('#modal-wali').text(data.nama_wali); // Tampilkan kelas siswa, pastikan ini ada dalam data
-            $('#modal-pekerjaan').text(data.pekerjaan_wali); // Tampilkan kelas siswa, pastikan ini ada dalam data
-            $('#modal-tlp').text("(+62) " + data.tlp); // Tampilkan kelas siswa, pastikan ini ada dalam data
+            var data = response.siswa;
+            $('#edit-modal').attr('href', `/admin/siswa/edit/${data.id_siswa}`);
+            const tgl = new Date(data.tgl_lahir).toLocaleDateString('id-ID').split('/').join('-'); // Format tanggal lahir
+            $('#modal-nis').text(data.nis);
+            $('#modal-nama').text(data.nama_siswa);
+            $('#modal-ajaran').text(data.nama_ajaran);
+            $('#nama').text(data.nama_siswa);
+            $('#modal-kelas').text(data.nama_kelas);
+            $('#kelas').text(data.nama_kelas);
+            $('#modal-jk').text(data.jk);
+            $('#modal-alamat').text(data.alamat);
+            $('#alamat').text(data.alamat);
+            $('#modal-wali').text(data.nama_wali);
+            $('#modal-pekerjaan').text(data.pekerjaan_wali);
+            $('#modal-tglLahir').text(tgl);
+            $('#modal-tlp').text("(+62) " + data.tlp);
             if (data.foto) {
-          $('#foto').attr('src', `/images/${data.foto}`);
-        } else {
-          $('#foto').attr('src', '/icon.png'); // Jika foto tidak ada
-        }
+              $('#foto').attr('src', `/images/${data.foto}`);
+            } else {
+              $('#foto').attr('src', '/icon.png'); // Jika foto tidak ada
+            }
             $("#modal-info").modal("show"); // Tampilkan modal
           } else {
-            alert('Data tidak ditemukan'); // Jika tidak ada data
+            alert('Data tidak ditemukan');
           }
         },
         error: function() {
-          alert('Terjadi kesalahan saat mengambil data.'); // Tangani kesalahan
+          alert('Terjadi kesalahan saat mengambil data.');
         }
       });
     });
   });
 </script>
+
+
+
 
 
 <%- include("../../Componen/footer") %>

@@ -1,21 +1,26 @@
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
-  <a href="index3.html" class="brand-link">
-    <span class="brand-text font-weight-light">ADMIN PAGE</span>
+  <a href="index3.html" class="brand-link bg-danger">
+    <div class="text-center fw-bold">
+      Admin Page
+  </div>
   </a>
 
   <!-- Sidebar -->
   <div class="sidebar">
     <!-- Sidebar user panel (optional) -->
-    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+    <div class="user-panel mt-2 pb-3 mb-2 d-flex align-items-center">
       <div class="image">
-        <img src="/waifu_Aing.jpg" class="img-circle elevation-2" alt="User Image">
+        <img src="" style="width: 50px; height: 50px; object-fit: cover;" class="img-circle elevation-2" id="image-fp" alt="User Image">
       </div>
-      <div class="info">
-        <a href="#" class="d-block">FANZZ</a>
+      <div class="info ms-2">
+        <a href="#" style="font-size: 20px;" class="d-block text-start" id="nama_user">Nama User</a>
       </div>
     </div>
+    
+    
+    
 
     <!-- SidebarSearch Form -->
     <div class="form-inline">
@@ -44,6 +49,30 @@
             <i class="nav-icon fas fa-school"></i>
             <p>Sekolah</p>
           </a>
+        </li>
+        <!-- User Section -->
+        <li class="nav-item  <%=(currentPath === '/admin/data_user' || currentPath === '/admin/user') ? 'menu-open' : ''%>">
+          <a href="#" class="nav-link  <%=(currentPath === '/admin/data_user' || currentPath === '/admin/user' || currentPath === '/admin/edit_user') ? 'active' : ''%>">
+            <i class="nav-icon fas fa-user"></i>
+            <p>
+              User
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="/admin/data_user" class="nav-link <%= currentPath === '/admin/data_user' ? 'active' : '' %>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Data User</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/admin/user" class="nav-link <%= currentPath === '/admin/user' ? 'active' : '' %>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Insert User</p>
+              </a>
+            </li>
+          </ul>
         </li>
 
         <!-- Siswa Section -->
@@ -224,3 +253,24 @@
   </div>
   <!-- /.sidebar -->
 </aside>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/plugins/jquery/jquery.min.js"></script>
+  <!-- jQuery UI 1.11.4 -->
+  <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script>
+  $(document).ready(function() {
+    profile()
+    function profile(){
+      $.ajax({
+        url : '/admin/admin_user',
+        type : 'GET',
+        success : function(result){
+          var row = result.data
+          $("#image-fp").attr('src', `/images/${row.foto}`)
+          $("#nama_user").text(row.username)
+        }
+      })
+    }
+  })
+</script>

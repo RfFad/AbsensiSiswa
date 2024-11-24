@@ -1,4 +1,4 @@
-const { InsertRiwayat, getRiwayat, getRiwayatById, UpdateRiwayat, DeleteRiwayat } = require('../../models/models_riwayat');
+const { InsertRiwayat, InsertNotification, getRiwayat, getRiwayatById, UpdateRiwayat, DeleteRiwayat } = require('../../models/models_riwayat');
 const {getSiswa} = require('../../models/models_siswa')
 const {getKelas} = require ('../../models/models_kelas');
 const { getDataKelas } = require('./KelasController');
@@ -39,6 +39,23 @@ getPageRiwayat : async (req, res) => {
     const {   id_siswa, id_kelas,  jenis_riwayat, deskripsi, tanggal } = req.body;
     try { 
         await InsertRiwayat(  id_siswa, id_kelas, jenis_riwayat, deskripsi, tanggal); // Use the hashed password
+        if (jenis_riwayat === 'Prestasi') {
+            await InsertNotification(id_siswa, 'Selamat! Anda telah mendapatkan prestasi.', 'success');
+        } else if (jenis_riwayat === 'Pelanggaran') {
+            await InsertNotification(id_siswa, 'Peringatan! Anda telah melakukan pelanggaran', 'warning');
+        }
+
+        if (jenis_riwayat === 'Prestasi') {
+            res.io.to(`siswa_${id_siswa}`).emit('notification', {
+                type: 'success',
+                message: `Selamat! Anda mendapatkan prestasi`,
+            });
+        } else if (jenis_riwayat === 'Pelanggaran') {
+            res.io.to(`siswa_${id_siswa}`).emit('notification', {
+                type: 'warning',
+                message: `Peringatan! Anda telah melakukan pelanggaran.`,
+            });
+        }
         req.flash('success', 'Berhasil menambahkan data!');
         return res.redirect('/admin/data_riwayat');
     } catch (error) {
@@ -90,6 +107,7 @@ getPageRiwayat : async (req, res) => {
         req.flash('error', `Gagal Menghapus data! ${error.message}`);
         return res.redirect('/admin/data_riwayat');
     }
-}
+},
+
 }
 module.exports = riwayat;

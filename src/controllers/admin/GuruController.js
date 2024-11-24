@@ -83,11 +83,15 @@ const getGuruData = async (req, res) => {
       success: req.flash("success"),
       error: req.flash("error"),
     };
+    const mapel = await getMapel()
     const jk = req.query.jk || null;
+    const nip= req.query.nip || null;
     const nama_guru = req.query.nama_guru || null;
     const alamat = req.query.alamat || null;
-    const row = await getGuru(nama_guru, alamat, jk);
-    res.render("admin/guru/guru", { row, index: 1, messages, currentPath: '/admin/data_guru'});
+    const jabatan = req.query.jabatan || null;
+    const nama_mp = req.query.nama_mp || null;
+    const row = await getGuru(nama_guru, alamat, jk, jabatan, nama_mp, nip);
+    res.render("admin/guru/guru", { row, index: 1, messages, currentPath: '/admin/data_guru', mapel});
   } catch (error) {
     res.status(500).json(error);
   }

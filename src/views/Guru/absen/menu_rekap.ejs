@@ -1,5 +1,5 @@
 <%- include("../Componen/header") %>
-<title>Admin | Edit Riwayat</title>
+<title>Guru | Menu absen</title>
 <%- include("../Componen/sidebar") %>
 
 <div class="content-wrapper">
@@ -9,7 +9,7 @@
         <div class="container-fluid mt-3">
             <% let displayedClasses = {}; %>
             <% menudata.forEach((data) => { %>
-                <% let key = `${data.nama_kelas}-${data.nama_kelas}` %>
+                <% let key = `${data.nama_ajaran}` %>
                 <% if(!displayedClasses[key]) { %>
           <div class="callout callout-info">
             <div class="info-box shadow-none">

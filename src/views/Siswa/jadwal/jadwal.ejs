@@ -54,8 +54,47 @@
             </div>
         </section>
     </div>
-
+    <div class="modal fade" id="modal-tambah">
+        <div class="modal-dialog modal-l">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Form izin</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/siswa/insert_izin"  method="POST">
+                        <input type="hidden" name="id_guru">
+                        <input type="hidden" name="id_siswa" value="<%= rows.id_siswa %>">
+                        <input type="hidden" name="tanggal">
+                        <div class="form-group">
+                            <label for="jenis">Jenis</label>
+                            <select name="jenis" class="form-control" required>
+                                <option value="izin">Izin</option>
+                                <option value="sakit">Sakit</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="keterangan">Keterangan</label>
+                            <textarea name="keterangan" class="form-control" required></textarea>
+                        </div>
+                    
+                    
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <div>
+                        <button type="submit" id="izinData" class="btn btn-primary">
+                            Simpan
+                        </button>
+                    </form>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
     <!-- Skrip dari AdminLTE dan Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="/plugins/jquery/jquery.min.js"></script>
     <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -63,6 +102,18 @@
     
     <script>
         $(document).ready(function(){
+           
+            const success = "<%= messages.success %>"
+                if(success){
+                Swal.fire({
+					  title: "Berhasil",
+					  text: "<%= messages.success %>",
+					  icon: "success",
+            //position: "top-end",
+            showConfirmButton: false,
+            timer: 1500
+					});
+        }
             const hariUrl = localStorage.getItem('hariTerakhir') || 'senin';
             list(hariUrl);
 
@@ -78,8 +129,34 @@
 
                 $('.pilih-hari').removeClass('active')
                 $(this).addClass('active')
+            });
+            });
+        function izin(){
+            let formData = {
+               // id_siswa : $("[name = 'id_siswa']").val(),
+                id_guru : $("[name = 'id_guru']").val()
+            };
+            const id_guru = $("[name = 'id_guru']").val()
+            $.ajax({
+                url : '/siswa/insert_izin',
+                type : 'POST',
+                data : {id_guru : id_guru},
+                success : function(response){
+                    if(response){
+                        Swal.fire({
+                        title: "Berhasil",
+                        text: response.message,
+                        icon: "success",
+                        timer: 2000,
+                        showConfirmButton: false,
+                    }).then(() => {
+                        list();
+                    });
+                    }
+                }
             })
-        })
+        }
+        
         function list(hari) {
             let html = "";
             $.ajax({
@@ -98,6 +175,7 @@
                         html += "<th>Kelas Ajar</th>";
                         html += "<th>Pelajaran</th>";
                         html += "<th>Jam Mulai</th>";
+                        html += "<th>Action</th>";
                         html += "</tr>";
                         html += "</thead><tbody>";
                         $.each(val, function(index, row) {
@@ -108,7 +186,8 @@
                             html += `<td>${row.nama_guru}</td>`;
                             html += `<td>${row.nama_kelas}</td>`;
                             html += `<td>${row.nama_mp}</td>`;
-                            html += `<td>${jamJadwal}</td>`;
+                            html += `<td><label class='label bg-success' style="border-radius: 6px; width: 100px; text-align: center;" > ${row.jam_mulai.slice(0, 5)} </label> - <label class='label bg-danger' style="border-radius: 6px; width: 100px; text-align: center;" >${row.jam_selesai.slice(0, 5)}</label></td></td>`;
+                            html += `<td><button class = 'btn btn-primary' id='btn-izin' data-idguru = '${row.id_guru}'>Izin</button></td>`;
                             html += "</tr>";
                         });
                         html += "</tbody></table>";
@@ -123,6 +202,15 @@
                 }
             });
         }
+       
+        $(document).on('click','#btn-izin', function(){
+            $("#modal-tambah").modal("show")
+            const tanggal = new Date().toISOString().split('T')[0];
+            const id_guru = $(this).data('idguru');
+            $("[name = 'id_guru']").val(id_guru);
+            $("[name = 'tanggal']").val(tanggal)
+           // alert(id_guru)
+        })
     </script>
 </body>
 </html>

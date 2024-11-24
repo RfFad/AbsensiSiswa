@@ -1,0 +1,112 @@
+<%- include("../Componen/header") %>
+<%- include("../Componen/sidebar") %>
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Arial', sans-serif;
+    }
+    
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        border: none;
+    }
+    .card-prestasi {
+        background: linear-gradient(135deg, #d4f2d4, #ffffff);
+        border-left: 5px solid #28a745;
+    }
+    .card-pelanggaran {
+        background: linear-gradient(135deg, #f7dada, #ffffff);
+        border-left: 5px solid #dc3545;
+    }
+    .icon-circle {
+        font-size: 40px;
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 20px auto;
+    }
+    .icon-prestasi {
+        background-color: #28a745;
+        color: #fff;
+    }
+    .icon-pelanggaran {
+        background-color: #dc3545;
+        color: #fff;
+    }
+    .btn-back {
+        margin-top: 20px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Detail Berdasarkan Riwayat -->
+    <% if (data.jenis_riwayat === 'Prestasi') { %>
+    <div class="card card-prestasi mt-3">
+        <div class="card-body text-center">
+            <div class="icon-circle icon-prestasi">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <h3>Selamat atas Prestasi Kamu!</h3>
+            <p class="mb-4">
+                Kami sangat bangga dengan prestasi yang telah Anda raih. Kerja keras dan dedikasi Anda telah membuahkan hasil yang luar biasa. Semoga prestasi ini menjadi pemacu semangat untuk terus berusaha dan menginspirasi teman-teman lainnya. Terus berjuang dan capai lebih banyak lagi!
+            </p>
+            <hr>
+            <div>
+                <h5>Detail Prestasi</h5>
+                <ul class="list-unstyled mt-3">
+                    <li><strong>Nama Siswa:</strong> <%= data.nama_siswa %></li>
+                    <li><strong>Kelas:</strong> <%= data.nama_kelas %></li>
+                    <li><strong>Tanggal:</strong> <%= new Date(data.tanggal).toLocaleDateString('id-ID') %></li>
+                    <li><strong>Prestasi:</strong></li>
+                    <li>" <%= data.deskripsi %> "</li>
+                </ul>
+            </div>
+            <a href="/siswa/riwayat" class="btn btn-success btn-back"><i class="fas fa-arrow-left"></i> Kembali ke Daftar Riwayat</a>
+        </div>
+    </div>
+    <% } else if (data.jenis_riwayat === 'Pelanggaran') { %>
+    <!-- Detail Pelanggaran -->
+     <div class="alert alert-danger mt-3"><i class="fas fa-exclamation-triangle"></i> Pelanggaran bisa berpengaruh pada nilai pelajaran, agar pelanggaran bisa ditoleran dan dihapus supaya hubungi pada guru atau staff yang bersangkutan</div>
+    <div class="card card-pelanggaran mt-2">
+        <div class="card-body text-center">
+            <div class="icon-circle icon-pelanggaran">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <h3>Perhatian, Kamu Melakukan Pelanggaran!</h3>
+            <p class="mb-4">
+                Kamu telah melanggar aturan sekolah dengan melakukan **<%= data.deskripsi %>**. 
+                Harap perbaiki sikapmu agar tidak dikenakan sanksi lebih berat.
+            </p>
+            <hr>
+            <div>
+                <h5>Detail</h5>
+                <ul class="list-unstyled mt-3">
+                    <li><strong>Nama Siswa:</strong> <%= data.nama_siswa %></li>
+                    <li><strong>Kelas:</strong> <%= data.nama_kelas %></li>
+                    <li><strong>Tanggal:</strong> <%= new Date(data.tanggal).toLocaleDateString('id-ID') %></li>
+                    <li><strong>pelanggaran yang dilakukan:</strong></li>
+                    <li>" <%= data.deskripsi %> "</li>
+                </ul>
+                <h5>Ancaman</h5>
+                <ul class="list-unstyled">
+                  <li><i class="fas fa-ban"></i> Pengurangan nilai</li>
+                  <li><i class="fas fa-clock"></i> Sanksi tambahan (jika diulangi)</li>
+                  <li><i class="fas fa-users"></i> Pemanggilan orang tua</li>
+              </ul>
+            </div>
+            <a href="/siswa/riwayat" class="btn btn-danger btn-back"><i class="fas fa-arrow-left"></i> Kembali ke Daftar Riwayat</a>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

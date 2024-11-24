@@ -1,5 +1,5 @@
 <%- include("../Componen/header") %>
-
+<title>Guru | Detail tugas</title>
 
 <style>
     .custom-file-upload {
@@ -101,9 +101,7 @@
                                 </tbody>
                             </table>
                             
-                            <div id="callout-info" class="alert alert-info mt-4">
-                                Ini adalah informasi tentang <strong>Materi & Soal</strong>
-                            </div>
+                           
                             
                             <ul class="nav nav-tabs nav-tugas-container" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
@@ -263,10 +261,7 @@
                                     <a href="#" id="nilai" class="dropdown-item" data-id="${row.id_pengumpulan}">
                                         <i class="fas fa-cog mr-2"></i> Beri nilai
                                     </a>
-                                    <div class="dropdown-divider"></div>
-                                    <a href="/login/logout" class="dropdown-item">
-                                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
-                                    </a>
+                                    
                                 </div>
                             </li>
                         </td>`;
@@ -312,12 +307,9 @@
                                         <i class="fa fa-info-circle mr-2"></i> Detail
                                     </a>
                                     <a href="#" id="nilai" class="dropdown-item" data-id="${row.id_pengumpulan}">
-                                        <i class="fas fa-cog mr-2"></i> Beri nilai
+                                        <i class="fas fa-cog mr-2"></i> Edit nilai
                                     </a>
-                                    <div class="dropdown-divider"></div>
-                                    <a href="/login/logout" class="dropdown-item">
-                                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
-                                    </a>
+                                    
                                 </div>
                             </li>
                         </td>`;

@@ -22,6 +22,7 @@
 <script src="/../../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="/../../dist/js/demo.js"></script>
+
 <script>
   const success = "<%= messages.success %>"
   if(success){
@@ -35,6 +36,35 @@
 					});
         }
 </script>
-
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+     const searchInput = document.querySelector('input[name="table_search"]');
+     const noResults = document.getElementById('no-results'); // Menggunakan ID dari <p>
+ 
+     searchInput.addEventListener('keyup', function() {
+         const filter = searchInput.value.toLowerCase();
+         const rows = document.querySelectorAll('tbody tr');
+         let hasVisibleRows = false;
+ 
+         rows.forEach(row => {
+             const cells = row.querySelectorAll('td');
+             const matches = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(filter));
+             if (matches) {
+                 row.style.display = '';
+                 hasVisibleRows = true;
+             } else {
+                 row.style.display = 'none';
+             }
+         });
+ 
+         if (!hasVisibleRows) {
+             noResults.style.display = 'block';
+         } else {
+             noResults.style.display = 'none';
+         }
+     });
+ });
+  
+ </script>
 </body>
 </html>

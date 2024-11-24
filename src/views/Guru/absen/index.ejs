@@ -8,7 +8,7 @@
       <div class="col-12">
         <div class="container-fluid mt-3">
           <div class="callout callout-info">
-            <h5><i class="fas fa-info"></i> Note:</h5>
+            <h5><i class="fas fa-info"></i> Nama Kelas : <%= kelas.nama_kelas %></h5>
             <!--
             
             -->
@@ -25,6 +25,8 @@
               <!-- Include necessary hidden fields -->
               <input type="hidden" name="id_jadwal" value="<%= id_jadwal %>">
               <input type="hidden" name="id_guru" value="<%= rows.id_guru %>">
+              <input type="hidden" name="id_kelas" value="<%= kelas.id_kelas %>">
+
               <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover table-sm table-striped table-responsive">
                   <thead>
@@ -43,10 +45,10 @@
                           <td><%= student.nama_kelas %></td>
                           <td>
                               <select name="status_<%= student.id_siswa %>" class="form-control">
-                                  <option value="hadir">Hadir</option>
-                                  <option value="izin">Izin</option>
-                                  <option value="sakit">Sakit</option>
-                                  <option value="alpa">Alpa</option>
+                                  <option value="hadir" <%= student.status === 'hadir' ? 'selected' : '' %>>Hadir</option>
+                                  <option value="izin" <%= student.status === 'izin' ? 'selected' : '' %>>Izin</option>
+                                  <option value="sakit" <%= student.status === 'sakit' ? 'selected' : '' %>>Sakit</option>
+                                  <option value="alpa" <%= student.status === 'alpa' ? 'selected' : '' %>>Alpa</option>
                               </select>
                           </td>
                       </tr>
@@ -66,16 +68,7 @@
             </form>
             <!-- Card footer with attendance legend -->
             <div class="card-footer">
-              <div class="keterangan bg-primary text-white rounded p-3">
-                <h4 class="keterangan-notes">Keterangan Absensi</h4>
-                <ul class="list-unstyled mb-0">
-                  <li><strong>A =</strong> Tidak Masuk Tanpa Keterangan</li>
-                  <li><strong>I =</strong> Tidak Masuk Ada Surat Ijin Atau Pemberitahuan</li>
-                  <li><strong>S =</strong> Tidak Masuk Ada Surat Dokter Atau Pemberitahuan</li>
-                  <li><strong>M =</strong> Hadir</li>
-                  <li><strong>N =</strong> Belum di Absen</li>
-                </ul>
-              </div>
+              
             </div>
           </div>
         </div>

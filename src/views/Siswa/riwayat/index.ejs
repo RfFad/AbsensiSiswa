@@ -1,4 +1,5 @@
 <%- include("../Componen/header") %>
+<title>Siswa | Riwayat</title>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <!-- Custom CSS -->
@@ -50,6 +51,12 @@
     
     <section class="content">
         <div class="container-fluid">
+            <div class="callout callout-info">
+                <h5><i class="fas fa-info"></i> Jika kamu memiliki riwayat pelanggaran supaya mengabari guru atau staff yang bersangkutan</h5>
+                <!--
+                
+                -->
+              </div>
             <div class="row" id="data-container">
                 <!-- Data Cards Akan Ditambahkan Dinamis -->
             </div>
@@ -70,17 +77,19 @@
         list();
 
         function list() {
-            let html = "";
             $.ajax({
                 url: '/siswa/data_riwayat',
                 type: 'GET',
                 success: function(response) {
                     const data = response.data;
+                    let html = "";
+
                     const prestasi = data.filter(row => row.jenis_riwayat === 'Prestasi');
                     const pelanggaran = data.filter(row => row.jenis_riwayat === 'Pelanggaran');
 
                     if (prestasi.length > 0) {
                         prestasi.forEach(row => {
+                            const tanggal = new Date(row.tanggal).toLocaleDateString('id-ID').split('/').join('-');
                             html += `
                                 <div class="col-md-4">
                                     <div class="card shadow-sm mb-4">
@@ -91,25 +100,26 @@
                                                 </div>
                                                 <div class="ms-3 d-flex flex-column">
                                                     <span class="badge badge-prestasi text-white" style="width: 100px;">Prestasi</span>
-                                                    <h5 class="card-title mb-0">Mendapatkan Prestasi</h5>
+                                                    <h5 class="card-title mb-0">Anda Mendapatkan Prestasi</h5>
                                                 </div>
                                             </div>
                                             <p><strong>Siswa:</strong> ${row.nama_siswa}</p>
                                             <p><strong>Kelas:</strong> ${row.nama_kelas}</p>
-                                            <p><strong>Tanggal:</strong> ${row.tanggal}</p>
+                                            <p><strong>Tanggal:</strong> ${tanggal}</p>
                                             <p class="text-muted">"${row.deskripsi}"</p>
+                                            <div class ='text-center'>
+                                            <a href="/siswa/detail_riwayat/${row.id_riwayat}" class="btn btn-success"><i class="fas fa-arrow-right"></i> Detail Riwayat</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             `;
                         });
-                    } else {
-                        html = "<p class='text-center'>Tidak ada data prestasi yang ditemukan.</p>";
                     }
 
-                    $("#data-container").html(html);
                     if (pelanggaran.length > 0) {
                         pelanggaran.forEach(row => {
+                            const tanggal = new Date(row.tanggal).toLocaleDateString('id-ID').split('/').join('-');
                             html += `
                                 <div class="col-md-4">
                                     <div class="card shadow-sm mb-4">
@@ -120,20 +130,26 @@
                                                 </div>
                                                 <div class="ms-3 d-flex flex-column">
                                                     <span class="badge badge-pelanggaran text-white" style="width: 100px;">Pelanggaran</span>
-                                                    <h5 class="card-title mb-0">Melakukan pelanggaran</h5>
+                                                    <h5 class="card-title mb-0">Anda Melakukan Pelanggaran</h5>
                                                 </div>
                                             </div>
                                             <p><strong>Siswa:</strong> ${row.nama_siswa}</p>
                                             <p><strong>Kelas:</strong> ${row.nama_kelas}</p>
-                                            <p><strong>Tanggal:</strong> ${row.tanggal}</p>
+                                            <p><strong>Tanggal:</strong> ${tanggal}</p>
                                             <p class="text-muted">"${row.deskripsi}"</p>
+                                            <div class ='text-center'>
+                                            <a href="/siswa/detail_riwayat/${row.id_riwayat}" class="btn btn-danger"><i class="fas fa-arrow-right"></i> Detail Riwayat</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             `;
                         });
-                    } else {
-                        html = "<p class='text-center'>Tidak ada data prestasi yang ditemukan.</p>";
+                    }
+
+                    // Tampilkan pesan jika tidak ada data sama sekali
+                    if (html === "") {
+                        html = "<p class='text-center'>Tidak ada data prestasi atau pelanggaran yang ditemukan.</p>";
                     }
 
                     $("#data-container").html(html);

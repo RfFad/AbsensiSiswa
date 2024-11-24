@@ -18,7 +18,10 @@ function unescapeHTML(html) {
 }
 
 app.locals.unescape = unescapeHTML;
-
+app.use((req, res, next) => {
+    res.io = io; // Tambahkan io ke res
+    next();
+});
 
 // Definisi lokasi file router
 
@@ -66,6 +69,33 @@ io.on('connection', (socket) => {
     });
     socket.on('disconnect', () => {
         console.log('A user disconnected');
+    });
+});
+io.on("connection", (socket) => {
+    console.log('User connected:', socket.id);
+
+    // Terima parameter id_siswa saat klien terhubung
+    socket.on('roomGuru', (id_guru) => {
+        socket.join(`guru_${id_guru}`); // Gabung ke room khusus siswa
+        console.log(`User ${socket.id} joined room guru_${id_guru}`);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected:', socket.id);
+    });
+  });
+  
+io.on('connection', (socket) => {
+    //console.log('User connected:', socket.id);
+
+    // Terima parameter id_siswa saat klien terhubung
+    socket.on('joinRoom', (id_siswa) => {
+        socket.join(`siswa_${id_siswa}`); // Gabung ke room khusus siswa
+       // console.log(`User ${socket.id} joined room siswa_${id_siswa}`);
+    });
+
+    socket.on('disconnect', () => {
+        //console.log('User disconnected:', socket.id);
     });
 });
 

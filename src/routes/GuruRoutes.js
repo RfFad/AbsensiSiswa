@@ -8,6 +8,7 @@ const jadwal_guru = require('../controllers/guru/JadwalController');
 const absen = require('../controllers/guru/AbsenController')
 const rekap = require('../controllers/guru/RekapAbsenController')
 const Tugas = require('../controllers/guru/TugasController')
+const izin = require ('../controllers/izinController')
 
 router.get('/', verifyUser.isLogin, checkRole('guru'), authHeader, Dashboard.getDashboard)
 router.get('/jadwal', verifyUser.isLogin, checkRole('guru'), jadwal_guru.jadwalmengajar)
@@ -28,4 +29,13 @@ router.get('/pengumpulan_tugas/:id_tugas', Tugas.pengumpulanTugas)
 router.get('/nilai_detail/:id_pengumpulan', Tugas.nilaiDetail)
 router.get('/jawaban_siswa/:id_pengumpulan', Tugas.jawaban_Siswa)
 router.post('/input_nilai/:id_pengumpulan', Tugas.inputNilai);
+router.get('/notif_izin', izin.notif_izin)
+router.get('/permintaan_izin', izin.data_izin)
+router.get('/detail_izin/:id_izin', izin.izin_detail)
+router.post('/read/:id_guru', izin.read)
+router.get('/setujui/:id_izin', izin.setujuiIzin)
+router.get('/tolak/:id_izin', izin.tolakIzin)
+router.get('/countIzin', izin.pesanCount)
+
+router.post('/hapusTugas/:id_tugas', Tugas.deleteTugas)
 module.exports = router;

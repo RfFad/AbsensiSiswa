@@ -1,7 +1,9 @@
 const mysql = require('mysql');
 const gurumodel = require('../../models/guru/models_guru');
 const jadwal = require('../../models/guru/jadwal_model');
-const {getSiswa} = require('../../models/models_siswa')
+const {getSiswa, getSiswaByGuru} = require('../../models/models_siswa');
+const { getKelas } = require("../../models/models_kelas");
+const tahun_ajar = require("../../models/models_tahunajar");
 const {
     
     getGuruById,
@@ -139,8 +141,18 @@ module.exports = {
     },
     async getSiswa(req, res) {
         try {
-            let siswa = await getSiswa()
-            res.status(200).json({ data: siswa });
+            const dataTahun = await tahun_ajar.getTahunAjar();
+            const datakelas = await getKelas();
+            const kelas = req.query.id_kelas || null;
+            const tahunAjar = req.query.idth || null;
+            const jk = req.query.jk || null ;
+            const tgl_lahir = req.query.tgl_lahir || null ;
+            const nama_siswa = req.query.nama_siswa || null;
+            const alamat = req.query.alamat || null;
+            const nama_wali = req.query.nama_wali || null;
+            const pekerjaan_wali = req.query.pekerjaan_wali || null;
+            let siswa = await getSiswaByGuru(kelas, tahunAjar, jk, tgl_lahir, nama_siswa, alamat, nama_wali, pekerjaan_wali)
+            res.status(200).json({ data: siswa,  datakelas, dataTahun});
         } catch (error) {
             console.error(error);
             res.status(404).json({ message: "Data siswa tidak ditemukan" });
@@ -149,12 +161,14 @@ module.exports = {
     
     async getPageSiswa (req, res) {
         try {
+            const dataTahun = await tahun_ajar.getTahunAjar();
+            const datakelas = await getKelas();
             const messages = {
                 success: req.flash("success"),
                 error: req.flash("error"),
               };
               const rows = await gurumodel.getguru(req, res);
-            res.render("guru/data_siswa", {title : "Data Siswa Ajar", messages, rows})
+            res.render("guru/data_siswa", {title : "Data Siswa Ajar", messages, rows, datakelas, dataTahun})
         } catch (error) {
             console.log(error)
             res.status(402)

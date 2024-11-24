@@ -1,6 +1,6 @@
 const connection = require('../configs/Databases');
 
-const getGuru = async (nama_guru = null, alamat = null, jk = null) => {
+const getGuru = async (nama_guru = null, alamat = null, jk = null, jabatan = null, nama_mp = null, nip=null) => {
     return new Promise((resolve, reject) => {
        let query = ` SELECT guru.*, mata_pelajaran.nama_mp FROM guru JOIN mata_pelajaran ON guru.idm = mata_pelajaran.idm `
 
@@ -18,6 +18,18 @@ const getGuru = async (nama_guru = null, alamat = null, jk = null) => {
        if(jk){
         condition.push(`guru.jk LIKE ?`)
         params.push(`%${jk}%`);
+       }
+       if(jabatan){
+        condition.push(`guru.jabatan LIKE ?`)
+        params.push(`%${jabatan}%`);
+       }
+       if(nip){
+        condition.push(`guru.nip LIKE ?`)
+        params.push(`%${nip}%`);
+       }
+       if(nama_mp){
+        condition.push(`mata_pelajaran.idm = ?`)
+        params.push(nama_mp);
        }
        if(condition.length > 0){
         query += `WHERE ` + condition.join (" AND ");

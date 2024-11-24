@@ -31,16 +31,43 @@ const Attendance = {
     //         });
     //     });
     // },
-    saveAbsen : (entries) => {
+    saveAbsen: (entries) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO absen (id_siswa, id_jadwal, id_guru, tanggal, status) VALUES ?`, [entries], (error, results) => {
-                if(error){
+            const query = `
+                INSERT INTO absen (id_absen, id_siswa, id_kelas, id_jadwal, id_guru, tanggal, status)
+                VALUES ?
+                ON DUPLICATE KEY UPDATE 
+                    
+                    id_siswa = VALUES(id_siswa),
+                    id_kelas = VALUES(id_kelas),
+                    id_jadwal = VALUES(id_jadwal),
+                    id_guru = VALUES(id_guru),
+                    tanggal = VALUES(tanggal),
+                    status = VALUES(status)
+            `;
+    
+            db.query(query, [entries], (error, results) => {
+                if (error) {
                     return reject(error);
                 }
-                resolve(results)
-            })
-        })
+                resolve(results);
+            });
+        });
+    }
+    
+,    
+    absenDetail : async( tanggal, id_jadwal) =>{
+        return new Promise((resolve, reject) =>{
+            db.query(`
+                SELECT * FROM absen WHERE tanggal = ? AND id_jadwal = ?
+                `, [tanggal, id_jadwal], (error, result) => {
+                    if(error) {
+                        return reject(error)
 
+                    }
+                    resolve(result)
+                })
+        })
     },
     dataSiswaByid_kelas: (id_kelas) => {
         return new Promise((resolve, reject) => {

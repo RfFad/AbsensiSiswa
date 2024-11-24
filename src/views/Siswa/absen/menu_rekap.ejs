@@ -1,5 +1,5 @@
 <%- include("../Componen/header") %>
-<title>Admin | Edit Riwayat</title>
+<title>Siswa | Menu rekap</title>
 <%- include("../Componen/sidebar") %>
 
 <div class="content-wrapper">
@@ -16,7 +16,7 @@
                 <span class="info-box-icon bg-info" style="height: 80px; width: 80px;"><i class="far fa-bookmark"></i></span>
     
                 <div class="info-box-content">
-                  <span class="info-box-text"><h4><a href="/siswa/rekap_absen?id_kelas=<%= data.idk %>&idm=<%= data.idm %>&idth=<%= rows.idth %>" style="text-decoration: none;">Data rekap kelas : <%= data.nama_mp %></h4></a></span>
+                  <span class="info-box-text"><h4><a href="/siswa/rekap_absen?id_kelas=<%= data.idk %>&idm=<%= data.idm %>&idth=<%= rows.idth %>" style="text-decoration: none;">Data rekap mapel : <%= data.nama_mp %></h4></a></span>
                 <span class="info-box-number"></span>
                 </div>
                 <!-- /.info-box-content -->

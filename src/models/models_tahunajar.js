@@ -46,6 +46,21 @@ const tahunajar = {
             })
     })
 },
+getTahunAjaranByName : async ( nama_ajaran ) => {
+    return new Promise((resolve, reject) => {
+        connect.query (`
+            SELECT * FROM tahun_ajaran WHERE nama_ajaran = ?
+            `, [nama_ajaran], (error, results) => {
+                if(error){
+                    return reject (error);
+                }
+                if(results.length === 0) {
+                    return reject (new Error('Hari Tidak ada'));
+                }
+                resolve(results[0]);
+            })
+    })
+},
  UpdateTahun : async (idth, nama_ajaran) => {
     return new Promise((resolve, reject) => {
         connect.query(`

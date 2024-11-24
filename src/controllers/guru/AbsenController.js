@@ -3,18 +3,20 @@ const { GetSiswaKelas } = require('../../models/models_siswa');
 const absenModel = require('../../models/guru/models_absen');
 const hariIna = require('../../configs/hari');
 const guru = require('../../models/guru/models_guru');
-
+const {getKelasById} = require('../../models/models_kelas')
+const {InsertNotification} = require('../../models/models_riwayat');
 const absen = {
     showAbsensiPage: async (req, res) => {
         const { id_kelas } = req.params;
         const today = hariIna(new Date().toLocaleString('en-US', { weekday: 'long' }));
         const now = new Date().toLocaleTimeString('en-US', { hour12: false });
-        
+        const tanggal = new Date().toISOString().split('T')[0];
+    
         try {
             // Mengambil data hari dan mengaktifkan jadwal berdasarkan waktu saat ini
             const hari = await jadwalmodel.getHariId(today);
             await jadwalmodel.activateJadwal(hari.idh, now);
-    
+            const kelas = await getKelasById(id_kelas)
             // Mengambil data guru dan pesan dari flash messages
             const rows = await guru.getguru(req, res);
             const messages = {
@@ -29,8 +31,10 @@ const absen = {
                 return res.redirect("/guru/jadwal");
             }
     
-            // Mengambil data siswa berdasarkan `id_kelas` dan `id_jadwal`
+            // Mengambil data siswa berdasarkan `id_kelas`
             const students = await absenModel.dataSiswaByid_kelas(id_kelas);
+    
+            // Mengambil data jadwal
             const jadwal = await absenModel.getJadwalById(id_jadwal);
     
             // Memeriksa status `aktif` dari jadwal
@@ -45,39 +49,115 @@ const absen = {
                 `);
             }
     
-            // Jika `aktif` bernilai 1, absen dapat dilakukan
-            req.flash("success", "Berhasil absen!");
-            res.render("guru/absen/index", { students, id_jadwal, messages, rows });
+            // Mengambil data absensi yang sudah ada
+            const absensi = await absenModel.absenDetail( tanggal, id_jadwal);
+    
+            // Buat mapping untuk status absensi
+            const absensiMap = {};
+            absensi.forEach(absen => {
+                absensiMap[absen.id_siswa] = {
+                    status: absen.status,
+                    id_jadwal: absen.id_jadwal,
+                    tanggal: absen.tanggal,
+                };
+            });
+    
+            // Tambahkan status dan metadata ke masing-masing siswa
+            students.forEach(student => {
+                const absenData = absensiMap[student.id_siswa] || {};
+                student.status = absenData.status || "belum"; // Default "belum" jika tidak ada data
+                student.id_jadwal = id_jadwal;
+                student.tanggal = tanggal;
+            });
+    
+            // Render halaman absensi
+            res.render("guru/absen/index", { students, id_jadwal, tanggal, messages, rows, kelas });
         } catch (error) {
             console.error(error);
             res.status(500).send("Server Error");
         }
+    }
+    ,
+    
+    submitAbsensi: async (req, res) => {
+        try {
+            const entries = [];
+            const { id_jadwal, id_guru, id_kelas } = req.body;
+            const tanggal = new Date().toISOString().split('T')[0]; // Mengambil tanggal hari ini dalam format YYYY-MM-DD 
+    
+            // Siapkan data absensi
+            for (const key of Object.keys(req.body)) {
+                if (key.startsWith('status_')) {
+                    const id_siswa = key.split('_')[1];
+                    const status = req.body[key]; // Status siswa
+    
+                    // Generate id_absen berdasarkan id_siswa, id_jadwal, dan tanggal
+                    const id_absen = `${id_siswa}_${id_jadwal}_${tanggal}`; // id_absen berdasarkan id_siswa, id_jadwal, tanggal
+                    entries.push([id_absen,  id_siswa, id_kelas, id_jadwal, id_guru, tanggal, status]); // Format data sesuai SQL
+                }
+            }
+    
+            // Gunakan upsert untuk menyimpan data absensi
+            await absenModel.saveAbsen(entries); // Menggunakan upsert untuk memasukkan atau memperbarui data absensi
+    
+            // Kirim notifikasi untuk siswa yang tidak hadir
+            for (const entry of entries) {
+                if (entry[5] === 'alpa') { // Status siswa yang tidak hadir
+                    // Simpan notifikasi ke database
+                    await InsertNotification(
+                        entry[1], // id_siswa
+                        `Anda tidak hadir di jam pelajaran pada tanggal ${tanggal}`, // Pesan
+                        'warning' // Tipe notifikasi
+                    );
+    
+                    // Kirim notifikasi real-time jika menggunakan socket.io
+                    if (res.io) {
+                        res.io.to(`siswa_${entry[1]}`).emit('notification', {
+                            type: 'warning',
+                            message: `Anda tidak hadir di jam pelajaran pada tanggal ${tanggal}`,
+                        });
+                    }
+                }
+            }
+    
+            req.flash('success', 'Berhasil absen!');
+            res.redirect('/guru/jadwal');
+        } catch (error) {
+            console.error('Error saat menyimpan absensi:', error);
+            res.status(500).send('Server Error');
+        }
     },
     
-   submitAbsensi: async (req, res) => {
-    try {
-        const entries = [];
-        const { id_jadwal, id_guru } = req.body;
-        const tanggal = new Date().toISOString().split('T')[0];
-        
-        // Gunakan Object.keys untuk mengakses key dalam req.body
-        for (const key of Object.keys(req.body)) {
-            if (key.startsWith('status_')) {
-                const id_siswa = key.split('_')[1];
-                const status = req.body[key];
-                entries.push([id_siswa, id_jadwal, id_guru, tanggal, status]); // Menambahkan data sebagai array per record
+    
+    detailAbsen: async (req, res) => {
+        try {
+            const { id_siswa, tanggal, id_jadwal } = req.params;
+    
+            // Validasi input
+            if (!id_siswa || !tanggal || !id_jadwal) {
+                req.flash('error', 'Parameter tidak lengkap.');
+                return res.redirect('/guru/jadwal');
             }
+    
+            // Ambil data detail absensi
+            const detail = await absenModel.absenDetail(id_siswa, tanggal, id_jadwal);
+    
+            // Periksa jika data tidak ditemukan
+            if (!detail) {
+                req.flash('error', 'Detail absensi tidak ditemukan.');
+                return res.redirect('/guru/jadwal');
+            }
+    
+            // Render view untuk detail absensi
+            res.render('guru/absen/index', { detail });
+        } catch (error) {
+            console.error('Error saat mengambil detail absensi:', error);
+            res.status(500).send('Server Error');
         }
-
-        await absenModel.saveAbsen(entries);
-        req.flash('success', 'berhasil absen!')
-        res.redirect('/guru/jadwal');
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Server Error');
-    }
-}
-
+    },
+    
+    
+    
     
     
 };

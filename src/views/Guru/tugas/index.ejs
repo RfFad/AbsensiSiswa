@@ -1,4 +1,5 @@
 <%- include("../Componen/header") %>
+<title>Guru | Tugas</title>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <%- include("../Componen/sidebar") %>
 
@@ -32,7 +33,6 @@
                                     <div class="d-flex justify-content-end">
                                       <input type="text" class="form-control" name="table_search" style="width: 160px;">
                                       <button type="submit" class="btn btn-secondary ml-2">Search</button>
-                                      <a href="#" class="btn btn-warning ml-2" id="filter-btn">Filter</a>
                                     </div>
                                   </div>
                                 <div class="table-responsive">
@@ -156,15 +156,16 @@
     <script src="/plugins/jquery/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <!-- Kode yang lain tetap sama -->
 
 <script>
     $(document).ready(function() {
         // Menampilkan data tugas
-        list();
 
+        list();
+       
         // Tutup modal saat tombol close ditekan
         $(".close").on('click', function(){
             $("#modal-tambah").modal("hide");
@@ -224,7 +225,7 @@
                             htmlAktif += `<td> <label class='label bg-danger' style="border-radius: 6px; width: 200px; text-align: center;" id="tanggalMulai">${hariDeadline}, ${formatDeadline} ${row.waktu_deadline.slice(0, 5)}`;
                             htmlAktif += `<td>
                                 <button class='btn btn-warning' id='btn-edit' data-id='${row.id_tugas}'>Edit</button>
-                                <button class='btn btn-danger'>Hapus</button>
+                                <button class='btn btn-danger btn-hapus' data-tugas ='${row.id_tugas}'>Hapus</button>
                                 <a href='/guru/tugas_detail/${row.id_tugas}' class='btn btn-primary'>Detail</a>
                                 </td>`;
                             htmlAktif += "</tr>";
@@ -263,7 +264,7 @@
                             htmlSelesai += `<td> <label class='label bg-danger' style="border-radius: 6px; width: 200px; text-align: center;" id="tanggalMulai">${hariDeadline}, ${formatDeadline} ${row.waktu_deadline.slice(0, 5)}</label></td>`;
                             htmlSelesai += `<td>
                                 <button class='btn btn-warning' id='btn-edit' data-id='${row.id_tugas}'>Edit</button>
-                                <button class='btn btn-danger'>Hapus</button>
+                                <button class='btn btn-danger btn-hapus' data-tugas = '${row.id_tugas}'>Hapus</button>
                                 <a href='/guru/tugas_detail/${row.id_tugas}' class='btn btn-primary'>Detail</a>
                                 </td>`;
                             htmlSelesai += "</tr>";
@@ -322,6 +323,48 @@
                 }
             });
         });
+        $(document).on('click', '.btn-hapus', function () {
+    const id_tugas = $(this).data("tugas"); // Ambil ID tugas dari atribut data
+    // Konfirmasi dengan SweetAlert
+    Swal.fire({
+        title: 'Apakah Anda yakin?',
+        text: "Anda tidak akan dapat mengembalikan data ini!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // AJAX untuk menghapus data
+            $.ajax({
+                url: `/guru/hapusTugas/${id_tugas}`, // Endpoint untuk penghapusan
+                type: 'POST',
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Berhasil menghapus tugas',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false,
+                    }).then(() => {
+                        list(); // Refresh daftar tugas setelah penghapusan
+                    });
+                },
+                error: function (xhr) {
+                    Swal.fire({
+                        title: 'Gagal!',
+                        text: 'Gagal menghapus tugas',
+                        icon: 'error',
+                        timer: 2000,
+                        showConfirmButton: false,
+                    });
+                },
+            });
+        }
+    });
+});
 
         // Menampilkan data untuk diedit di modal
         $(document).on('click', '#btn-edit', function() {
@@ -352,6 +395,7 @@
             }
         });
     });
+   
 </script>
 
 <!-- Kode lainnya tetap sama -->

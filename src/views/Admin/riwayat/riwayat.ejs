@@ -1,18 +1,25 @@
 <%- include("../../Componen/header") %>
 <title>Admin | Data Riwayat</title>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
 <%- include("../../Componen/sideNavbar") %>
 
 <div class="content-wrapper">
-  <div class="container-fluid">
-    <div class="row mb-2">
-      <div class="col-sm-6">
-        <h1>Data Riwayat</h1>
-      </div>
-      
-    </div>
-  </div><!-- /.container-fluid -->
-</section>
-
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Data Riwayat</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/admin">Home</a></li>
+            <li class="breadcrumb-item active">Data Riwayat</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
 <!-- Main content -->
 <section class="content">
   <div class="container-fluid">
@@ -20,7 +27,7 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">DataTable with minimal features & hover style</h3>
+            <h3 class="card-title">Data Riwayat Siswa</h3>
           </div>
           <!-- /.card-header -->
           
@@ -32,47 +39,35 @@
                 <button type="submit" class="btn btn-secondary ml-2" style="height: 35px;">Search</button>
               </div>
             </div>
-            <% if (messages.success) { %>
-                
-              <div class="alert alert-success">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                  <%= messages.success %>
-              </div>
-          <% } %>
-          <% if (messages.error) { %>
-              <div class="alert alert-danger">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                  <%= messages.error %>
-              </div>
-          <% } %>
             <div class="table-responsive">
-              <table id="example2" class="table table-bordered table-hover">
+              <table id="example2" class="table table-bordered table-striped table-hover">
                 <thead>
-                  <tr>
+                  <tr class="bg-dark">
                     <th style="width: 1%;">No</th>
                     <th>Nama Siswa</th>
-                    <th>Kelas</th>
-                    <th>Jenis Riwayat</th>
-                    <th>Deskripsi</th>
-                    <th>Tanggal</th>
-                    <th>Action</th>
+                    <th style="width: 50px;">Kelas</th>
+                    <th style="width: 100px;">Jenis Riwayat</th>
+                    <th style="width: 300px;">Deskripsi</th>
+                    <th style="width: 100px;">Tanggal</th>
+                    <th style="width: 150px;">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   <p id="no-results" style="display: none; text-align: center; padding: 10px; font-size: 30px; font-weight: bold;">Data tidak ada</p>
                   <% row.forEach((riwayat, index) => { %>
-                  <tr>
+                  <tr >
                     <td><%= index + 1 %></td>
                     <td><%= riwayat.nama_siswa %></td>
-                    <td><%= riwayat.nama_kelas %></td>
+                    <td style="text-align: center;"><%= riwayat.nama_kelas %></td>
                     <td><%= riwayat.jenis_riwayat %></td>
                     <td><%= riwayat.deskripsi %></td>
                     <td><%= new Date(riwayat.tanggal).toLocaleDateString('en-CA')%></td>
                     <td>
-                      <a href="/admin/riwayat/edit/<%= riwayat.id_riwayat %>" class="btn btn-warning btn-sm"><i class="fas fa-edit">Edit</i></a>
+                      <a href="/admin/riwayat/edit/<%= riwayat.id_riwayat %>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
                       <form action="/admin/riwayat/delete/<%= riwayat.id_riwayat%>?_method=DELETE" method="post" style="display:inline;" class="delete-form">
-                        <button type="button" class="btn btn-danger" onclick="confirmDelete(this)"><i class='fas fa-trash-alt'></i>Hapus</button>
-                      </form>     
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete(this)"><i class='fas fa-trash-alt'></i></button>
+                      </form>  
+                         
                     </td>
                   </tr>
                   <% }) %>
@@ -91,7 +86,23 @@
 </section>
 
 </div>
+
 <script>
+   $(function () {
+    $("#example2").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
   function confirmDelete(button) {
       Swal.fire({
           title: 'Apakah Anda yakin?',

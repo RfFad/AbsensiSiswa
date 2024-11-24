@@ -212,6 +212,16 @@ module.exports = {
             console.log(error)
             res.status(404).json({messages : 'error, gagal memberikan nilai'})
         }
+    },
+    deleteTugas : async(req, res) => {
+        const {id_tugas} = req.params
+        try {
+            await modelTugas.hapusTugas(id_tugas);
+            res.status(200).json({message : 'berhasil menghapus data'})
+        } catch (error) {
+            console.log(error)
+            res.status(404)
+        }
     }
 
 };

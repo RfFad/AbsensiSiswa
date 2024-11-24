@@ -7,7 +7,7 @@ const {
   getInfoSiswa,
   getGrafikSiswa 
 } = require("../../models/models_siswa");
-const { getKelas } = require("../../models/models_kelas");
+const { getKelas, getKelasByName, updateKenaikan } = require("../../models/models_kelas");
 const md5 = require("md5");
 const tahun_ajar = require("../../models/models_tahunajar");
 const path = require('path');
@@ -33,6 +33,52 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage }).single('foto');
 
 // Method untuk menambahkan siswa
+const naikKelas = async (req, res) => {
+  try {
+    // Ambil semua data siswa
+    const siswaData = await getSiswa();
+
+    for (const siswa of siswaData) {
+      const { id_siswa, nama_kelas } = siswa;
+
+      // Pisahkan angka dan huruf dari nama_kelas
+      const angkaKelas = parseInt(nama_kelas.match(/\d+/)[0]);
+      const hurufKelas = nama_kelas.replace(angkaKelas, '');
+
+      let kelasBaru = null;
+
+      // Tentukan kelas baru
+      if (angkaKelas === 7) {
+        kelasBaru = `8${hurufKelas}`;
+      } else if (angkaKelas === 8) {
+        kelasBaru = `9${hurufKelas}`;
+      } else if (angkaKelas === 9) {
+        console.log(`Siswa ${id_siswa} sudah di kelas terakhir.`);
+        continue;
+      }
+
+      // Ambil id_kelas dari kelas baru
+      const kelasData = await getKelasByName(kelasBaru);
+      if (!kelasData) {
+        console.error(`Kelas ${kelasBaru} tidak ditemukan di database.`);
+        continue;
+      }
+
+      const id_kelas_baru = kelasData.id_kelas;
+
+      // Update id_kelas siswa
+      await updateKenaikan(id_siswa, { id_kelas: id_kelas_baru });
+      console.log(`Siswa ${id_siswa} naik ke kelas ${kelasBaru}`);
+    }
+
+    req.flash("success", "Proses kenaikan kelas selesai.");
+    res.redirect("/admin/data_siswa");
+  } catch (error) {
+    console.error("Error saat menaikkan kelas:", error);
+    req.flash("error", "Terjadi kesalahan saat menaikkan kelas.");
+    res.redirect("/admin/data_siswa");
+  }
+};
 const ExportDataSiswa = async (req, res) =>{
 try {
   
@@ -89,6 +135,109 @@ try {
   console.log(error)
 }
 }
+const importDataSiswa = async (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      req.flash("error", "Error saat mengunggah file!");
+      console.log(err);
+      return res.redirect("/admin/data_siswa");
+    }
+
+    const filePath = req.file.path;
+
+    try {
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.readFile(filePath);
+
+      const worksheet = workbook.getWorksheet(1);
+      if (!worksheet) {
+        throw new Error("Worksheet tidak ditemukan!");
+      }
+
+      const siswaData = [];
+
+      worksheet.eachRow((row, rowNumber) => {
+        if (rowNumber === 1) return;
+
+        const nis = row.getCell(1).value;
+        const nama_siswa = row.getCell(2).value;
+        const nama_kelas = row.getCell(3).value;
+        const jk = row.getCell(4).value;
+        const tgl_lahir = row.getCell(5).value;
+        const nama_wali = row.getCell(6).value;
+        const alamat = row.getCell(7).value;
+        const pekerjaan_wali = row.getCell(8).value;
+        const tlp = row.getCell(9).value;
+        const rawPassword = row.getCell(10).value;
+        const nama_ajaran = row.getCell(11).value;
+
+        if (!nis || !nama_siswa || !nama_kelas || !nama_ajaran) {
+          console.error(`Baris ${rowNumber}: Data tidak lengkap, diabaikan.`);
+          return;
+        }
+
+        const tglLahirConverted =
+          tgl_lahir instanceof Date ? tgl_lahir : new Date(tgl_lahir);
+
+        siswaData.push({
+          nis,
+          nama_siswa,
+          nama_kelas,
+          jk,
+          tgl_lahir: tglLahirConverted,
+          nama_wali,
+          alamat,
+          pekerjaan_wali,
+          tlp,
+          password: rawPassword ? md5(rawPassword) : md5("default123"),
+          foto: null,
+          nama_ajaran,
+        });
+      });
+
+      for (const siswa of siswaData) {
+        const kelas = await getKelasByName(siswa.nama_kelas);
+        if (!kelas) {
+          console.error(`Kelas '${siswa.nama_kelas}' tidak ditemukan.`);
+          continue;
+        }
+
+        const tahunAjaran = await tahun_ajar.getTahunAjaranByName(siswa.nama_ajaran);
+        if (!tahunAjaran) {
+          console.error(`Tahun ajaran '${siswa.nama_ajaran}' tidak ditemukan.`);
+          continue;
+        }
+
+        await InsertSiswa(
+          siswa.nis,
+          siswa.nama_siswa,
+          siswa.tlp,
+          siswa.tgl_lahir,
+          kelas.id_kelas,
+          tahunAjaran.idth,
+          siswa.jk,
+          siswa.nama_wali,
+          siswa.alamat,
+          siswa.pekerjaan_wali,
+          siswa.password,
+          siswa.foto
+        );
+      }
+
+      fs.unlinkSync(filePath);
+
+      req.flash("success", "Data siswa berhasil diimpor!");
+      res.redirect("/admin/data_siswa");
+    } catch (error) {
+      console.error("Error saat mengimpor data:", error);
+      req.flash("error", "Terjadi kesalahan saat mengimpor data!");
+      res.redirect("/admin/data_siswa");
+    }
+  });
+};
+
+
+
 const getInsertSiswa = async (req, res) => {
   upload(req, res, async (err) => {
     if (err) {
@@ -113,6 +262,7 @@ const getInsertSiswa = async (req, res) => {
   });
 };
 const getSiswaData = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
   try {
     const messages = {
       success: req.flash("success"),
@@ -122,27 +272,32 @@ const getSiswaData = async (req, res) => {
     // Ambil daftar kelas untuk select option
     const datakelas = await getKelas();
     const dataTahun = await tahun_ajar.getTahunAjar();
-    // Ambil parameter kelas dari query, atau null jika tidak ada
+
+    // Ambil parameter filter dari query
     const kelas = req.query.id_kelas || null;
     const tahunAjar = req.query.idth || null;
-    const jk = req.query.jk || null ;
-    const tgl_lahir = req.query.tgl_lahir || null ;
+    const jk = req.query.jk || null;
+    const tgl_lahir = req.query.tgl_lahir || null;
     const nama_siswa = req.query.nama_siswa || null;
     const alamat = req.query.alamat || null;
     const nama_wali = req.query.nama_wali || null;
     const pekerjaan_wali = req.query.pekerjaan_wali || null;
-    // Ambil data siswa berdasarkan kelas (jika dipilih) atau semua siswa
-    const siswakelas = await getSiswa(kelas, tahunAjar, jk, tgl_lahir, nama_siswa, alamat, nama_wali, pekerjaan_wali);
+
+    // Ambil data siswa dan pagination
+    const siswakelas = await getSiswa(kelas, tahunAjar, jk, tgl_lahir, nama_siswa, alamat, nama_wali, pekerjaan_wali, page);
 
     // Render ke view 'siswa'
     res.render("admin/siswa/siswa", {
-      siswakelas, // Mengirimkan data siswa
-      index: 1, 
-      messages, 
-      currentPath: '/admin/data_siswa', 
-      selectedKelas: kelas, // Kelas yang dipilih
-      datakelas, // Daftar kelas untuk dropdown
-      dataTahun
+      siswakelas: siswakelas.data, // Data siswa
+      index: 1,
+      messages,
+      currentPath: '/admin/data_siswa',
+      selectedKelas: kelas,
+      datakelas, // Daftar kelas
+      dataTahun, // Daftar tahun ajar
+      page, // Halaman saat ini
+      totalPages: siswakelas.totalPages, // Total halaman
+      currentPage: siswakelas.currentPage, // Halaman saat ini dari response
     });
   } catch (error) {
     res.status(500).json(error);
@@ -299,7 +454,8 @@ const getGrafik = async(req, res) => {
     return res.status(404)
   }
 }
-module.exports = {
+module.exports = { 
+  naikKelas,
   getInsertSiswa,
   getPageSiswa,
   getSiswaData,
@@ -308,5 +464,6 @@ module.exports = {
   getDeleteSiswa,
   getInfoSiswaNis,
   getGrafik,
-  ExportDataSiswa
+  ExportDataSiswa,
+  importDataSiswa
 };

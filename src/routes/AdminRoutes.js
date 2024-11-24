@@ -11,12 +11,13 @@ const{getCountData} = require ('../controllers/admin/CountAdminController');
 const {getInsertMapel, getDataMapel, getPageMapel, getUpdateMapel, getUpdatePageMapel, getDeleteMapel} = require('../controllers/admin/MapelController')
 const {getInsertHari, getPageHari, getDataHari, getDeleteHari, getUpdateHari, getUpdatePageHari} = require ('../controllers/admin/HariController');
 // const {getInsertHari, getPageHari} = require ('../controllers/admin/HariController');
-const { getInsertSiswa, getPageSiswa, getSiswaData, getUpdatePageSiswa, updateSiswa, getDeleteSiswa, getInfoSiswaNis, getGrafik, ExportDataSiswa } = require('../controllers/admin/SiswaController') 
+const { getInsertSiswa, importDataSiswa,naikKelas, getPageSiswa, getSiswaData, getUpdatePageSiswa, updateSiswa, getDeleteSiswa, getInfoSiswaNis, getGrafik, ExportDataSiswa } = require('../controllers/admin/SiswaController') 
 const {getUpdatePageSekolah, updateSekolahData, getDataSekolah} = require('../controllers/admin/SekolahController')
 const TahunAjaranCont= require("../controllers/admin/TahunAjarController");
 const jadwal = require ('../controllers/admin/JadwalController');
 const riwayat = require ('../controllers/admin/RiwayatController');
 const TahunAjarCont = require('../controllers/admin/TahunAjarController');
+const user = require('../controllers/admin/UserController')
 
 //router
 router.get('/', verifyUser.isLogin, getCountData)
@@ -106,4 +107,14 @@ router.post("/simpan_tahun", TahunAjaranCont.InsertTahun)
 router.post("/delete_ajaran/:idth", TahunAjarCont.DeleteTahun)
 router.get("/tahun_ajaranId/:idth", TahunAjarCont.GetAjaranId)
 router.post("/update_ajaran/:idth", TahunAjarCont.UpdateTahunAjar)
+router.get("/kenaikankelas", naikKelas);
+router.post("/import_siswa", importDataSiswa);
+//user
+router.get('/data_user', user.getUser)
+router.post('/insert_user', user.getinsert)
+router.get('/user', user.getInsertPage)
+router.get('/edit_user/:id_user', user.detailUser)
+router.post('/update_user/:id_user', user.getUpdateUser)
+router.post('/delete_user/:id_user', user.getDelete)
+router.get('/admin_user', user.getUserFp)
 module.exports = router;

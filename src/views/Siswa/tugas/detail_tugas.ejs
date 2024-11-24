@@ -1,5 +1,5 @@
 <%- include("../Componen/header") %>
-
+<title>Siswa | Detail tugas</title>
 
 <style>
     .custom-file-upload {
@@ -69,7 +69,7 @@
                 <div class="col-12">
                     <div class="card card-outline card-info">
                         <div class="card-header">
-                            <h4>Data Tugas</h4>
+                            <h4>Detail Tugas</h4>
                         </div>
                         <div class="card-body">
                             <table class="table table-bordered table-striped table-responsive">
@@ -118,15 +118,15 @@
                                 <div class="tab-pane fade show active" id="materi" role="tabpanel" aria-labelledby="materi-tab">
                                     <h4 class="mt-3 text-center"><%= data.judul_tugas %></h4>
                                     <p><%= data.deskripsi %></p>
-                                    <div class="file-section">
+                                    <div class="file-section" id="fileTugas">
                                         <h5>File Tugas</h5>
                                         <!-- Jika file berupa gambar -->
                                          <div class="file-content">
                                         <img src="/file_tugas/<%= data.file_tugas %>" alt="File Tugas" id="taskFileImage" class="img-fluid">
                                     </div>
                                         <!-- Jika file berupa dokumen -->
-                                        <p>
-                                            <a href="#" class="file-link mt-3" id="taskFileLink" download>
+                                        <p class="download-btn">
+                                            <a href="/file_tugas/<%= data.file_tugas %>" class="file-link mt-3" download>
                                                 <i class="fas fa-file-download"></i> Download Tugas
                                             </a>
                                         </p>
@@ -168,6 +168,12 @@
 <script>
     $(document).ready(function() {
        jawab()
+       const fileTugas = "<%= data.file_tugas %>"
+       if(!fileTugas){
+        $(".download-btn").hide();
+        $("#fileTugas").html("<div class='alert alert-warning'> Guru tidak memberikan file </div>")
+
+       }
         function Hari(tanggal) {
             const hariNama = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
             return hariNama[tanggal];

@@ -22,7 +22,10 @@ const getGrafikSiswa = async () => {
         });
     });
 };
-const getSiswa = async (id_kelas = null, idth = null, jk = null, tgl_lahir = null, nama_siswa = null, alamat = null, nama_wali = null, pekerjaan_wali = null) => {
+const getSiswa = async (id_kelas = null, idth = null, jk = null, tgl_lahir = null, nama_siswa = null, alamat = null, nama_wali = null, pekerjaan_wali = null, page = 1) => {
+    const limit = 34;
+    const offset = (page - 1) * limit;
+
     return new Promise((resolve, reject) => {
         let query = `
           SELECT siswa.*, kelas.nama_kelas AS nama_kelas, tahun_ajaran.nama_ajaran AS nama_ajaran 
@@ -31,65 +34,82 @@ const getSiswa = async (id_kelas = null, idth = null, jk = null, tgl_lahir = nul
           JOIN tahun_ajaran ON siswa.idth = tahun_ajaran.idth
         `;
 
+        let countQuery = `
+          SELECT COUNT(*) AS total 
+          FROM siswa 
+          JOIN kelas ON siswa.id_kelas = kelas.id_kelas 
+          JOIN tahun_ajaran ON siswa.idth = tahun_ajaran.idth
+        `;
+
         const params = [];
         const condition = [];
 
-        // Filter by class if `id_kelas` is provided
+        // Filter conditions
         if (id_kelas) {
-            condition.push (` siswa.id_kelas = ?`);
+            condition.push(`siswa.id_kelas = ?`);
             params.push(id_kelas);
         }
-
-        // Filter by year if `idth` is provided
         if (idth) {
-            
-                condition.push( `  siswa.idth = ?`);
-           
+            condition.push(`siswa.idth = ?`);
             params.push(idth);
         }
-        if(jk){
-           
-                condition.push(`siswa.jk = ?`)
+        if (jk) {
+            condition.push(`siswa.jk = ?`);
             params.push(jk);
         }
-        if(tgl_lahir){
-           
-                condition.push(`siswa.tgl_lahir = ?`)
+        if (tgl_lahir) {
+            condition.push(`siswa.tgl_lahir = ?`);
             params.push(tgl_lahir);
         }
-
-        if(nama_siswa){
+        if (nama_siswa) {
             condition.push(`siswa.nama_siswa LIKE ?`);
             params.push(`%${nama_siswa}%`);
         }
-
-        if(alamat){
-            condition.push(`siswa.alamat LIKE ?`)
+        if (alamat) {
+            condition.push(`siswa.alamat LIKE ?`);
             params.push(`%${alamat}%`);
         }
-        if(nama_wali){
-            condition.push(`siswa.nama_wali LIKE ?`)
+        if (nama_wali) {
+            condition.push(`siswa.nama_wali LIKE ?`);
             params.push(`%${nama_wali}%`);
         }
-        if(pekerjaan_wali){
-            condition.push(`siswa.pekerjaan_wali LIKE ?`)
+        if (pekerjaan_wali) {
+            condition.push(`siswa.pekerjaan_wali LIKE ?`);
             params.push(`%${pekerjaan_wali}%`);
         }
 
-        if(condition.length > 0){
-            query += `WHERE ` + condition.join(" AND ")
+        // Apply conditions to queries
+        if (condition.length > 0) {
+            query += ` WHERE ` + condition.join(" AND ");
+            countQuery += ` WHERE ` + condition.join(" AND ");
         }
-        query += ` ORDER BY siswa.nis`;
-        
-        // Execute the query
-        connection.query(query, params, (error, result) => {
+
+        // Add pagination
+        query += ` ORDER BY siswa.nis LIMIT ? OFFSET ?`;
+        params.push(limit, offset);
+
+        // Execute both queries
+        connection.query(countQuery, params.slice(0, -2), (error, countResult) => {
             if (error) {
                 return reject(error);
             }
-            resolve(result);
+            const total = countResult[0].total;
+
+            connection.query(query, params, (error, dataResult) => {
+                if (error) {
+                    return reject(error);
+                }
+                resolve({
+                    data: dataResult,
+                    total,
+                    totalPages: Math.ceil(total / limit),
+                    currentPage: page,
+                });
+            });
         });
     });
 };
+
 
 
 
@@ -216,5 +236,75 @@ const GetSiswaKelas = async (id_kelas) => {
         });
     });
 }
+const getSiswaByGuru = async (id_kelas = null, idth = null, jk = null, tgl_lahir = null, nama_siswa = null, alamat = null, nama_wali = null, pekerjaan_wali = null) => {
+    return new Promise((resolve, reject) => {
+        let query = `
+          SELECT siswa.*, kelas.nama_kelas AS nama_kelas, tahun_ajaran.nama_ajaran AS nama_ajaran 
+          FROM siswa 
+          JOIN kelas ON siswa.id_kelas = kelas.id_kelas 
+          JOIN tahun_ajaran ON siswa.idth = tahun_ajaran.idth
+        `;
 
-module.exports = { getSiswa, getSiswaById, InsertSiswa, UpdateSiswa, DeleteSiswa, GetSiswaKelas, getInfoSiswa, getGrafikSiswa };
+        const params = [];
+        const condition = [];
+
+        // Filter by class if `id_kelas` is provided
+        if (id_kelas) {
+            condition.push (` siswa.id_kelas = ?`);
+            params.push(id_kelas);
+        }
+
+        // Filter by year if `idth` is provided
+        if (idth) {
+            
+                condition.push( `  siswa.idth = ?`);
+           
+            params.push(idth);
+        }
+        if(jk){
+           
+                condition.push(`siswa.jk = ?`)
+            params.push(jk);
+        }
+        if(tgl_lahir){
+           
+                condition.push(`siswa.tgl_lahir = ?`)
+            params.push(tgl_lahir);
+        }
+
+        if(nama_siswa){
+            condition.push(`siswa.nama_siswa LIKE ?`);
+            params.push(`%${nama_siswa}%`);
+        }
+
+        if(alamat){
+            condition.push(`siswa.alamat LIKE ?`)
+            params.push(`%${alamat}%`);
+        }
+        if(nama_wali){
+            condition.push(`siswa.nama_wali LIKE ?`)
+            params.push(`%${nama_wali}%`);
+        }
+        if(pekerjaan_wali){
+            condition.push(`siswa.pekerjaan_wali LIKE ?`)
+            params.push(`%${pekerjaan_wali}%`);
+        }
+
+        if(condition.length > 0){
+            query += `WHERE ` + condition.join(" AND ")
+        }
+        query += ` ORDER BY siswa.nis`;
+        
+        // Execute the query
+        connection.query(query, params, (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(result);
+        });
+    });
+};
+
+
+module.exports = { getSiswa, getSiswaByGuru, getSiswaById, InsertSiswa, UpdateSiswa, DeleteSiswa, GetSiswaKelas, getInfoSiswa, getGrafikSiswa };
+

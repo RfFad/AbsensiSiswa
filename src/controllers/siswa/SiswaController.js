@@ -5,10 +5,11 @@ const { getSekolah } = require('../../models/models_sekolah');
 const { getMapelById } = require("../../models/models_mapel");
 const tahunAjar = require("../../models/models_tahunajar");
 const models_tugas = require("../../models/guru/models_tugas");
+const izin = require("../../models/models_izin")
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
-const {getRiwayatBySiswa} = require('../../models/models_riwayat')
+const {getRiwayatBySiswa, detailRiwayatBysiswa} = require('../../models/models_riwayat')
 
 const storagePath = path.join(__dirname, '..', '..', 'public', 'file_jawaban');
 if (!fs.existsSync(storagePath)) {
@@ -55,8 +56,12 @@ module.exports = {
     },
     renderJadwal: async (req, res) => {
         try {
+            const messages = {
+                success: req.flash("success"),
+                error: req.flash("error"),
+            };
             const rows = await siswamodel.getsiswa(req, res);
-            res.render("siswa/jadwal/jadwal", { rows });
+            res.render("siswa/jadwal/jadwal", { rows, messages });
         } catch (error) {
             console.log(error);
             return res.status(404);
@@ -300,6 +305,39 @@ module.exports = {
         } catch (error) {
             console.log(error);
             return res.status(404).json({error});
+        }
+    },
+    riwayatDetail : async(req, res) => {
+        const {id_riwayat} = req.params
+        try {
+            const data = await detailRiwayatBysiswa(id_riwayat)
+            const rows = await siswamodel.getsiswa(req, res);
+            res.render('siswa/riwayat/detail_riwayat', {rows, data})
+        } catch (error) {
+            console.log(error)
+            res.status(404)
+        }
+    },
+    message : async(req, res) => {
+        const nis = req.session.username
+        try {
+            const rows = await siswamodel.getsiswa(req, res);
+            const countIzin = await izin.izinSiswa(nis)
+            const data = await siswamodel.inbox(nis)
+            res.render('siswa/message/inbox', {rows, data, countIzin : countIzin.length})
+        } catch (error) {
+            console.log(error)
+            res.status(404)
+        }
+    },
+    hapus_notif : async(req, res) => {
+        const {id_notif} = req.params
+        try {
+            await siswamodel.DeleteNotif(id_notif)
+            res.status(202).json({msg : 'berhasil menghapus'})
+        } catch (error) {
+            console.log(error)
+            res.status(404)
         }
     }
 };

@@ -1,5 +1,28 @@
 
 const connection = require('../configs/Databases'); // Adjust if necessary
+const getKelasByName = (nama_kelas) => {
+    return new Promise((resolve, reject) => {
+      connection.query("SELECT * FROM kelas WHERE nama_kelas = ?", [nama_kelas], (error, results) => {
+        if (error) {
+          reject(error); // Jika ada error, reject promise
+        } else {
+          resolve(results.length > 0 ? results[0] : null); // Resolusi data
+        }
+      });
+    });
+}
+const updateKenaikan = (id_siswa, { id_kelas }) => {
+    return new Promise((resolve, reject) => {
+      const query = "UPDATE siswa SET id_kelas = ? WHERE id_siswa = ?";
+      connection.query(query, [id_kelas, id_siswa], (error, results) => {
+        if (error) {
+          reject(error); // Jika error, reject promise
+        } else {
+          resolve(results); // Jika berhasil, resolve dengan hasil query
+        }
+      });
+    });
+  };
 const getKelasById = async (id_kelas) => {
     return new Promise((resolve, reject) => {
         connection.query(`
@@ -84,4 +107,4 @@ const DeleteKelas = async (id_kelas) => {
             
     })
 }
-module.exports = { InsertKelas, getKelas, getKelasById, UpdateKelas, DeleteKelas };
+module.exports = { InsertKelas, updateKenaikan, getKelasByName, getKelas, getKelasById, UpdateKelas, DeleteKelas };

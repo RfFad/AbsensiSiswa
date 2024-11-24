@@ -1,0 +1,120 @@
+<%- include("../../Componen/header") %>
+<title>Admin | Update User</title>
+<%- include("../../Componen/sideNavbar") %>
+
+<div class="content-wrapper">
+  <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Edit Data</h1>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Insert Data Form</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <% if (messages.success) { %>
+                  <div class="alert alert-success">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                      <%= messages.success %>
+                  </div>
+              <% } %>
+              <% if (messages.error) { %>
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                      <%= messages.error %>
+                  </div>
+              <% } %>
+             
+                <form action="/admin/update_user/<%= data.id_user %>" method="post" enctype="multipart/form-data">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label for="">Username</label>
+                  <div class="form-group mb-3">
+                      <input type="text" class="form-control" name="username" placeholder="Masukkan username" value="<%= data.username %>" required>
+                  </div>
+                      <label for="">Email</label>
+                  <div class="form-group mb-3">
+                      <input type="email" class="form-control" name="email" placeholder="Masukkan Email" value="<%= data.email %>" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="jk">Jenis Kelamin</label>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="jk" id="jkLaki" value="laki-laki" required <%= data.jk === 'laki-laki' ? 'checked' : '' %> >
+                      <label class="form-check-label" for="jkLaki" >Laki-Laki</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="jk" id="jkPerempuan" value="perempuan" required <%= data.jk === 'perempuan' ? 'checked' : '' %>>
+                      <label class="form-check-label" for="jkPerempuan">Perempuan</label>
+                    </div>
+                  </div>
+                 
+                    </div>
+                    <div class="col-md-6">
+                    <label for="">Foto</label>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                    </div>
+                    <div class="custom-file">
+                      <input type="file" class="custom-file-input" id="foto" aria-describedby="inputGroupFileAddon01" name="foto" accept="image/*" onchange="previewFoto(event)">
+                      <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                    </div>
+                  </div>
+                  <!-- Tempat untuk menampilkan preview foto yang dipilih -->
+                  <div class="form-group">
+                    <img id="fotoPreview" src="/images/<%= data.foto %>" alt="Preview Foto Siswa" style="width: 150px; margin-top: 10px;" />
+                  </div>
+                  <label for="password">Password</label>
+                  <div class="form-group mb-3">
+                      <input type="password" class="form-control" name="password" placeholder="Masukkan Password">
+                  </div>
+                  
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Simpan perubahan</button>
+                </form>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+      </div>
+    </section>
+  
+</div>
+ <!--script -->
+ <script src="/plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script>
+  function previewFoto(event){
+    const fotoInput = event.target
+    const fotoPreview = $("#fotoPreview")
+
+    //
+    if(fotoInput.files && fotoInput.files[0]){
+      const reader = new FileReader();
+
+      reader.onload = function(e){
+        fotoPreview.attr('src', e.target.result);
+        fotoPreview.show() 
+      }
+      reader.readAsDataURL(fotoInput.files[0])
+    }else{
+      fotoPreview.hide()
+    }
+  }
+</script>
+<%- include("../../Componen/footer") %>

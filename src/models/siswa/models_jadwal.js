@@ -3,7 +3,7 @@ const connection = require('../../configs/Databases');
 module.exports = {
     jadwal : async(id_kelas, hari) => {
         return new  Promise((resolve, reject) =>{
-            connection.query(`SELECT jadwal.idj, hari.hari AS hari, guru.nama_guru AS nama_guru, guru.nip AS nip, 
+            connection.query(`SELECT jadwal.idj, jadwal.idg AS id_guru, hari.hari AS hari, guru.nama_guru AS nama_guru, guru.nip AS nip, 
                    kelas.nama_kelas AS nama_kelas, kelas.id_kelas AS id_kelas, 
                    mata_pelajaran.nama_mp AS nama_mp, jadwal.jam_mulai, jadwal.jam_selesai 
             FROM jadwal 

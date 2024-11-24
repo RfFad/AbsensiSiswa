@@ -436,6 +436,16 @@ WHERE
                 }
             )
         })
+    },
+    hapusTugas : async (id_tugas)  =>{
+        return new Promise((resolve, reject) =>{
+            db.query(`DELETE FROM tugas WHERE id_tugas = ?`, [id_tugas], (error, result) =>{
+                if(error){
+                    return reject(error)
+                }
+                resolve(result)
+            })
+        })
     }
 
     

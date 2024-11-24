@@ -41,7 +41,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
     <div class="container">
       <a href="../../index3.html" class="navbar-brand">
-        <img src="<%= rows.jk === 'laki-laki' ? '/pria.jfif' : '/wanita.jfif' %>" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <img src="/images/<%= rows.foto %>" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" id="foto_fp" style="opacity: .8">
         <span class="brand-text font-weight-light">siswa Page</span>
       </a>
 
@@ -113,6 +113,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Right navbar links -->
 <!-- Right navbar links -->
 <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="/siswa/message">
+      <i class="far fas fa-envelope"></i>
+      <span class="badge badge-warning navbar-badge notif"></span>
+    </a>
+  </li>
   <!-- Profile Dropdown Menu -->
   <li class="nav-item dropdown">
     <a class="nav-link d-flex align-items-center" data-toggle="dropdown" href="#">
@@ -136,11 +142,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </li>
 
   <!-- Control Sidebar Button -->
-  <li class="nav-item">
-    <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-      <i class="fas fa-th-large"></i>
-    </a>
-  </li>
+  
 </ul>
     </div>
   </nav>
@@ -157,103 +159,123 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </button>
             </div>
             <div class="modal-body">
-                <div class="main-body">
-                    <div class="row gutters-sm">
-                        <div class="col-md-4 mb-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex flex-column align-items-center text-center">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
-                                        <div class="mt-3">
-                                            <h4 id="nama"></h4>
-                                            <p class="text-secondary mb-1" id="kelas"></p>
-                                            <p class="text-muted font-size-sm" id="alamat"></p>
-                                            <button class="btn btn-primary">Follow</button>
-                                            <button class="btn btn-outline-primary">Message</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-6">
+              <div class="main-body">
+                  <div class="row gutters-sm">
+                      <div class="col-md-4 mb-3">
+                          <div class="card">
+                              <div class="card-body">
+                                  <div class="d-flex flex-column align-items-center text-center">
+                                    <img src="/images/<%= rows.foto %>" id="foto" alt="Admin" class="rounded-circle" style="width: 150px; height: 170px; object-fit: cover;">
+
+                                      <div class="mt-3">
+                                          <h4 id="nama"></h4>
+                                          <p class="text-secondary mb-1" id="kelas"></p>
+                                          <p class="text-muted font-size-sm" id="alamat"></p>
+                                          <button class="btn btn-primary">Follow</button>
+                                          <button class="btn btn-outline-primary">Message</button>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-8">
+                          <div class="card mb-3">
+                              <div class="card-body">
+                                  <div class="row">
+                                      <div class="col-md-6">
                                           <div class="row">
-                                            <div class="col-md-4">
-                                                <h6 class="mb-0">Mapel Ajar</h6>
-                                            </div>
-                                            <div class="col-md-8 text-secondary">
-                                              <%= rows.nama_mp %>
-                                            </div>
-                                        </div>
-                                            <hr>
-                                            <div class="form-group row">
-                                              <label for="nip" class="col-md-4 col-form-label">Nama</label>
-                                              <div class="col-md-8">
-                                                  <input type="text" id="nip" class="form-control border-0 border-bottom" name="nama_siswa" value="<%= rows.nama_siswa %>" required>
+                                              <div class="col-md-4">
+                                                  <h6 class="mb-0">Nis</h6>
                                               </div>
-                                          </div>                                          
-                                            <hr>
-                                            <div class="form-group row">
-                                              <label for="nip" class="col-md-4 col-form-label">Jabatan</label>
-                                              <div class="col-md-8">
-                                                  <input type="text" id="nip" class="form-control border-0 border-bottom" name="jabatan" value="<%= rows.jabatan %>" required>
+                                              <div class="col-md-8 text-secondary" id="modal-nis">
+                                                <%= rows.nis %>
                                               </div>
-                                          </div>   
-                                            <hr>
-                                            <div class="form-group row">
-                                              <label for="nip" class="col-md-4 col-form-label">Gender</label>
-                                              <div class="col-md-8">
-                                                <select id="gender" name="jk" class="form-control border-0 border-bottom" disabled>
-                                                  <option value="Male" <%= rows.gender === 'Male' ? 'selected' : '' %>>Male</option>
-                                                  <option value="Female" <%= rows.gender === 'Female' ? 'selected' : '' %>>Female</option>
-                                              </select>
-                                              </div>
-                                          </div>   
-                                            <hr>
-                                        </div>
-                                        <div class="col-md-6">
-                                          <div class="row">
-                                            <div class="col-md-4">
-                                                <h6 class="mb-0">Mapel Ajar</h6>
-                                            </div>
-                                            <div class="col-md-8 text-secondary">
-                                              <%= rows.nama_mp %>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="form-group row">
-                                          <label for="nip" class="col-md-4 col-form-label">Tlp</label>
-                                          <div class="col-md-8">
-                                              <input type="text" id="nip" class="form-control border-0 border-bottom" name="tlp" value="<%= rows.tlp %>" required>
                                           </div>
-                                      </div>   
-                                            <hr>
-                                            <div class="form-group row">
-                                              <label for="nip" class="col-md-4 col-form-label">Alamat</label>
-                                              <div class="col-md-8">
-                                                  <input type="text" id="nip" class="form-control border-0 border-bottom" name="alamat" value="<%= rows.alamat %>" required>
+                                          <hr>
+                                          <div class="row">
+                                              <div class="col-md-4">
+                                                  <h6 class="mb-0">Nama</h6>
                                               </div>
-                                          </div>   
-                                            <hr>
-                                            
-                                        
-                                            <div class="row">
-                                                <div class="col-md-12 text-right">
-                                                    <a class="btn btn-info" target="__blank" href="#">Edit</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                              <div class="col-md-8 text-secondary" id="modal-nama">
+                                                <%= rows.nama_siswa %>
+                                              </div>
+                                          </div>
+                                          <hr>
+                                          <div class="row">
+                                              <div class="col-md-4">
+                                                  <h6 class="mb-0">Kelas</h6>
+                                              </div>
+                                              <div class="col-md-8 text-secondary" id="modal-kelas">
+                                                <%= rows.nama_kelas %>
+                                              </div>
+                                          </div>
+                                          <hr>
+                                          <div class="row">
+                                              <div class="col-md-4">
+                                                  <h6 class="mb-0">Tahun Ajaran</h6>
+                                              </div>
+                                              <div class="col-md-8 text-secondary" id="modal-ajaran">
+                                                <%= rows.nama_ajaran %>
+                                              </div>
+                                          </div>
+                                          <hr>
+                                          <div class="row">
+                                              <div class="col-md-4">
+                                                  <h6 class="mb-0">Nama Wali</h6>
+                                              </div>
+                                              <div class="col-md-8 text-secondary" id="modal-wali">
+                                                <%= rows.nama_wali %>
+                                              </div>
+                                          </div>
+                                          <hr>
+                                      </div>
+                                      <div class="col-md-6">
+                                          <div class="row">
+                                              <div class="col-md-4">
+                                                  <h6 class="mb-0">Tlp</h6>
+                                              </div>
+                                              <div class="col-md-8 text-secondary" id="modal-tlp">
+                                                <%= rows.tlp %>
+                                              </div>
+                                          </div>
+                                          <hr>
+                                          <div class="row">
+                                              <div class="col-md-4">
+                                                  <h6 class="mb-0">Address</h6>
+                                              </div>
+                                              <div class="col-md-8 text-secondary" id="modal-alamat">
+                                                <%= rows.alamat %>
+                                              </div>
+                                          </div>
+                                          <hr>
+                                          <div class="row">
+                                              <div class="col-md-4">
+                                                  <h6 class="mb-0">Gender</h6>
+                                              </div>
+                                              <div class="col-md-8 text-secondary" id="modal-jk">
+                                                <%= rows.jk %>
+                                              </div>
+                                          </div>
+                                          <hr>
+                                          <div class="row">
+                                              <div class="col-md-4">
+                                                  <h6 class="mb-0">Pekerjaan Wali</h6>
+                                              </div>
+                                              <div class="col-md-8 text-secondary" id="modal-pekerjaan">
+                                                <%= rows.pekerjaan_wali %>
+                                              </div>
+                                          </div>
+                                          <hr>
+                                          
+                                      </div>
+                                  </div>
+                                  <hr>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
             <!-- /.modal-body -->
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -319,11 +341,42 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
   <script>
     $(document).ready(function(){
+      notif()
+      function notif(){
+      let notif = ''
+      $.ajax({
+        url : '/siswa/data_notif',
+        type : 'GET',
+        success : function(result){
+          var count = result.jumlahNotif
+          if(count > 0){
+          notif += count
+          $('.notif').show();
+        }else{
+          $('.notif').hide()
+        }
+        $('.notif').text(notif)
+        }
+      })
+    }
       $("#profile-link").click(function(){
         $("#modal-info").modal("show")
       })
       $(".close").click(function(){
         $("#modal-info").modal("hide")
       })
+    const foto = "<%= rows.foto %>";
+  
+  
+    if(!foto){
+      $("#foto").attr('src', '/icon.png')
+    }
     })
+
+
+    const foto_fp = "<%= rows.foto %>";
+    if(!foto_fp){
+      $("#foto_fp").attr('src', '/icon.png')
+    }
+   
   </script>

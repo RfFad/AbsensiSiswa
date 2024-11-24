@@ -1,5 +1,5 @@
 <%- include("../Componen/header") %>
-<title>Admin | Edit Riwayat</title>
+<title>Siswa | Rekap absen</title>
 <style>
   .keterangan {
     text-align: center;
@@ -29,7 +29,7 @@
       <div class="col-12">
         <div class="container-fluid mt-3">
           <div class="callout callout-info">
-            <h5><i class="fas fa-info"></i> Note: Pilih terlebih dahulu tahun dan juga bulan untuk menapilkan data rekapnya!</h5>
+            <h5><i class="fas fa-info"></i> Note: Gunakanlah filter jika ingin mencari data rekap yang diinginkan!</h5>
             <!--
             
             -->
@@ -82,14 +82,9 @@
                 <div class="row">
                   <div class="col-lg-6 col-6">
                     <div class="group-info">
-                      <label>Nama Guru</label>
-                      <span>:</span>
-                      <span> </span>
-                    </div>
-                    <div class="group-info">
                       <label>Kelas</label>
                       <span>:</span>
-                      <span> <%= kelas.nama_kelas %></span>
+                      <span> <%= rows.nama_kelas %></span>
                     </div>
                   </div>
               
