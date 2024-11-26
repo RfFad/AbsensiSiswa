@@ -1,0 +1,105 @@
+<%- include("../../Componen/header") %>
+<title>Admin | Riwayat</title>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- Custom CSS -->
+<style>
+    body {
+        background-color: #f4f7f6;
+        font-family: 'Arial', sans-serif;
+    }
+    .card {
+        border: none;
+        border-radius: 15px;
+        transition: transform 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    .icon-circle {
+        width: 50px;
+        height: 50px;
+        background-color: #0d6efd;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        margin-right: 10px;
+    }
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+    .badge-prestasi {
+        background-color: #28a745;
+    }
+    .badge-pelanggaran {
+        background-color: #dc3545;
+    }
+</style>
+<%- include("../../Componen/sideNavbar") %>
+
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6"></div>
+        </div>
+    </div>
+    
+    <section class="content">
+        <div class="container-fluid">
+            <div class="callout callout-info">
+                <label for="" class="bg bg-info" style="width: 200px; height: 25px; border-radius: 10px; text-align: center;">jumlah prestasi :  <%= data.filter(row => row.jenis_riwayat === 'Prestasi').length %>
+                </label>
+              </div>
+            <div class="row" id="data-container">
+                <%  data.forEach((row, index) => { if(row.jenis_riwayat === 'Prestasi') {%> 
+                    <div class="col-md-4">
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="icon-circle" style="background-color: #28a745;">
+                                        <i class="fas fa-trophy"></i>
+                                    </div>
+                                    <div class="ms-3 d-flex flex-column">
+                                        <span class="badge badge-prestasi text-white" style="width: 100px;">Prestasi</span>
+                                        <h5 class="card-title mb-0">Siswa Mendapatkan Prestasi</h5>
+                                    </div>
+                                </div>
+                                <p><strong>Siswa:</strong> <%= row.nama_siswa %></p>
+                                <p><strong>Kelas:</strong> <%= row.nama_kelas %></p>
+                                <p><strong>Tanggal:</strong> <%= new Date(row.tanggal).toLocaleDateString('id-ID').split('/').join('-') %></p>
+                                <p class="text-muted">"<%= row.deskripsi %>"</p>
+                                <div class ='text-center'>
+                               
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }})  %>
+
+                <!-- Data Cards Akan Ditambahkan Dinamis -->
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Modal Tambah -->
+<!-- Tambahkan modal jika diperlukan -->
+
+<!-- Skrip dari AdminLTE dan Bootstrap -->
+<script src="/plugins/jquery/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function() {
+        list();
+
+        });
+</script>
+
+<%- include("../../Componen/footer") %>

@@ -89,6 +89,8 @@ router.post('/insert_riwayat',riwayat.getInsertRiwayat );
 router.get('/riwayat/edit/:id_riwayat', riwayat.getUpdatePageRiwayat)
 router.post('/riwayat/update/:id_riwayat', riwayat.UpdateRiwayat);
 router.post('/riwayat/delete/:id_riwayat', riwayat.getDeleteRiwayat);
+router.get('/prestasi', riwayat.getPrestasi)
+router.get('/pelanggaran', riwayat.getPelanggaran)
 router.get('/getSiswaByKelas/:id_kelas', (req, res) => {
     const id_kelas = req.params.id_kelas;
 

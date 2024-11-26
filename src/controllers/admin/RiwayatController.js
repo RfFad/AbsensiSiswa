@@ -108,6 +108,32 @@ getPageRiwayat : async (req, res) => {
         return res.redirect('/admin/data_riwayat');
     }
 },
+getPrestasi : async(req, res) => {
+    try {
+        const messages = {
+            success: req.flash('success'),
+            error: req.flash('error')
+        };
+        const data = await getRiwayat()
+        res.render('admin/riwayat/prestasi', {data, currentPath : '/admin/prestasi', messages})
+    } catch (error) {
+        console.log(error)
+        return res.status(404)
+    }
+},
+getPelanggaran : async(req, res) => {
+    try {
+        const messages = {
+            success: req.flash('success'),
+            error: req.flash('error')
+        };
+        const data = await getRiwayat()
+        res.render('admin/riwayat/pelanggaran', {data, currentPath : '/admin/pelanggaran', messages})
+    } catch (error) {
+        console.log(error)
+        return res.status(404)
+    }
+},
 
 }
 module.exports = riwayat;
