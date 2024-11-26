@@ -6,7 +6,7 @@ const {
   DeleteGuru,
   getInfoGuru
 } = require("../../models/models_guru");
-const {getMapel} = require("../../models/models_mapel");
+const {getMapel, getMapelByName} = require("../../models/models_mapel");
 const jadwal = require("../../models/models_jadwal")
 const md5 = require("md5");
 const tahun_ajar = require("../../models/models_tahunajar");
@@ -77,6 +77,80 @@ const ExportDataGuru = async (req, res) =>{
     console.log(error)
   }
   }
+const importGuru = async(req, res)=>{
+  upload(req, res, async (err) => {
+    if (err) {
+      req.flash("error", "Error saat mengunggah file!");
+      console.log(err);
+      return res.redirect("/admin/data_siswa");
+    }
+
+    const filePath = req.file.path;
+
+  try {
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.readFile(filePath)
+
+    const worksheet = workbook.getWorksheet(1);
+    if (!worksheet) {
+      throw new Error("Worksheet tidak ditemukan!");
+    }
+    const guruData =[];
+
+    worksheet.eachRow((row, rowNumber) => {
+      if(rowNumber === 1) return;
+
+      const nip = row.getCell(1).value;
+      const nama_guru = row.getCell(2).value;
+      const nama_mp = row.getCell(3).value;
+      const jk = row.getCell(4).value;
+      const jabatan = row.getCell(5).value;
+      const alamat = row.getCell(6).value;
+      const tlp = row.getCell(7).value;
+      const passwordMd5 = row.getCell(8).value;
+    
+    guruData.push({
+      nip,
+      nama_guru,
+      nama_mp,
+      jk,
+      jabatan,
+      alamat,
+      tlp,
+      password : passwordMd5 ? md5(passwordMd5) : md5("12345"),
+      foto : null
+
+    })
+  })
+  for (const guru of guruData){
+    const nama_mp = await getMapelByName(guru.nama_mp)
+    if (!nama_mp) {
+      console.error(`mapel '${guru.nama_mp}' tidak ditemukan.`);
+      continue;
+    }
+    await InsertGuru(
+      guru.nip,
+      guru.nama_guru, 
+      nama_mp.idm, 
+      guru.jk, 
+      guru.jabatan, 
+      guru.alamat, 
+      guru.tlp, 
+      guru.password, 
+      guru.foto
+    )
+  }
+  fs.unlinkSync(filePath);
+
+  req.flash("success", "Data guru berhasil diimpor!");
+  res.redirect("/admin/data_guru");
+  } catch (error) {
+    console.error("Error saat mengimpor data:", error);
+      req.flash("error", "Terjadi kesalahan saat mengimpor data!");
+      res.redirect("/admin/data_guru");
+  }
+})
+}
 const getGuruData = async (req, res) => {
   try {
     const messages = {
@@ -237,5 +311,6 @@ module.exports = {
   updateGuru,
   getDeleteGuru,
   getInfoGuruNip,
-  ExportDataGuru
+  ExportDataGuru,
+  importGuru
 };

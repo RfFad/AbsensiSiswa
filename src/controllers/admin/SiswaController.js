@@ -5,7 +5,8 @@ const {
   UpdateSiswa,
   DeleteSiswa,
   getInfoSiswa,
-  getGrafikSiswa 
+  getGrafikSiswa,
+  getSiswaExport 
 } = require("../../models/models_siswa");
 const { getKelas, getKelasByName, updateKenaikan } = require("../../models/models_kelas");
 const md5 = require("md5");
@@ -90,7 +91,7 @@ try {
   const alamat = req.query.alamat || null;
   const nama_wali = req.query.nama_wali || null;
   const pekerjaan_wali = req.query.pekerjaan_wali || null;
-  const siswaData = await getSiswa(kelas, tahunAjar, jk, tgl_lahir, nama_siswa, alamat, nama_wali, pekerjaan_wali);
+  const siswaData = await getSiswaExport(kelas, tahunAjar, jk, tgl_lahir, nama_siswa, alamat, nama_wali, pekerjaan_wali, page = 1);
 
   const workbook =new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('Data Siswa');
@@ -189,7 +190,7 @@ const importDataSiswa = async (req, res) => {
           alamat,
           pekerjaan_wali,
           tlp,
-          password: rawPassword ? md5(rawPassword) : md5("default123"),
+          password : rawPassword ? md5(rawPassword) : md5("123"),
           foto: null,
           nama_ajaran,
         });

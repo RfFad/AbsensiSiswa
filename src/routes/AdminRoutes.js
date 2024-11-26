@@ -6,7 +6,7 @@ const verifyUser = require('../configs/verify');
 const {authHeader} = require('../configs/jwtMiddleware')  // assuming authHeader is another middleware
 // const {getInsertSiswa, pageInsert} = require('../controllers/AdminCrudController')
 const {getPageKelas, getInsertKelas, getDataKelas, getUpdateKelas, getUpdatePageKelas, getDeleteKelas} = require('../controllers/admin/KelasController')
-const {getInsertGuru, ExportDataGuru, getPageGuru, getGuruData, getUpdatePage, updateGuru, getDeleteGuru, getInfoGuruNip} = require ('../controllers/admin/GuruController')
+const {getInsertGuru, importGuru, ExportDataGuru, getPageGuru, getGuruData, getUpdatePage, updateGuru, getDeleteGuru, getInfoGuruNip} = require ('../controllers/admin/GuruController')
 const{getCountData} = require ('../controllers/admin/CountAdminController');
 const {getInsertMapel, getDataMapel, getPageMapel, getUpdateMapel, getUpdatePageMapel, getDeleteMapel} = require('../controllers/admin/MapelController')
 const {getInsertHari, getPageHari, getDataHari, getDeleteHari, getUpdateHari, getUpdatePageHari} = require ('../controllers/admin/HariController');
@@ -109,6 +109,7 @@ router.get("/tahun_ajaranId/:idth", TahunAjarCont.GetAjaranId)
 router.post("/update_ajaran/:idth", TahunAjarCont.UpdateTahunAjar)
 router.get("/kenaikankelas", naikKelas);
 router.post("/import_siswa", importDataSiswa);
+router.post("/import_guru", importGuru);
 //user
 router.get('/data_user', user.getUser)
 router.post('/insert_user', user.getinsert)

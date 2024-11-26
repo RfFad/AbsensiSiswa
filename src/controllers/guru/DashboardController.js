@@ -1,9 +1,10 @@
 const mysql = require('mysql');
 const gurumodel = require('../../models/guru/models_guru');
 const jadwal = require('../../models/guru/jadwal_model');
-const {getSiswa, getSiswaByGuru} = require('../../models/models_siswa');
+const {getSiswa, getSiswaByNis, getSiswaByGuru} = require('../../models/models_siswa');
 const { getKelas } = require("../../models/models_kelas");
 const tahun_ajar = require("../../models/models_tahunajar");
+const {getRiwayatBySiswa} = require("../../models/models_riwayat")
 const {
     
     getGuruById,
@@ -172,6 +173,33 @@ module.exports = {
         } catch (error) {
             console.log(error)
             res.status(402)
+        }
+    },
+    async riwayatSiswa (req, res) {
+        const {nis} = req.params
+        try {
+            const messages = {
+                success: req.flash("success"),
+                error: req.flash("error"),
+              };
+            
+            const rows = await gurumodel.getguru(req, res);
+            const data = await getRiwayatBySiswa(nis);
+            const siswa = await getSiswaByNis(nis)
+            res.render("guru/riwayat_siswa", {rows, messages, data, siswa})
+        } catch (error) {
+            console.log(error)
+            res.status(404)
+        }
+    },
+    async dataRiwayat(req, res){
+        const {nis} = req.params
+        try {
+            const data = await getRiwayatBySiswa()
+            res.status(202).json({data})
+        } catch (error) {
+            console.log(error)
+            res.status(404)
         }
     }
 };

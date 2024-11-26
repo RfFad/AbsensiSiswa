@@ -15,6 +15,21 @@ const getMapelById = async (idm) => {
             })
     })
 }
+const getMapelByName = async (nama_mp) => {
+    return new Promise((resolve, reject) => {
+        connection.query(`
+           SELECT * FROM mata_pelajaran WHERE nama_mp = ? 
+            `, [nama_mp], (error, result) => {
+                if(error){
+                    return reject(error);
+                }
+                if(result.length === 0){
+                    return reject (new Error('Mapel TIdak Ditemukan'));
+                }
+                resolve(result[0]);
+            })
+    })
+}
 const getMapel = async () => {
     return new Promise((resolve, reject) => {
         connection.query(`
@@ -84,4 +99,4 @@ const DeleteMapel = async (idm) => {
             
     })
 }
-module.exports = { InsertMapel, getMapel, getMapelById, UpdateMapel, DeleteMapel };
+module.exports = { InsertMapel, getMapelByName, getMapel, getMapelById, UpdateMapel, DeleteMapel };

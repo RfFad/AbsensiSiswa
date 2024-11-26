@@ -109,7 +109,64 @@ const getSiswa = async (id_kelas = null, idth = null, jk = null, tgl_lahir = nul
         });
     });
 };
+const getSiswaExport = async (id_kelas = null, idth = null, jk = null, tgl_lahir = null, nama_siswa = null, alamat = null, nama_wali = null, pekerjaan_wali = null,) => {
+    return new Promise((resolve, reject) => {
+       let query = ` SELECT siswa.*, kelas.nama_kelas AS nama_kelas, tahun_ajaran.nama_ajaran AS nama_ajaran 
+          FROM siswa 
+          JOIN kelas ON siswa.id_kelas = kelas.id_kelas 
+          JOIN tahun_ajaran ON siswa.idth = tahun_ajaran.idth`
 
+       const params = [];
+       const condition = [];
+
+       if (id_kelas) {
+        condition.push(`siswa.id_kelas = ?`);
+        params.push(id_kelas);
+    }
+    if (idth) {
+        condition.push(`siswa.idth = ?`);
+        params.push(idth);
+    }
+    if (jk) {
+        condition.push(`siswa.jk = ?`);
+        params.push(jk);
+    }
+    if (tgl_lahir) {
+        condition.push(`siswa.tgl_lahir = ?`);
+        params.push(tgl_lahir);
+    }
+    if (nama_siswa) {
+        condition.push(`siswa.nama_siswa LIKE ?`);
+        params.push(`%${nama_siswa}%`);
+    }
+    if (alamat) {
+        condition.push(`siswa.alamat LIKE ?`);
+        params.push(`%${alamat}%`);
+    }
+    if (nama_wali) {
+        condition.push(`siswa.nama_wali LIKE ?`);
+        params.push(`%${nama_wali}%`);
+    }
+    if (pekerjaan_wali) {
+        condition.push(`siswa.pekerjaan_wali LIKE ?`);
+        params.push(`%${pekerjaan_wali}%`);
+    }
+
+    // Apply conditions to queries
+    if (condition.length > 0) {
+        query += ` WHERE ` + condition.join(" AND ");
+    }
+
+       query += ` ORDER BY siswa.nis `;
+
+        connection.query(query, params, (error, result) => {
+            if(error){
+                return reject(error)
+            }
+            resolve(result);
+        });
+    });
+}
 
 
 
@@ -118,6 +175,23 @@ const getSiswaById = async (id_siswa) => {
         connection.query(`
           SELECT * FROM siswa WHERE id_siswa = ?
         `, [id_siswa], (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+            if (result.length === 0) {
+                return reject(new Error('Siswa tidak ditemukan'));
+            }
+            resolve(result[0]);
+        });
+    });
+}
+const getSiswaByNis = async (nis) => {
+    return new Promise((resolve, reject) => {
+        connection.query(`
+          SELECT siswa.*, kelas.nama_kelas AS nama_kelas
+          FROM siswa 
+          JOIN kelas ON siswa.id_kelas = kelas.id_kelas  WHERE siswa.nis = ?
+        `, [nis], (error, result) => {
             if (error) {
                 return reject(error);
             }
@@ -306,5 +380,5 @@ const getSiswaByGuru = async (id_kelas = null, idth = null, jk = null, tgl_lahir
 };
 
 
-module.exports = { getSiswa, getSiswaByGuru, getSiswaById, InsertSiswa, UpdateSiswa, DeleteSiswa, GetSiswaKelas, getInfoSiswa, getGrafikSiswa };
+module.exports = { getSiswa, getSiswaExport, getSiswaByNis, getSiswaByGuru, getSiswaById, InsertSiswa, UpdateSiswa, DeleteSiswa, GetSiswaKelas, getInfoSiswa, getGrafikSiswa };
 

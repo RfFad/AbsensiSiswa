@@ -446,6 +446,16 @@ WHERE
                 resolve(result)
             })
         })
+    },
+    hapusJawaban : async (id_tugas)  =>{
+        return new Promise((resolve, reject) =>{
+            db.query(`DELETE FROM pengumpulan_tugas WHERE id_tugas = ?`, [id_tugas], (error, result) =>{
+                if(error){
+                    return reject(error)
+                }
+                resolve(result)
+            })
+        })
     }
 
     

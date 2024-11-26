@@ -34,7 +34,7 @@ const siswamodel = {
     },
     inbox : async (nis) => {
         return new Promise((resolve, reject) =>{
-            connection.query(` SELECT notifications_riwayat.*, sekolah.nama AS nama_sekolah, siswa.nis FROM notifications_riwayat INNER JOIN siswa ON notifications_riwayat.id_siswa = siswa.id_siswa INNER JOIN sekolah ON notifications_riwayat.id_sekolah = sekolah.id_sekolah WHERE siswa.nis = ?`, [nis], (error, result) =>{
+            connection.query(` SELECT notifications_riwayat.*, sekolah.nama AS nama_sekolah, siswa.nis FROM notifications_riwayat INNER JOIN siswa ON notifications_riwayat.id_siswa = siswa.id_siswa INNER JOIN sekolah ON notifications_riwayat.id_sekolah = sekolah.id_sekolah WHERE siswa.nis = ? ORDER BY notifications_riwayat.created_at DESC`, [nis], (error, result) =>{
                 if(error){
                     return reject(error)
                 }

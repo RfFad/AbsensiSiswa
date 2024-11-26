@@ -36,6 +36,8 @@ router.post('/read/:id_guru', izin.read)
 router.get('/setujui/:id_izin', izin.setujuiIzin)
 router.get('/tolak/:id_izin', izin.tolakIzin)
 router.get('/countIzin', izin.pesanCount)
+router.get('/riwayat_siswa/:nis', Dashboard.riwayatSiswa)
+//router.get('/riwayat', Dashboard.dataRiwayat)
 
 router.post('/hapusTugas/:id_tugas', Tugas.deleteTugas)
 module.exports = router;

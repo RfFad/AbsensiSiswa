@@ -1,240 +1,375 @@
-const connection = require('../configs/Databases');
+<%- include("./Componen/header") %>
+<title>Guru | Data siswa</title>
+<%- include("./Componen/sidebar") %>
 
-//
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h4>Data Siswa</h4>
+            </div>
+        </div>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row" style="display: none;" id="filter">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <select class="form-control" id="kelasSelect">
+                                            <option value="semua">Pilih Kelas</option>
+                                            <option value="semua">Semua</option>
+                                            <% datakelas.forEach(k => { %>
+                                                <option value="<%= k.id_kelas %>"><%= k.nama_kelas %></option>
+                                            <% }); %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <select class="form-control" id="genderSelect">
+                                            <option value="semua">Pilih Gender</option>
+                                            <option value="semua">Semua</option>
+                                            <option value="laki-laki">Laki-laki</option>
+                                            <option value="perempuan">Perempuan</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="siswaSelect" placeholder="Nama Siswa">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="waliSelect" placeholder="Nama Wali">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <select class="form-control" id="tahunSelect">
+                                            <option value="semua">Pilih Tahun Ajar</option>
+                                            <% dataTahun.forEach(t => { %>
+                                                <option value="<%= t.idth %>"><%= t.nama_ajaran %></option>
+                                            <% }); %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <input type="date" class="form-control" id="dateSelect">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="alamatSelect" placeholder="Alamat">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="pekerjaanSelect" placeholder="Pekerjaan Wali">
+                                    </div>
+                                </div>
+                                <button id="filterButton" class="btn btn-secondary ml-2" style="height: 35px;">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-const getGrafikSiswa = async () => {
-    return new Promise((resolve, reject) => {
-        connection.query(`
-            SELECT tahun_ajaran.nama_ajaran AS tahun_ajaran, COUNT(siswa.id_siswa) AS jumlah_siswa
-            FROM siswa
-            JOIN kelas ON siswa.id_kelas = kelas.id_kelas
-            JOIN tahun_ajaran ON siswa.idth = tahun_ajaran.idth
-            GROUP BY tahun_ajaran.nama_ajaran
-            ORDER BY tahun_ajaran.nama_ajaran
-        `, [], (error, result) => {
-            if (error) {
-                return reject(error);
-            }
-            if (result.length === 0) {
-                return reject(new Error('Tidak ada data siswa yang ditemukan'));
-            }
-            resolve(result);
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex flex-column flex-md-row justify-content-between mb-2">
+                                <div class="d-flex justify-content-end">
+                                    <a href="#" class="btn btn-warning mr-2" id="filter-btn">Filter</a>
+                                    <button type="submit" class="btn btn-secondary mr-2">Search</button>
+                                    <input type="text" class="form-control" name="table_search" style="width: 160px;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <div class="body">
+                                    <!-- Konten tabel akan dimuat di sini -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade" id="modal-siswa">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Informasi Siswa</h4>
+                <button type="button" id="modal-close-btn" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="main-body">
+                    <div class="row gutters-sm">
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex flex-column align-items-center text-center">
+                                        <img src="" id="fotoFp" alt="Admin" class="rounded-circle" style="width: 150px; height: 170px; object-fit: cover;">
+                                        <div class="mt-3">
+                                            <h4 id="nama"></h4>
+                                            <p class="text-secondary mb-1" id="kelas"></p>
+                                            <p class="text-muted font-size-sm" id="alamat"></p>
+                                            <button class="btn btn-primary">Follow</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <h6 class="mb-0">Nis</h6>
+                                                </div>
+                                                <div class="col-md-8 text-secondary" id="modal-nis">
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <h6 class="mb-0">Nama</h6>
+                                                </div>
+                                                <div class="col-md-8 text-secondary" id="modal-nama">
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <h6 class="mb-0">Kelas</h6>
+                                                </div>
+                                                <div class="col-md-8 text-secondary" id="modal-kelas">
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <h6 class="mb-0">Tahun Ajaran</h6>
+                                                </div>
+                                                <div class="col-md-8 text-secondary" id="modal-ajaran">
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <h6 class="mb-0">Nama Wali</h6>
+                                                </div>
+                                                <div class="col-md-8 text-secondary" id="modal-wali">
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <h6 class="mb-0">Tlp</h6>
+                                                </div>
+                                                <div class="col-md-8 text-secondary" id="modal-tlp">
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <h6 class="mb-0">Address</h6>
+                                                </div>
+                                                <div class="col-md-8 text-secondary" id="modal-alamat">
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <h6 class="mb-0">Gender</h6>
+                                                </div>
+                                                <div class="col-md-8 text-secondary" id="modal-jk">
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <h6 class="mb-0">Pekerjaan Wali</h6>
+                                                </div>
+                                                <div class="col-md-8 text-secondary" id="modal-pekerjaan">
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Skrip dari AdminLTE dan Bootstrap -->
+<script src="/plugins/jquery/jquery.min.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        // Panggil list dengan filter jika ada
+        list();
+
+        // Toggle filter
+        $("#filter-btn").click(function() {
+            $("#filter").slideToggle();
         });
-    });
-};
-const getSiswa = async (id_kelas = null, idth = null, jk = null, tgl_lahir = null, nama_siswa = null, alamat = null, nama_wali = null, pekerjaan_wali = null, page = 1) => {
-    const limit = 34;
-    const offset = (page - 1) * limit;
 
-    return new Promise((resolve, reject) => {
-        let query = `
-          SELECT siswa.*, kelas.nama_kelas AS nama_kelas, tahun_ajaran.nama_ajaran AS nama_ajaran 
-          FROM siswa 
-          JOIN kelas ON siswa.id_kelas = kelas.id_kelas 
-          JOIN tahun_ajaran ON siswa.idth = tahun_ajaran.idth
-        `;
-
-        let countQuery = `
-          SELECT COUNT(*) AS total 
-          FROM siswa 
-          JOIN kelas ON siswa.id_kelas = kelas.id_kelas 
-          JOIN tahun_ajaran ON siswa.idth = tahun_ajaran.idth
-        `;
-
-        const params = [];
-        const condition = [];
-
-        // Filter conditions
-        if (id_kelas) {
-            condition.push(`siswa.id_kelas = ?`);
-            params.push(id_kelas);
-        }
-        if (idth) {
-            condition.push(`siswa.idth = ?`);
-            params.push(idth);
-        }
-        if (jk) {
-            condition.push(`siswa.jk = ?`);
-            params.push(jk);
-        }
-        if (tgl_lahir) {
-            condition.push(`siswa.tgl_lahir = ?`);
-            params.push(tgl_lahir);
-        }
-        if (nama_siswa) {
-            condition.push(`siswa.nama_siswa LIKE ?`);
-            params.push(`%${nama_siswa}%`);
-        }
-        if (alamat) {
-            condition.push(`siswa.alamat LIKE ?`);
-            params.push(`%${alamat}%`);
-        }
-        if (nama_wali) {
-            condition.push(`siswa.nama_wali LIKE ?`);
-            params.push(`%${nama_wali}%`);
-        }
-        if (pekerjaan_wali) {
-            condition.push(`siswa.pekerjaan_wali LIKE ?`);
-            params.push(`%${pekerjaan_wali}%`);
-        }
-
-        // Apply conditions to queries
-        if (condition.length > 0) {
-            query += ` WHERE ` + condition.join(" AND ");
-            countQuery += ` WHERE ` + condition.join(" AND ");
-        }
-
-        // Add pagination
-        query += ` ORDER BY siswa.nis LIMIT ? OFFSET ?`;
-        params.push(limit, offset);
-
-        // Execute both queries
-        connection.query(countQuery, params.slice(0, -2), (error, countResult) => {
-            if (error) {
-                return reject(error);
+        // Fungsi untuk mengambil data dengan filter
+        $("#filterButton").on("click", function() {
+    const tahunSelected = $("#tahunSelect").val();
+    const selectedKelas = $("#kelasSelect").val();
+    const genderSelect = $("#genderSelect").val();
+    const dateSelect = $("#dateSelect").val();
+    const siswaSelect = $("#siswaSelect").val();
+    const alamatSelect = $("#alamatSelect").val();
+    const waliSelect = $("#waliSelect").val();
+    const pekerjaanSelect = $("#pekerjaanSelect").val();
+    
+    let params = [];
+    localStorage.setItem("tahunSelect", tahunSelected);
+    localStorage.setItem("kelasSelect", selectedKelas);
+    localStorage.setItem("genderSelect", genderSelect);
+    // Cek dan tambahkan parameter filter jika ada
+    if (tahunSelected && tahunSelected !== "semua") {
+        params.push(`idth=${tahunSelected}`); 
+    }
+    if (selectedKelas && selectedKelas !== "semua") {
+        params.push(`id_kelas=${selectedKelas}`); 
+    }
+    if (genderSelect && genderSelect !== "semua") {
+        params.push(`jk=${genderSelect}`); 
+    }
+    if ( dateSelect && dateSelect !== "semua") {
+        params.push(`tgl_lahir=${dateSelect}`); 
+    }
+    if ( siswaSelect && siswaSelect !== "semua") {
+        params.push(`nama_siswa=${siswaSelect}`); 
+    }
+    if(alamatSelect && alamatSelect !== "semua"){
+      params.push(`alamat=${alamatSelect}`)
+    }
+    if(waliSelect && waliSelect !== "semua"){
+      params.push(`nama_wali=${waliSelect}`)
+    }
+    if(pekerjaanSelect && pekerjaanSelect !== "semua"){
+      params.push(`pekerjaan_wali=${pekerjaanSelect}`)
+    }
+    // Gabungkan parameter jika ada filter yang dipilih
+    if (params.length > 0) {
+                url = "/guru/list_siswa?" + params.join("&");
+            } else {
+                url = "/guru/list_siswa"; // Jika tidak ada filter, URL standar
             }
-            const total = countResult[0].total;
-
-            connection.query(query, params, (error, dataResult) => {
-                if (error) {
-                    return reject(error);
-                }
-                resolve({
-                    data: dataResult,
-                    total,
-                    totalPages: Math.ceil(total / limit),
-                    currentPage: page,
-                });
-            });
-        });
-    });
-};
-
-
-
-
-const getSiswaById = async (id_siswa) => {
-    return new Promise((resolve, reject) => {
-        connection.query(`
-          SELECT * FROM siswa WHERE id_siswa = ?
-        `, [id_siswa], (error, result) => {
-            if (error) {
-                return reject(error);
-            }
-            if (result.length === 0) {
-                return reject(new Error('Siswa tidak ditemukan'));
-            }
-            resolve(result[0]);
-        });
-    });
-}
-const getInfoSiswa = async (nis) => {
-    return new Promise((resolve, reject) => {
-        connection.query(`
-         SELECT siswa.*, kelas.nama_kelas as nama_kelas, tahun_ajaran.nama_ajaran AS nama_ajaran 
-          FROM siswa 
-          JOIN kelas ON siswa.id_kelas = kelas.id_kelas JOIN tahun_ajaran ON siswa.idth = tahun_ajaran.idth WHERE nis = ?
-        `, [nis], (error, result) => {
-            if (error) {
-                return reject(error);
-            }
-            if (result.length === 0) {
-                return reject(new Error('Siswa tidak ditemukan'));
-            }
-            resolve(result[0]);
-        });
-    });
-}
-
-const InsertSiswa = async (
-    nis, nama_siswa, tlp, tgl_lahir, id_kelas, idth, jk, nama_wali, alamat, pekerjaan_wali, password, foto
-  ) => {
-    return new Promise((resolve, reject) => {
-      // Cek apakah NIS sudah ada
-      connection.query(`
-        SELECT * FROM siswa WHERE nis = ?
-      `, [nis], (error, results) => {
-        if (error) return reject(error);
-  
-        if (results.length > 0) {
-          return reject(new Error('NIS sudah digunakan, tidak boleh menambahkan data NIS yang sama'));
-        }
-  
-        // Jika NIS belum ada, lanjutkan insert data
-        connection.query(`
-          INSERT INTO siswa 
-          (nis, nama_siswa, tlp, tgl_lahir, id_kelas, idth, jk, nama_wali, alamat, pekerjaan_wali, password, foto) 
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `, [nis, nama_siswa, tlp, tgl_lahir, id_kelas, idth, jk, nama_wali, alamat, pekerjaan_wali, password, foto], 
-        (insertError, insertResults) => {
-          if (insertError) return reject(insertError);
-          resolve(insertResults);
-        });
-      });
-    });
-  };
-
-  const UpdateSiswa = async (id_siswa, nis, nama_siswa, tlp, tgl_lahir, id_kelas, idth, jk, nama_wali, alamat, pekerjaan_wali, password, foto) => {
-    return new Promise((resolve, reject) => {
-        // Logging untuk melihat data yang masuk ke dalam query
-        
-
-        connection.query(`
-            SELECT * FROM siswa WHERE id_siswa = ?
-        `, [id_siswa], (error, results) => {
-            if (error) {
-                console.error("Error SELECT siswa:", error);
-                return reject(error);
-            }
-
-            if (results.length === 0) {
-                console.error("Siswa tidak ditemukan dengan id_siswa:", id_siswa);
-                return reject(new Error('Data siswa tidak ditemukan'));
-            }
-
-            // Update data siswa
-            connection.query(`
-                UPDATE siswa 
-                SET nis = ?, nama_siswa = ?, tlp =?, tgl_lahir = ?, id_kelas = ?, idth = ?, jk = ?, nama_wali = ?, alamat = ?,pekerjaan_wali = ?, password = ?, foto = ? 
-                WHERE id_siswa = ?
-            `, [nis, nama_siswa, tlp, tgl_lahir, id_kelas, idth, jk, nama_wali, alamat, pekerjaan_wali, password, foto, id_siswa], (updateError, updateResults) => {
-                if (updateError) {
-                    console.error("Error UPDATE siswa:", updateError);
-                    return reject(updateError);
-                }
-
-                // Logging jika update berhasil
-                console.log("Berhasil mengupdate data siswa dengan id:", id_siswa);
-                resolve(updateResults);
-            });
-        });
-    });
-};
-
-const DeleteSiswa = async (id_siswa) => {
-    return new Promise ((resolve, reject) => {
-       
-                connection.query(`
-                    DELETE FROM siswa WHERE id_siswa = ?
-                    `, [id_siswa], (deleteError,deleteResults) => {
-                        if(deleteError) return reject(deleteError)
-                        resolve(deleteResults);
-                    })
-
             
-    })
-}
-const GetSiswaKelas = async (id_kelas) => {
-    return new Promise((resolve, reject) => {
-        connection.query(`
-          SELECT siswa.*, kelas.nama_kelas AS nama_kelas, tahun_ajaran.nama_ajaran AS nama_ajaran FROM siswa JOIN kelas ON siswa.id_kelas = kelas.id_kelas JOIN tahun_ajaran ON siswa.idth = tahun_ajaran.idth WHERE siswa.id_kelas = ? order by siswa.nis; 
-        `,[id_kelas], (error, result) => {
-            if (error) {
-                return reject(error);
+            // Panggil fungsi list untuk menampilkan data dengan filter
+            list(url);
+    // Redirect ke URL yang sudah difilter
+    
+});   });
+
+    // Fungsi untuk menampilkan list siswa
+    function list(url = `/guru/list_siswa`) {
+        let html = "";
+        $.ajax({
+            url: url,  // Pastikan endpoint ini benar
+            type: "GET",
+            success: function(result) {
+                const val = result.data;
+                if (val.length > 0) {
+                    html += "<table class='table table-bordered table-striped table-hover'>";
+                    html += "<thead class='bg-dark'>";
+                    html += "<tr>";
+                    html += "<th>No</th>";
+                    html += "<th>Nis</th>";
+                    html += "<th>Foto</th>";
+                    html += "<th>Nama Siswa</th>";
+                    html += "<th>Kelas</th>";
+                    html += "<th>Gender</th>";
+                    html += "<th>Tahun Ajaran</th>";
+                    html += "<th>Action</th>";
+                    html += "</tr>";
+                    html += "</thead><tbody>";
+                    $.each(val, function(index, row) {
+                        const foto = row.foto ? `/images/${row.foto}` : '/icon.png';
+                        html += `<tr>`;
+                        html += `<td>${index + 1}</td>`;
+                        html += `<td>${row.nis}</td>`;
+                        html += `<td><img style="width: 100px; height: 110px; object-fit: cover;" src="${foto}" class="img-thumbnail" alt=""></td>`;
+                        html += `<td>${row.nama_siswa}</td>`;
+                        html += `<td>${row.nama_kelas}</td>`;
+                        html += `<td>${row.jk}</td>`;
+                        html += `<td>${row.nama_ajaran}</td>`;
+                        html += `<td><a href="#" class="btn btn-primary info-btn" data-nis="${row.nis}"><i class="fa fa-info-circle"></i></a></td>`;
+                        html += "</tr>";
+                    });
+                    html += "</tbody></table>";
+                } else {
+                    html = "<p>No data available</p>";
+                }
+                $(".body").html(html);
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+                $(".body").html("<p>Error loading data</p>");
             }
-            resolve(result);
+        });
+    }
+
+    // Fungsi untuk menampilkan informasi detail siswa dalam modal
+    $(document).on('click', '.info-btn', function() {
+        const nis = $(this).data("nis");
+
+        $.ajax({
+            url: `/admin/info_siswa/${nis}`,
+            method: 'GET',
+            success: function(response) {
+                if (response.siswa) {
+                    const data = response.siswa;
+                    $('#modal-nis').text(data.nis);
+                    $('#modal-nama').text(data.nama_siswa);
+                    $('#modal-ajaran').text(data.nama_ajaran);
+                    $('#nama').text(data.nama_siswa);
+                    $('#modal-kelas').text(data.nama_kelas);
+                    $('#kelas').text(data.nama_kelas);
+                    $('#modal-jk').text(data.jk);
+                    $('#modal-alamat').text(data.alamat);
+                    $('#alamat').text(data.alamat);
+                    $('#modal-wali').text(data.nama_wali);
+                    $('#modal-pekerjaan').text(data.pekerjaan_wali);
+                    $('#modal-tlp').text("(+62) " + data.tlp);
+                    $('#fotoFp').attr('src', data.foto ? `/images/${data.foto}` : '/icon.png');
+                    $("#modal-siswa").modal("show");
+                } else {
+                    alert('Data tidak ditemukan');
+                }
+            },
+            error: function() {
+                alert('Terjadi kesalahan saat mengambil data.');
+            }
         });
     });
-}
 
-module.exports = { getSiswa, getSiswaById, InsertSiswa, UpdateSiswa, DeleteSiswa, GetSiswaKelas, getInfoSiswa, getGrafikSiswa };
+    // Menutup modal
+    $("#modal-close-btn").click(function () {
+        $('#modal-siswa').modal('hide');
+    });
+
+</script>
+
+<%- include("./Componen/footer") %>

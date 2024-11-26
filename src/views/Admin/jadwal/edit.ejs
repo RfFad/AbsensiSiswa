@@ -72,7 +72,7 @@
                         <label for="guru"> GURU </label>
                         <select class="form-control" name="idg" id="">
                           <% guru.forEach ((row )=> { %>
-                         <option value="<%= row.id_guru %>" <%= jadwal.idg === row.id_guru ? 'selected' : ''%>><%= row.nama_guru %></option>
+                         <option value="<%= row.id_guru %>" <%= jadwal.idg === row.id_guru ? 'selected' : ''%>><%= row.nama_guru %> - <%= row.nama_mp %></option>
                          <% }) %>
                         </select>
                        </div>

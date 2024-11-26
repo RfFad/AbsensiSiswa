@@ -217,6 +217,7 @@ module.exports = {
         const {id_tugas} = req.params
         try {
             await modelTugas.hapusTugas(id_tugas);
+            await modelTugas.hapusJawaban(id_tugas)
             res.status(200).json({message : 'berhasil menghapus data'})
         } catch (error) {
             console.log(error)

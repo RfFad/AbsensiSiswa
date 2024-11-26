@@ -5,6 +5,7 @@ const hariIna = require('../../configs/hari');
 const guru = require('../../models/guru/models_guru');
 const {getKelasById} = require('../../models/models_kelas')
 const {InsertNotification} = require('../../models/models_riwayat');
+const gurumodel = require('../../models/guru/models_guru');
 const absen = {
     showAbsensiPage: async (req, res) => {
         const { id_kelas } = req.params;
@@ -83,7 +84,7 @@ const absen = {
         try {
             const entries = [];
             const { id_jadwal, id_guru, id_kelas } = req.body;
-            const tanggal = new Date().toISOString().split('T')[0]; // Mengambil tanggal hari ini dalam format YYYY-MM-DD 
+            const tanggal = new Date().toISOString().split('T')[0]; // Mengambil tanggal hari ini dalam format YYYY-MM-DD
     
             // Siapkan data absensi
             for (const key of Object.keys(req.body)) {
@@ -93,28 +94,28 @@ const absen = {
     
                     // Generate id_absen berdasarkan id_siswa, id_jadwal, dan tanggal
                     const id_absen = `${id_siswa}_${id_jadwal}_${tanggal}`; // id_absen berdasarkan id_siswa, id_jadwal, tanggal
-                    entries.push([id_absen,  id_siswa, id_kelas, id_jadwal, id_guru, tanggal, status]); // Format data sesuai SQL
+                    entries.push([id_absen, id_siswa, id_kelas, id_jadwal, id_guru, tanggal, status]); // Format data sesuai SQL
                 }
             }
     
             // Gunakan upsert untuk menyimpan data absensi
             await absenModel.saveAbsen(entries); // Menggunakan upsert untuk memasukkan atau memperbarui data absensi
-    
             // Kirim notifikasi untuk siswa yang tidak hadir
+            const guru = await gurumodel.getguru(req, res)
             for (const entry of entries) {
-                if (entry[5] === 'alpa') { // Status siswa yang tidak hadir
+                if (entry[6] === 'alpa') { // Status siswa "Alpa"
                     // Simpan notifikasi ke database
                     await InsertNotification(
                         entry[1], // id_siswa
-                        `Anda tidak hadir di jam pelajaran pada tanggal ${tanggal}`, // Pesan
+                        `Anda tidak hadir di jam pelajaran ${guru.nama_mp} pada tanggal ${tanggal}`, // Pesan
                         'warning' // Tipe notifikasi
                     );
     
                     // Kirim notifikasi real-time jika menggunakan socket.io
                     if (res.io) {
-                        res.io.to(`siswa_${entry[1]}`).emit('notification', {
+                        await res.io.to(`siswa_${entry[1]}`).emit('notification', {
                             type: 'warning',
-                            message: `Anda tidak hadir di jam pelajaran pada tanggal ${tanggal}`,
+                            message: `Anda tidak hadir di jam pelajaran ${guru.nama_mp} pada tanggal ${tanggal}`,
                         });
                     }
                 }
@@ -127,6 +128,7 @@ const absen = {
             res.status(500).send('Server Error');
         }
     },
+    
     
     
     detailAbsen: async (req, res) => {
