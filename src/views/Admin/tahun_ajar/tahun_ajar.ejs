@@ -50,6 +50,7 @@
                   <tr class="bg-dark">
                     <th style="width: 1%;">No</th>
                     <th>Tahun Ajar</th>
+                    <th>Status</th>
                     <th style="width: 120px;">Action</th>
                   </tr>
                 </thead>
@@ -60,6 +61,7 @@
                     <tr>
                     <td><%= index + 1 %></td>
                     <td><%= tahun.nama_ajaran %></td>
+                    <td><label class="btn <%= tahun.status === 1 ? 'btn-success' : 'btn-danger' %>"><%= tahun.status === 1 ? 'Aktif' : 'Selesai' %></label></td>
                     <td>
                       <a href="/admin/tahun_ajaranId/<%= tahun.idth %>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
                       <form action="/admin/delete_ajaran/<%= tahun.idth %>?_method=DELETE" method="post" style="display:inline;" class="delete-form">

@@ -13,7 +13,7 @@ const tahunajar = {
     })
 },
 
- InsertTahunAjar : async (nama_ajaran) => {
+ InsertTahunAjar : async (nama_ajaran, status) => {
     return new Promise ((resolve, reject) => {
         connect.query(`
             SELECT * FROM tahun_ajaran WHERE nama_ajaran = ?
@@ -23,8 +23,8 @@ const tahunajar = {
                         return reject(new Error('Hari tidak boleh sama'))
                     };
                 connect.query(`
-                   INSERT INTO tahun_ajaran (nama_ajaran) VALUES (?) 
-                    `, [nama_ajaran], (InsertError, InsertResults)=> {
+                   INSERT INTO tahun_ajaran (nama_ajaran, status) VALUES (?, ?) 
+                    `, [nama_ajaran, status], (InsertError, InsertResults)=> {
                     if(InsertError) return reject (error);
                     resolve(InsertResults);
                 });
@@ -61,7 +61,7 @@ getTahunAjaranByName : async ( nama_ajaran ) => {
             })
     })
 },
- UpdateTahun : async (idth, nama_ajaran) => {
+ UpdateTahun : async (idth, nama_ajaran, status) => {
     return new Promise((resolve, reject) => {
         connect.query(`
             SELECT * FROM tahun_ajaran WHERE idth = ?
@@ -73,8 +73,8 @@ getTahunAjaranByName : async ( nama_ajaran ) => {
                 }
 
                 connect.query (`
-                   UPDATE tahun_ajaran SET nama_ajaran = ?  WHERE idth = ?
-                    `, [nama_ajaran, idth], (updateError, updateResults) => {
+                   UPDATE tahun_ajaran SET nama_ajaran = ?, status= ?  WHERE idth = ?
+                    `, [nama_ajaran, status, idth], (updateError, updateResults) => {
                         if(updateError) return reject (updateError);
                         resolve(updateResults);
                     })

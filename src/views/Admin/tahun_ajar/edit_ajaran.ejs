@@ -21,6 +21,12 @@
                 <div class="form-group mb-3">
                     <input type="text" class="form-control" name="nama_ajaran" placeholder="Masukkan Tahun Ajar" value="<%= tahun.nama_ajaran%>" required>
                 </div>
+                <div class="form-group mb-3">
+                    <select name="status" class="form-control" id="">
+                        <option value="1" <%= tahun.status === 1 ? 'selected' : '' %>>aktif</option>
+                        <option value="0" <%= tahun.status === 0 ? 'selected' : '' %>>selesai</option>
+                    </select>
+                </div>
                 <a href="/admin/tahun_ajaran" class="btn btn-secondary">Kembali</a>
                 <button type="submit" class="btn btn-primary">Edit Data</button>
             </form>

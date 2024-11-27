@@ -33,32 +33,25 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).single('foto');
 
-// Method untuk menambahkan siswa
 const naikKelas = async (req, res) => {
   try {
-    // Ambil semua data siswa
-    const siswaData = await getSiswa();
+    const siswaData = await getSiswaExport();
 
     for (const siswa of siswaData) {
       const { id_siswa, nama_kelas } = siswa;
-
-      // Pisahkan angka dan huruf dari nama_kelas
       const angkaKelas = parseInt(nama_kelas.match(/\d+/)[0]);
       const hurufKelas = nama_kelas.replace(angkaKelas, '');
 
       let kelasBaru = null;
 
-      // Tentukan kelas baru
       if (angkaKelas === 7) {
         kelasBaru = `8${hurufKelas}`;
       } else if (angkaKelas === 8) {
         kelasBaru = `9${hurufKelas}`;
       } else if (angkaKelas === 9) {
-        console.log(`Siswa ${id_siswa} sudah di kelas terakhir.`);
-        continue;
+        kelasBaru = `alumni`;
       }
 
-      // Ambil id_kelas dari kelas baru
       const kelasData = await getKelasByName(kelasBaru);
       if (!kelasData) {
         console.error(`Kelas ${kelasBaru} tidak ditemukan di database.`);
@@ -66,8 +59,6 @@ const naikKelas = async (req, res) => {
       }
 
       const id_kelas_baru = kelasData.id_kelas;
-
-      // Update id_kelas siswa
       await updateKenaikan(id_siswa, { id_kelas: id_kelas_baru });
       console.log(`Siswa ${id_siswa} naik ke kelas ${kelasBaru}`);
     }
@@ -80,6 +71,7 @@ const naikKelas = async (req, res) => {
     res.redirect("/admin/data_siswa");
   }
 };
+
 const ExportDataSiswa = async (req, res) =>{
 try {
   

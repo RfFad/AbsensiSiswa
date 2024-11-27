@@ -65,9 +65,9 @@
                    <label for="Tahun Ajaran">Tahun Ajaran</label>
                    <select class="form-control" name="idth" required>
                     <option value="" disabled selected>--SELECT TAHUN_AJAR--</option>
-                    <% tahun_ajaran.forEach(tahun => { %>
+                    <% tahun_ajaran.forEach(tahun => { if(tahun.status === 1) { %>
                       <option value="<%= tahun.idth %>"><%= tahun.nama_ajaran %></option>
-                    <% }) %>
+                    <% }}) %>
                   </select>
                   </div>
                   <div class="form-group">

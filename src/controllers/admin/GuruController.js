@@ -34,7 +34,11 @@ const ExportDataGuru = async (req, res) =>{
     const nama_guru = req.query.nama_guru || null;
     const alamat = req.query.alamat || null;
     const jk = req.query.jk || null;
-    const guruData = await getGuru(nama_guru, alamat, jk);
+    const nip= req.query.nip || null;
+    const jabatan = req.query.jabatan || null;
+    const nama_mp = req.query.nama_mp || null;
+    
+    const guruData = await getGuru(nama_guru, alamat, jk, jabatan, nama_mp, nip);
   
     const workbook =new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Data guru');

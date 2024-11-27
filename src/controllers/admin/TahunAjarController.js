@@ -27,9 +27,9 @@ PageInsert : async(req, res) => {
     }
 },
 InsertTahun : async (req, res) => {
-    const {nama_ajaran} = req.body
+    const {nama_ajaran, status} = req.body
     try {
-        await tahunAjar.InsertTahunAjar(nama_ajaran)
+        await tahunAjar.InsertTahunAjar(nama_ajaran, status)
         req.flash("success", "berhasil menambahkan data")
         console.log("berhasil")
         return res.redirect("/admin/tahun_ajaran")
@@ -70,10 +70,10 @@ GetAjaranId : async (req, res) => {
 },
 UpdateTahunAjar : async (req, res) => {
     const {idth} = req.params
-    const {nama_ajaran} = req.body
+    const {nama_ajaran, status} = req.body
     try {
         
-        await tahunAjar.UpdateTahun(idth, nama_ajaran)
+        await tahunAjar.UpdateTahun(idth, nama_ajaran, status)
         req.flash("success", "berhasil memperbarui data")
         console.log("berhasil")
         return res.redirect("/Admin/tahun_ajaran");

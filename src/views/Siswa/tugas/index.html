@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+   function generateRandomString(length) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ'; // 34 huruf
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * chars.length);
+    result += chars[randomIndex];
+  }
+  return result;
+}
+
+function generateMultipleStrings(numStrings, length) {
+  const result = [];
+  for (let i = 0; i < numStrings; i++) {
+    result.push(generateRandomString(length));
+  }
+  return result;
+}
+
+const randomStrings = generateMultipleStrings(34, 5); // 34 string, panjang masing-masing 5 karakter
+console.log(randomStrings);
+
+
+  </script>
+</body>
+</html>
+OEINN
+IFBWI
+UWDUD
+FLEMC
+KGMIJ
+OBYPF
+EEUOF
+PXBTT
+VKFVQ
+EAPXM
+VOWYO
+SZPCQ
+TKTZZ
+XIAUR
+EOFIM
+IMPOE
+VLJMN
+PRFKF
+SORON
+LWUCI
+EPHDD
+FIWRW
+GIIWJ
+BWRIP
+QOUED
+PNBGA
+WXNOC
+EPYXJ
+ZDFTK
+GAPKK
+RHNKK
+JRBPE
+TCXQO
+JXNTT

@@ -465,6 +465,24 @@
 <!-- jQuery UI 1.11.4 -->
 <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
 <script>
+  function Kenaikan(){
+    Swal.fire({
+        title: "Naikan kelas siswa?",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya",
+        cancelButtonText: "Batal",
+      }).then((result) => {
+        if(result.isConfirmed){
+          // Mengambil parameter filter dari URL
+         
+          let exportUrl = `/admin/kenaikankelas`;
+          window.location.href = exportUrl;
+        }
+      });
+    
+  }
   // Fungsi untuk membangun parameter filter
   function buildFilterParams() {
     const tahunSelected = $("#tahunSelect").val();
