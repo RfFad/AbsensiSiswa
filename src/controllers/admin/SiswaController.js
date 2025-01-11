@@ -8,6 +8,7 @@ const {
   getGrafikSiswa,
   getSiswaExport 
 } = require("../../models/models_siswa");
+const getCount = require('../../models/models_count')
 const { getKelas, getKelasByName, updateKenaikan } = require("../../models/models_kelas");
 const md5 = require("md5");
 const tahun_ajar = require("../../models/models_tahunajar");
@@ -72,62 +73,90 @@ const naikKelas = async (req, res) => {
   }
 };
 
-const ExportDataSiswa = async (req, res) =>{
-try {
-  
-  const kelas = req.query.id_kelas || null;
-  const tahunAjar = req.query.idth || null;
-  const jk = req.query.jk || null ;
-  const tgl_lahir = req.query.tgl_lahir || null ;
-  const nama_siswa = req.query.nama_siswa || null;
-  const alamat = req.query.alamat || null;
-  const nama_wali = req.query.nama_wali || null;
-  const pekerjaan_wali = req.query.pekerjaan_wali || null;
-  const siswaData = await getSiswaExport(kelas, tahunAjar, jk, tgl_lahir, nama_siswa, alamat, nama_wali, pekerjaan_wali, page = 1);
+const ExportDataSiswa = async (req, res) => {
+  try {
+    const kelas = req.query.id_kelas || null;
+    const tahunAjar = req.query.idth || null;
+    const jk = req.query.jk || null;
+    const tgl_lahir = req.query.tgl_lahir || null;
+    const nama_siswa = req.query.nama_siswa || null;
+    const alamat = req.query.alamat || null;
+    const nama_wali = req.query.nama_wali || null;
+    const pekerjaan_wali = req.query.pekerjaan_wali || null;
+    const siswaData = await getSiswaExport(kelas, tahunAjar, jk, tgl_lahir, nama_siswa, alamat, nama_wali, pekerjaan_wali, (page = 1));
 
-  const workbook =new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet('Data Siswa');
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Data Siswa');
 
-  worksheet.columns = [
-    {header: 'NIS', key:'nis', width: 15},
-    {header: 'Nama Siswa', key:'nama_siswa', width: 25},
-    {header: 'Kelas', key:'nama_kelas', width: 15},
-    {header: 'Gender', key:'jk', width: 10},
-    {header: 'Tanggal Lahir', key:'tgl_lahir', width: 15},
-    {header: 'Nama Wali', key:'nama_wali', width: 25},
-    {header: 'Pekerjaan Wali', key:'pekerjaan_wali', width: 25},
-    {header: 'Tahun Ajaran', key:'nama_ajaran', width: 20},
-  ];
-  siswaData.forEach((siswa)=>{
-    worksheet.addRow({
-      nis: siswa.nis,
-      nama_siswa: siswa.nama_siswa,
-      nama_kelas: siswa.nama_kelas,
-      jk: siswa.jk,
-      tgl_lahir: siswa.tgl_lahir,
-      nama_wali: siswa.nama_wali,
-      pekerjaan_wali: siswa.pekerjaan_wali,
-      nama_ajaran: siswa.nama_ajaran
-    })
-  });
-  const filePath = path.join(__dirname, '..','..', 'public', 'excel', 'Data_Siswa.xlsx');
+    worksheet.columns = [
+      { header: 'NIS', key: 'nis', width: 15 },
+      { header: 'Nama Siswa', key: 'nama_siswa', width: 25 },
+      { header: 'Kelas', key: 'nama_kelas', width: 15 },
+      { header: 'Gender', key: 'jk', width: 10 },
+      { header: 'Tanggal Lahir', key: 'tgl_lahir', width: 15 },
+      { header: 'Nama Wali', key: 'nama_wali', width: 25 },
+      { header: 'Pekerjaan Wali', key: 'pekerjaan_wali', width: 25 },
+      { header: 'Tahun Ajaran', key: 'nama_ajaran', width: 20 },
+    ];
 
-  await workbook.xlsx.writeFile(filePath);
-  res.download(filePath, 'Data_Siswa.xlsx', (err) => {
-    if (err) {
-        res.status(500).send('Terjadi kesalahan saat mengekspor data');
-    }
-
-    // Hapus file setelah diunduh
-    fs.unlink(filePath, (err) => {
-        if (err) console.error(err);
+    worksheet.getRow(1).eachCell((cell) => {
+      cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+      cell.alignment = { vertical: 'middle', horizontal: 'center' };
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: '4472C4' },
+      };
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' },
+      };
     });
-});
-} catch (error) {
-  res.status(500).send('Terjadi kesalahan saat mengambil data siswa');
-  console.log(error)
-}
-}
+
+    siswaData.forEach((siswa) => {
+      worksheet.addRow({
+        nis: siswa.nis,
+        nama_siswa: siswa.nama_siswa,
+        nama_kelas: siswa.nama_kelas,
+        jk: siswa.jk,
+        tgl_lahir: siswa.tgl_lahir,
+        nama_wali: siswa.nama_wali,
+        pekerjaan_wali: siswa.pekerjaan_wali,
+        nama_ajaran: siswa.nama_ajaran,
+      });
+    });
+
+    worksheet.eachRow((row, rowNumber) => {
+      row.eachCell((cell) => {
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+      });
+    });
+
+    const filePath = path.join(__dirname, '..', '..', 'public', 'excel', 'Data_Siswa.xlsx');
+
+    await workbook.xlsx.writeFile(filePath);
+    res.download(filePath, 'Data_Siswa.xlsx', (err) => {
+      if (err) {
+        res.status(500).send('Terjadi kesalahan saat mengekspor data');
+      }
+
+      fs.unlink(filePath, (err) => {
+        if (err) console.error(err);
+      });
+    });
+  } catch (error) {
+    res.status(500).send('Terjadi kesalahan saat mengambil data siswa');
+    console.log(error);
+  }
+};
+
 const importDataSiswa = async (req, res) => {
   upload(req, res, async (err) => {
     if (err) {
@@ -278,7 +307,7 @@ const getSiswaData = async (req, res) => {
 
     // Ambil data siswa dan pagination
     const siswakelas = await getSiswa(kelas, tahunAjar, jk, tgl_lahir, nama_siswa, alamat, nama_wali, pekerjaan_wali, page);
-
+    const countSiswa = await getCount.CountSiswa();
     // Render ke view 'siswa'
     res.render("admin/siswa/siswa", {
       siswakelas: siswakelas.data, // Data siswa
@@ -288,7 +317,8 @@ const getSiswaData = async (req, res) => {
       selectedKelas: kelas,
       datakelas, // Daftar kelas
       dataTahun, // Daftar tahun ajar
-      page, // Halaman saat ini
+      page,
+      countSiswa : countSiswa, // Halaman saat ini
       totalPages: siswakelas.totalPages, // Total halaman
       currentPage: siswakelas.currentPage, // Halaman saat ini dari response
     });

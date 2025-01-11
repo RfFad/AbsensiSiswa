@@ -52,11 +52,12 @@
                       <td><%= jadwal.hari %></td>
                       <td><%= jadwal.nama_kelas %></td>
                       <td><%= jadwal.nama_mp %></td>
-                      <td><label class='label bg-success' style="border-radius: 6px; width: 100px; text-align: center;" ><%= jadwal.jam_mulai.slice(0, 5) %> </label> - <label class='label bg-danger' style="border-radius: 6px; width: 100px; text-align: center;" ><%= jadwal.jam_selesai.slice(0, 5) %></label></td>
-                     
+                      <td><label class='label bg-success' style="border-radius: 6px; width: 100px; text-align: center;" >
+                        <%= jadwal.jam_mulai.slice(0, 5) %> </label> - <label class='label bg-danger' style="border-radius: 6px; width: 100px; text-align: center;" >
+                        <%= jadwal.jam_selesai.slice(0, 5) %>
+                        </label></td>
                       <td>
                         <a href="/guru/absen/<%= jadwal.id_kelas %>?id_jadwal=<%= jadwal.idj %>" class="btn btn-info"><i class="fas fa-edit">Absen</i></a>  
-                        <a href="#" class="btn btn-warning"><i class="fas fa-edit">Rekap Absen</i></a>  
                       </td>
                     </tr>
                     <% }) %>
@@ -77,4 +78,17 @@
   </div>
   
   <%- include("../Componen/footer") %>
-  
+  <script>
+    $(document).ready(function(){
+      const error = "<%= messages.error %>"
+  if(error){
+  Swal.fire({
+					  title: "Peringatan",
+					  text: "<%= messages.error %>",
+					  icon: "warning",
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Oke',
+					});
+        }
+    })
+  </script>

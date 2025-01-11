@@ -40,7 +40,7 @@ const tahunajar = {
                     return reject (error);
                 }
                 if(results.length === 0) {
-                    return reject (new Error('Hari Tidak ada'));
+                    return reject (new Error('Tahun ajar Tidak ada'));
                 }
                 resolve(results[0]);
             })

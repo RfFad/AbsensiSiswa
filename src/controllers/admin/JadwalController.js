@@ -69,6 +69,19 @@ const jadwal = {
       res.status(400).json("Internal Server Error");
     }
   },
+  sabtu: async (req, res) => {
+    try {
+      const messages = {
+        success: req.flash("success"),
+        error: req.flash("error"),
+      };
+      const row = await jadwalmodel.getSabtu();
+      res.render("admin/jadwal/sabtu", { row, messages, currentPath : '/admin/data_jadwal' });
+    } catch (error) {
+      console.error("Error rendering the page:", error);
+      res.status(400).json("Internal Server Error");
+    }
+  },
 
   getPageInsert: async (req, res) => {
     try {

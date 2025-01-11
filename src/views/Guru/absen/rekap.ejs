@@ -13,6 +13,7 @@
 .group-info label {
   width: 120px;
   font-weight: bold;
+  
 }
 
 .group-info span {
@@ -39,15 +40,15 @@
               <h4>Filter Search</h4>
             </div>
             <div class="row">
-              <div class="col-lg-4">
+              <div class="col-lg-3">
                 <select id="semester" class="form-control mb-3" required>
                   <option value="" disabled selected>Pilih Semester</option>
                   <option value="1">Semester 1</option>
                   <option value="2">Semester 2</option>
                 </select>
               </div>
-              <div class="col-lg-4">
-                <select name="" id="bulan" class="form-control mb-3" required>
+              <div class="col-lg-3">
+                <select name="" id="bulan" class="form-control mb-3">
                   <option value="" disabled selected>Select Bulan</option>
                   <% ['January', 'February', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'].forEach((month, index) => { %>
                     <option value="<%= index + 1 %>"><%= month %></option>
@@ -55,8 +56,11 @@
                 </select>
                 
               </div>
-              <div class="col-lg-4">
-                <input type="number" id="year" name="year" min="2000" max="2100" placeholder="yyyy" class="form-control" required>
+              <div class="col-lg-3">
+                <input type="number" id="year" name="year" min="2000" max="2100" placeholder="yyyy" class="form-control">
+              </div>
+              <div class="col-lg-3">
+                <input type="date" id="tanggal" placeholder="tanggal" class="form-control">
               </div>
               <button type="button" id="date-btn" class="btn btn-primary mt-3">Confirm</button>
             </div>
@@ -208,6 +212,7 @@
   const bulan = $("#bulan").val();
   const tahun = $("#year").val();
   const semester = $("#semester").val();
+  const tanggal = $("#tanggal").val();
 
   // Mendapatkan URL saat ini
   let urlPath = window.location.pathname;
@@ -219,10 +224,14 @@
   url.searchParams.delete("bulan");
   url.searchParams.delete("tahun");
   url.searchParams.delete("semester");
+  url.searchParams.delete("tanggal");
 
   // Menambahkan parameter bulan, tahun, atau semester sesuai dengan inputan yang ada
   if (bulan) {
     url.searchParams.append("bulan", bulan);
+  }
+  if (tanggal) {
+    url.searchParams.append("tanggal", tanggal);
   }
   if (tahun) {
     url.searchParams.append("tahun", tahun);

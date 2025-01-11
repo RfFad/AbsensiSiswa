@@ -79,6 +79,7 @@ router.get('/jadwal/selasa', jadwal.selasa)
 router.get('/jadwal/rabu', jadwal.rabu)
 router.get('/jadwal/kamis', jadwal.kamis)
 router.get('/jadwal/jumat', jadwal.jumat)
+router.get('/jadwal/sabtu', jadwal.sabtu)
 router.get('/jadwal/edit/:idj', jadwal.getUpdatePage);
 router.post('/jadwal/update/:idj', jadwal.getUpdateInsert);
 router.post('/jadwal/delete/:idj', jadwal.getDelete)

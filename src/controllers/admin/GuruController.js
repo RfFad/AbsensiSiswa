@@ -28,59 +28,93 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage }).single('foto');
 //metod guru
-const ExportDataGuru = async (req, res) =>{
+const ExportDataGuru = async (req, res) => {
   try {
-    
     const nama_guru = req.query.nama_guru || null;
     const alamat = req.query.alamat || null;
     const jk = req.query.jk || null;
-    const nip= req.query.nip || null;
+    const nip = req.query.nip || null;
     const jabatan = req.query.jabatan || null;
     const nama_mp = req.query.nama_mp || null;
     
     const guruData = await getGuru(nama_guru, alamat, jk, jabatan, nama_mp, nip);
   
-    const workbook =new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Data guru');
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Data Guru');
   
     worksheet.columns = [
-      {header: 'NIP', key:'nip', width: 15},
-      {header: 'Nama guru', key:'nama_guru', width: 25},
-      {header: 'Jabatan', key:'jabatan', width: 20},
-      {header: 'Mapel Ajar', key:'nama_mp', width: 20},
-      {header: 'Tlp', key:'tlp', width: 20},
-      {header: 'Alamat', key:'alamat', width: 30},
-      {header: 'Gender', key:'jk', width: 15},
+      { header: 'NIP', key: 'nip', width: 15 },
+      { header: 'Nama Guru', key: 'nama_guru', width: 25 },
+      { header: 'Jabatan', key: 'jabatan', width: 20 },
+      { header: 'Mapel Ajar', key: 'nama_mp', width: 20 },
+      { header: 'Telepon', key: 'tlp', width: 20 },
+      { header: 'Alamat', key: 'alamat', width: 30 },
+      { header: 'Gender', key: 'jk', width: 15 },
     ];
-    guruData.forEach((guru)=>{
+
+    worksheet.getRow(1).eachCell((cell) => {
+      cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+      cell.alignment = { vertical: 'middle', horizontal: 'center' };
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: '4472C4' },
+      };
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' },
+      };
+    });
+
+    guruData.forEach((guru) => {
       worksheet.addRow({
         nip: guru.nip,
         nama_guru: guru.nama_guru,
         jabatan: guru.jabatan,
         nama_mp: guru.nama_mp,
-        tlp :guru.tlp,
-        alamat : guru.alamat,
-        jk: guru.jk
-      })
+        tlp: guru.tlp,
+        alamat: guru.alamat,
+        jk: guru.jk,
+      });
     });
-    const filePath = path.join(__dirname, '..','..', 'public', 'excel', 'Data_Guru.xlsx');
+
+    worksheet.eachRow((row, rowNumber) => {
+      row.eachCell((cell) => {
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+        if (rowNumber % 2 === 0) {
+          cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'D9E1F2' },
+          };
+        }
+      });
+    });
+
+    const filePath = path.join(__dirname, '..', '..', 'public', 'excel', 'Data_Guru.xlsx');
   
     await workbook.xlsx.writeFile(filePath);
     res.download(filePath, 'Data_Guru.xlsx', (err) => {
       if (err) {
-          res.status(500).send('Terjadi kesalahan saat mengekspor data');
+        res.status(500).send('Terjadi kesalahan saat mengekspor data');
       }
   
-      // Hapus file setelah diunduh
       fs.unlink(filePath, (err) => {
-          if (err) console.error(err);
+        if (err) console.error(err);
       });
-  });
+    });
   } catch (error) {
-    res.status(500).send('Terjadi kesalahan saat mengambil data siswa');
-    console.log(error)
+    res.status(500).send('Terjadi kesalahan saat mengambil data guru');
+    console.log(error);
   }
-  }
+};
 const importGuru = async(req, res)=>{
   upload(req, res, async (err) => {
     if (err) {

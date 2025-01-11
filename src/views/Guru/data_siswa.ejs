@@ -81,7 +81,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive" style="height: 500px;">
+                            <div class="table-responsive">
                                 <div class="body">
                                     <!-- Konten tabel akan dimuat di sini -->
                                 </div>
@@ -285,53 +285,61 @@
         });
 
         // Fungsi untuk menampilkan list siswa
-        function list(url = "/guru/list_siswa") {
-            let html = "";
-            $.ajax({
-                url: url,  // Menggunakan URL yang sudah difilter
-                type: "GET",
-                success: function(result) {
-                    const val = result.data;
-                    if (val.length > 0) {
-                        html += "<table class='table table-bordered table-striped table-hover'>";
-                        html += "<thead class='thead-dark position-sticky top-0'>";
-                        html += "<tr>";
-                        html += "<th>No</th>";
-                        html += "<th>Nis</th>";
-                        html += "<th>Foto</th>";
-                        html += "<th>Nama Siswa</th>";
-                        html += "<th>Kelas</th>";
-                        html += "<th>Gender</th>";
-                        html += "<th>Tahun Ajaran</th>";
-                        html += "<th>Action</th>";
-                        html += "</tr>";
-                        html += "</thead><tbody>";
-                        $.each(val, function(index, row) {
-                            const foto = row.foto ? `/images/${row.foto}` : '/icon.png';
-                            html += `<tr>`;
-                            html += `<td>${index + 1}</td>`;
-                            html += `<td>${row.nis}</td>`;
-                            html += `<td><img style="width: 100px; height: 110px; object-fit: cover;" src="${foto}" class="img-thumbnail" alt=""></td>`;
-                            html += `<td>${row.nama_siswa}</td>`;
-                            html += `<td>${row.nama_kelas}</td>`;
-                            html += `<td>${row.jk}</td>`;
-                            html += `<td>${row.nama_ajaran}</td>`;
-                            html += `<td><a href="#" class="btn btn-primary info-btn" data-nis="${row.nis}"><i class="fa fa-info-circle"></i></a></td>`;
-                            html += "</tr>";
-                        });
-                        html += "</tbody></table>";
-                    } else {
-                        html = "<p>No data available</p>";
-                    }
-                    $(".body").html(html);
-                },
-                error: function(xhr, status, error) {
-                    console.error("AJAX Error:", status, error);
-                    $(".body").html("<p>Error loading data</p>");
-                }
-            });
-        }
+        // Fungsi untuk menampilkan list siswa
+function list(url = "/guru/list_siswa") {
+    let html = "";
+    $.ajax({
+        url: url,  // Menggunakan URL yang sudah difilter
+        type: "GET",
+        success: function(result) {
+            const val = result.data;
+            if (val.length > 0) {
+                html += `<table id="example1" class="table table-bordered table-striped">`;
+                html += "<thead>";
+                html += "<tr>";
+                html += "<th>No</th>";
+                html += "<th>Nis</th>";
+                html += "<th>Foto</th>";
+                html += "<th>Nama Siswa</th>";
+                html += "<th>Kelas</th>";
+                html += "<th>Gender</th>";
+                html += "<th>Tahun Ajaran</th>";
+                html += "<th>Action</th>";
+                html += "</tr>";
+                html += "</thead><tbody>";
+                $.each(val, function(index, row) {
+                    const foto = row.foto ? `/images/${row.foto}` : '/icon.png';
+                    html += `<tr>`;
+                    html += `<td>${index + 1}</td>`;
+                    html += `<td>${row.nis}</td>`;
+                    html += `<td><img style="width: 100px; height: 110px; object-fit: cover;" src="${foto}" class="img-thumbnail" alt=""></td>`;
+                    html += `<td>${row.nama_siswa}</td>`;
+                    html += `<td>${row.nama_kelas}</td>`;
+                    html += `<td>${row.jk}</td>`;
+                    html += `<td>${row.nama_ajaran}</td>`;
+                    html += `<td><a href="#" class="btn btn-primary info-btn" data-nis="${row.nis}"><i class="fa fa-info-circle"></i></a></td>`;
+                    html += "</tr>";
+                });
+                html += "</tbody></table>";
+            } else {
+                html = "<p>No data available</p>";
+            }
+            $(".body").html(html);
 
+            // Inisialisasi ulang DataTable setelah tabel dimuat
+            $("#example1").DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX Error:", status, error);
+            $(".body").html("<p>Error loading data</p>");
+        }
+    });
+}
         // Fungsi untuk menampilkan informasi detail siswa dalam modal
         $(document).on('click', '.info-btn', function() {
             const nis = $(this).data("nis");

@@ -24,7 +24,7 @@ module.exports = {
       );
     });
   },
-  rekapBulanan: async (id_kelas, bulan, tahun, nip, idth, semester) => {
+  rekapBulanan: async (id_kelas, bulan, tahun, nip, idth = null, semester, tanggal) => {
     return new Promise((resolve, reject) => {
       const filterSemester = semester === '1' ? `MONTH(absen.tanggal) BETWEEN 7 AND 12` : `MONTH(absen.tanggal) BETWEEN 1 AND 6`;
   
@@ -58,12 +58,19 @@ module.exports = {
         WHERE 
           siswa.id_kelas = ? 
           AND guru.nip = ? 
-          AND tahun_ajaran.idth = ? 
       `;
   
-      const params = [id_kelas, nip, idth];
+      const params = [id_kelas, nip];
       const condition = [];
   
+      if (idth) {
+        condition.push(`tahun_ajaran.idth = ?`);
+        params.push(idth);
+      }
+      if (tanggal) {
+        condition.push(`absen.tanggal = ?`);
+        params.push(tanggal);
+      }
       if (tahun) {
         condition.push(`YEAR(absen.tanggal) = ?`);
         params.push(tahun);

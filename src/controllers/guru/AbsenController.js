@@ -41,13 +41,9 @@ const absen = {
             // Memeriksa status `aktif` dari jadwal
             if (jadwal.aktif === 0) {
                 // Jika `aktif` bernilai 0, absen tidak bisa dilakukan di luar jam pelajaran
-                return res.send(`
-                    <center>
-                        <br>
-                        <h3>Maaf, Anda tidak bisa mengabsen siswa diluar jam pelajaran.</h3>
-                        <a href="/guru/jadwal"><b>Kembali</b></a>
-                    </center>
-                `);
+                req.flash("error", "Maaf, anda tidak bisa mengabsen siswa di luar jam pelajaran")
+                return res.redirect('/guru/jadwal')
+            
             }
     
             // Mengambil data absensi yang sudah ada

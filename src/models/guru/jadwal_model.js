@@ -10,7 +10,7 @@ const jadwalmodel = {
         const id_guru = req.session.username;
         return new Promise((resolve, reject) => {
             connection.query(`
-                SELECT jadwal.idj, 
+                SELECT  jadwal.idj, 
        hari.hari AS hari, 
        guru.nama_guru AS nama_guru, 
        guru.nip AS nip, 

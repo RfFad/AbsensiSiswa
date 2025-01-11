@@ -8,7 +8,7 @@ module.exports = {
     rekapAbsensiKelas: async (req, res) => {
         const { id_kelas } = req.params;
         const nip = req.session.username;
-        const { bulan, tahun, idm, idth, semester } = req.query;
+        const { bulan, tahun, idm, idth, semester, tanggal } = req.query;
 
     
         try {
@@ -27,10 +27,11 @@ module.exports = {
                 bulan || null,
                 tahun || null,
                 nip, 
-                idth,
-                semester || null
+                idth || null,
+                semester || null,
+                tanggal || null,
             );
-    
+
             const formattedData = {};
             const uniqueDates = new Set();
     
