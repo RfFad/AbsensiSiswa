@@ -306,11 +306,11 @@ const getSiswaData = async (req, res) => {
     const pekerjaan_wali = req.query.pekerjaan_wali || null;
 
     // Ambil data siswa dan pagination
-    const siswakelas = await getSiswa(kelas, tahunAjar, jk, tgl_lahir, nama_siswa, alamat, nama_wali, pekerjaan_wali, page);
+    const siswakelas = await getSiswaExport(kelas, tahunAjar, jk, tgl_lahir, nama_siswa, alamat, nama_wali, pekerjaan_wali, page);
     const countSiswa = await getCount.CountSiswa();
     // Render ke view 'siswa'
     res.render("admin/siswa/siswa", {
-      siswakelas: siswakelas.data, // Data siswa
+      siswakelas: siswakelas, // Data siswa
       index: 1,
       messages,
       currentPath: '/admin/data_siswa',

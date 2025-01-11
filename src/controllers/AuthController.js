@@ -212,7 +212,13 @@ module.exports = {
                 req.flash('color', 'danger');
                 req.flash('status', 'Oops..');
                 req.flash('message', 'You do not have permission to access this page');
-                return res.redirect('/login');
+                if(req.session.role === 'admin'){
+                    return res.redirect('/admin');
+                }else if(req.session.role === 'guru'){
+                    return res.redirect('/guru');
+                }else{
+                    return res.redirect('/siswa');
+                }
             }
             next();
         };

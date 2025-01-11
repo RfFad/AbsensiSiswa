@@ -13,31 +13,31 @@ const izin = require ('../controllers/izinController')
 router.get('/', verifyUser.isLogin, checkRole('guru'), authHeader, Dashboard.getDashboard)
 router.get('/jadwal', verifyUser.isLogin, checkRole('guru'), jadwal_guru.jadwalmengajar)
 router.get('/absen/:id_kelas', verifyUser.isLogin, checkRole('guru'), authHeader, absen.showAbsensiPage)
-router.post('/input_absen', absen.submitAbsensi)
-router.post('/update/:id_guru', Dashboard.updateGuru)
-router.get('/rekap_absen/:id_kelas', rekap.rekapAbsensiKelas)
-router.get('/menu_rekap', rekap.menuRekap)
-router.get('/data_siswa', Dashboard.getPageSiswa)
-router.get('/list_siswa',Dashboard.getSiswa);
-router.post('/input_tugas', Tugas.tugasInput);
-router.get('/data_tugas', Tugas.dataTugas)
-router.get('/tugas', Tugas.tugasPage);
-router.get('/tugasByid/:id_tugas',Tugas.tugasByid);
-router.post('/update_tugas/:id_tugas', Tugas.tugasUpdate);
-router.get('/tugas_detail/:id_tugas', Tugas.tugasDetail)
-router.get('/pengumpulan_tugas/:id_tugas', Tugas.pengumpulanTugas)
-router.get('/nilai_detail/:id_pengumpulan', Tugas.nilaiDetail)
-router.get('/jawaban_siswa/:id_pengumpulan', Tugas.jawaban_Siswa)
-router.post('/input_nilai/:id_pengumpulan', Tugas.inputNilai);
-router.get('/notif_izin', izin.notif_izin)
-router.get('/permintaan_izin', izin.data_izin)
-router.get('/detail_izin/:id_izin', izin.izin_detail)
-router.post('/read/:id_guru', izin.read)
-router.get('/setujui/:id_izin', izin.setujuiIzin)
-router.get('/tolak/:id_izin', izin.tolakIzin)
-router.get('/countIzin', izin.pesanCount)
-router.get('/riwayat_siswa/:nis', Dashboard.riwayatSiswa)
-//router.get('/riwayat', Dashboard.dataRiwayat)
+router.post('/input_absen', verifyUser.isLogin, checkRole('guru'), authHeader, absen.submitAbsensi,)
+router.post('/update/:id_guru', verifyUser.isLogin, checkRole('guru'), authHeader, Dashboard.updateGuru)
+router.get('/rekap_absen/:id_kelas', verifyUser.isLogin, checkRole('guru'), authHeader, rekap.rekapAbsensiKelas)
+router.get('/menu_rekap', verifyUser.isLogin, checkRole('guru'), authHeader, rekap.menuRekap)
+router.get('/data_siswa', verifyUser.isLogin, checkRole('guru'), authHeader, Dashboard.getPageSiswa)
+router.get('/list_siswa', verifyUser.isLogin, checkRole('guru'), authHeader,Dashboard.getSiswa);
+router.post('/input_tugas', verifyUser.isLogin, checkRole('guru'), authHeader, Tugas.tugasInput);
+router.get('/data_tugas', verifyUser.isLogin, checkRole('guru'), authHeader, Tugas.dataTugas)
+router.get('/tugas', verifyUser.isLogin, checkRole('guru'), authHeader, Tugas.tugasPage);
+router.get('/tugasByid/:id_tugas', verifyUser.isLogin, checkRole('guru'), authHeader,Tugas.tugasByid);
+router.post('/update_tugas/:id_tugas', verifyUser.isLogin, checkRole('guru'), authHeader, Tugas.tugasUpdate);
+router.get('/tugas_detail/:id_tugas', verifyUser.isLogin, checkRole('guru'), authHeader, Tugas.tugasDetail)
+router.get('/pengumpulan_tugas/:id_tugas', verifyUser.isLogin, checkRole('guru'), authHeader, Tugas.pengumpulanTugas)
+router.get('/nilai_detail/:id_pengumpulan', verifyUser.isLogin, checkRole('guru'), authHeader, Tugas.nilaiDetail)
+router.get('/jawaban_siswa/:id_pengumpulan', verifyUser.isLogin, checkRole('guru'), authHeader, Tugas.jawaban_Siswa)
+router.post('/input_nilai/:id_pengumpulan', verifyUser.isLogin, checkRole('guru'), authHeader, Tugas.inputNilai);
+router.get('/notif_izin', verifyUser.isLogin, checkRole('guru'), authHeader, izin.notif_izin)
+router.get('/permintaan_izin', verifyUser.isLogin, checkRole('guru'), authHeader, izin.data_izin)
+router.get('/detail_izin/:id_izin', verifyUser.isLogin, checkRole('guru'), authHeader, izin.izin_detail)
+router.post('/read/:id_guru', verifyUser.isLogin, checkRole('guru'), authHeader, izin.read)
+router.get('/setujui/:id_izin', verifyUser.isLogin, checkRole('guru'), authHeader, izin.setujuiIzin)
+router.get('/tolak/:id_izin', verifyUser.isLogin, checkRole('guru'), authHeader, izin.tolakIzin)
+router.get('/countIzin', verifyUser.isLogin, checkRole('guru'), authHeader, izin.pesanCount)
+router.get('/riwayat_siswa/:nis', verifyUser.isLogin, checkRole('guru'), authHeader, Dashboard.riwayatSiswa)
+//router.get('/riwayat', verifyUser.isLogin, checkRole('guru'), authHeader, Dashboard.dataRiwayat)
 
-router.post('/hapusTugas/:id_tugas', Tugas.deleteTugas)
+router.post('/hapusTugas/:id_tugas', verifyUser.isLogin, checkRole('guru'), authHeader, Tugas.deleteTugas)
 module.exports = router;

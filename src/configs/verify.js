@@ -7,7 +7,7 @@ module.exports = {
             req.session.destroy(function(err) {
                 res.redirect('/login');
             })
-        }
+        } 
     },
     isLogout(req, res, next){
         if(req.session.loggedin !== true){
