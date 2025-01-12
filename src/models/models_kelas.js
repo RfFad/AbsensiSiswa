@@ -41,7 +41,8 @@ const getKelasById = async (id_kelas) => {
 const getKelas = async () => {
     return new Promise((resolve, reject) => {
         connection.query(`
-          SELECT * FROM kelas ORDER BY id_kelas
+          SELECT * FROM kelas ORDER BY CAST(SUBSTRING_INDEX(nama_kelas, ' ', 1) AS UNSIGNED) ASC,
+    SUBSTRING(nama_kelas, 2) ASC
             `, (error, result) => {
                 if(error) {
                     return reject (error) ;

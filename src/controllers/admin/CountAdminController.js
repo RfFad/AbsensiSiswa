@@ -11,6 +11,11 @@ const getCountData = async (req, res) => {
     const countJadwal = await getCount.CountJadwal();
     const countRiwayat = await getCount.CountRiwayat();
     const countUser = await getCount.CountUser();
+    const messages = {
+            
+      success: req.flash('success'),
+      error: req.flash('error')
+  };
     res.render("admin/index", {
       countKelas,
       countGuru,
@@ -21,7 +26,7 @@ const getCountData = async (req, res) => {
       countRiwayat,
       countUser,
       currentPath : '/admin',
-      messages:"hello"
+      messages,
     });
   } catch (error) {
     res.status(400).json(error);

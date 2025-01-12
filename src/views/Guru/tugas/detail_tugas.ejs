@@ -128,7 +128,7 @@
                                     </div>
                                         <!-- Jika file berupa dokumen -->
                                         <p>
-                                            <a href="#" class="file-link mt-3" id="taskFileLink" download>
+                                            <a href="/file_tugas/<%= data.file_tugas %>" class="file-link mt-3" id="taskFileLink" download>
                                                 <i class="fas fa-file-download"></i> Download Tugas
                                             </a>
                                         </p>
@@ -183,6 +183,7 @@
         if(!file){
             $("#taskFileImage").hide();
             $(".file-content").html("<div id='callout-info' class='alert alert-warning mt-3'>Anda tidak menambahkan file!</div>")
+            $("#taskFileLink").hide()
         }
         $(document).on('click', '#nilai', function() { 
             const id = $(this).data("id"); 

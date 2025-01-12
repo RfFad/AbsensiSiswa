@@ -3,7 +3,7 @@ const tahunajar = {
  getTahunAjar : async () => {
     return new Promise((resolve, reject) => {
         connect.query(`
-          SELECT * FROM tahun_ajaran ORDER BY idth
+          SELECT * FROM tahun_ajaran ORDER BY nama_ajaran DESC
             `, (error, result) => {
                 if(error) {
                     return reject (error) ;

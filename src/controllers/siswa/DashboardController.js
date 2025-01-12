@@ -20,7 +20,11 @@ module.exports = {
         try {
             const sekolah = await getSekolah();
             const rows = await siswamodel.getsiswa(req, res);
+            const messages = {
             
+                success: req.flash('success'),
+                error: req.flash('error')
+            };
 
             //const { results, count } = await jadwal.getJadwal(req, res);
             connect.getConnection(function (err, connection) {
@@ -49,6 +53,7 @@ module.exports = {
                                 currentPath: '/siswa' ,
                                 rows,
                                 sekolah,
+                                messages,
                                 //jdwl : count,
                                 siswa: results[0], // Passing the siswa profile data to the view
                                 colorFlash: req.flash('color'),

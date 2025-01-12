@@ -71,7 +71,32 @@ DeleteJadwal : async (idj) => {
  getSenin : async () => {
     return new Promise((resolve, reject) => {
         connection.query(`
-          SELECT jadwal.idj,hari.hari as hari, guru.nama_guru as nama_guru, guru.idm AS mapel_ajar, kelas.nama_kelas as nama_kelas, mata_pelajaran.nama_mp as nama_mp, jadwal.jam_mulai, jadwal.jam_selesai FROM jadwal, hari, guru, kelas, mata_pelajaran WHERE jadwal.idh = hari.idh AND jadwal.idg = guru.id_guru AND jadwal.idk = kelas.id_kelas AND jadwal.idm =mata_pelajaran.idm AND hari.idh = 1 ORDER BY jadwal.jam_mulai ASC, kelas.nama_kelas DESC  `, (error, result) => {
+         SELECT 
+    jadwal.idj,
+    hari.hari AS hari,
+    guru.nama_guru AS nama_guru,
+    guru.idm AS mapel_ajar,
+    kelas.nama_kelas AS nama_kelas,
+    mata_pelajaran.nama_mp AS nama_mp,
+    jadwal.jam_mulai,
+    jadwal.jam_selesai
+FROM 
+    jadwal
+JOIN 
+    hari ON jadwal.idh = hari.idh
+JOIN 
+    guru ON jadwal.idg = guru.id_guru
+JOIN 
+    kelas ON jadwal.idk = kelas.id_kelas
+JOIN 
+    mata_pelajaran ON jadwal.idm = mata_pelajaran.idm
+WHERE 
+    hari.idh = 1
+ORDER BY 
+    CAST(SUBSTRING_INDEX(kelas.nama_kelas, ' ', 1) AS UNSIGNED) ASC,
+    SUBSTRING(kelas.nama_kelas, 2) ASC,
+    jadwal.jam_mulai ASC;
+  `, (error, result) => {
             if (error) {
                 return reject(error);
             }
@@ -82,7 +107,32 @@ DeleteJadwal : async (idj) => {
  getSelasa : async () => {
     return new Promise((resolve, reject) => {
         connection.query(`
-          SELECT jadwal.idj,hari.hari as hari, guru.nama_guru as nama_guru, kelas.nama_kelas as nama_kelas, mata_pelajaran.nama_mp as nama_mp, jadwal.jam_mulai, jadwal.jam_selesai FROM jadwal, hari, guru, kelas, mata_pelajaran WHERE jadwal.idh = hari.idh AND jadwal.idg = guru.id_guru AND jadwal.idk = kelas.id_kelas AND jadwal.idm =mata_pelajaran.idm AND hari.idh = 2 ORDER BY jadwal.jam_mulai ASC, kelas.nama_kelas DESC  `, (error, result) => {
+         SELECT 
+    jadwal.idj,
+    hari.hari AS hari,
+    guru.nama_guru AS nama_guru,
+    guru.idm AS mapel_ajar,
+    kelas.nama_kelas AS nama_kelas,
+    mata_pelajaran.nama_mp AS nama_mp,
+    jadwal.jam_mulai,
+    jadwal.jam_selesai
+FROM 
+    jadwal
+JOIN 
+    hari ON jadwal.idh = hari.idh
+JOIN 
+    guru ON jadwal.idg = guru.id_guru
+JOIN 
+    kelas ON jadwal.idk = kelas.id_kelas
+JOIN 
+    mata_pelajaran ON jadwal.idm = mata_pelajaran.idm
+WHERE 
+    hari.idh = 2
+ORDER BY 
+    CAST(SUBSTRING_INDEX(kelas.nama_kelas, ' ', 1) AS UNSIGNED) ASC,
+    SUBSTRING(kelas.nama_kelas, 2) ASC,
+    jadwal.jam_mulai ASC;
+ `, (error, result) => {
             if (error) {
                 return reject(error);
             }
@@ -93,7 +143,32 @@ DeleteJadwal : async (idj) => {
  getRabu : async () => {
     return new Promise((resolve, reject) => {
         connection.query(`
-          SELECT jadwal.idj,hari.hari as hari, guru.nama_guru as nama_guru, kelas.nama_kelas as nama_kelas, mata_pelajaran.nama_mp as nama_mp, jadwal.jam_mulai, jadwal.jam_selesai FROM jadwal, hari, guru, kelas, mata_pelajaran WHERE jadwal.idh = hari.idh AND jadwal.idg = guru.id_guru AND jadwal.idk = kelas.id_kelas AND jadwal.idm =mata_pelajaran.idm AND hari.idh = 3 ORDER BY jadwal.jam_mulai ASC, kelas.nama_kelas DESC  `, (error, result) => {
+         SELECT 
+    jadwal.idj,
+    hari.hari AS hari,
+    guru.nama_guru AS nama_guru,
+    guru.idm AS mapel_ajar,
+    kelas.nama_kelas AS nama_kelas,
+    mata_pelajaran.nama_mp AS nama_mp,
+    jadwal.jam_mulai,
+    jadwal.jam_selesai
+FROM 
+    jadwal
+JOIN 
+    hari ON jadwal.idh = hari.idh
+JOIN 
+    guru ON jadwal.idg = guru.id_guru
+JOIN 
+    kelas ON jadwal.idk = kelas.id_kelas
+JOIN 
+    mata_pelajaran ON jadwal.idm = mata_pelajaran.idm
+WHERE 
+    hari.idh = 3
+ORDER BY 
+    CAST(SUBSTRING_INDEX(kelas.nama_kelas, ' ', 1) AS UNSIGNED) ASC,
+    SUBSTRING(kelas.nama_kelas, 2) ASC,
+    jadwal.jam_mulai ASC;
+`, (error, result) => {
             if (error) {
                 return reject(error);
             }
@@ -104,7 +179,32 @@ DeleteJadwal : async (idj) => {
  getKamis : async () => {
     return new Promise((resolve, reject) => {
         connection.query(`
-          SELECT jadwal.idj,hari.hari as hari, guru.nama_guru as nama_guru, kelas.nama_kelas as nama_kelas, mata_pelajaran.nama_mp as nama_mp, jadwal.jam_mulai, jadwal.jam_selesai FROM jadwal, hari, guru, kelas, mata_pelajaran WHERE jadwal.idh = hari.idh AND jadwal.idg = guru.id_guru AND jadwal.idk = kelas.id_kelas AND jadwal.idm =mata_pelajaran.idm AND hari.idh = 4 ORDER BY jadwal.jam_mulai ASC, kelas.nama_kelas DESC  `, (error, result) => {
+          SELECT 
+    jadwal.idj,
+    hari.hari AS hari,
+    guru.nama_guru AS nama_guru,
+    guru.idm AS mapel_ajar,
+    kelas.nama_kelas AS nama_kelas,
+    mata_pelajaran.nama_mp AS nama_mp,
+    jadwal.jam_mulai,
+    jadwal.jam_selesai
+FROM 
+    jadwal
+JOIN 
+    hari ON jadwal.idh = hari.idh
+JOIN 
+    guru ON jadwal.idg = guru.id_guru
+JOIN 
+    kelas ON jadwal.idk = kelas.id_kelas
+JOIN 
+    mata_pelajaran ON jadwal.idm = mata_pelajaran.idm
+WHERE 
+    hari.idh = 4
+ORDER BY 
+    CAST(SUBSTRING_INDEX(kelas.nama_kelas, ' ', 1) AS UNSIGNED) ASC,
+    SUBSTRING(kelas.nama_kelas, 2) ASC,
+    jadwal.jam_mulai ASC;
+  `, (error, result) => {
             if (error) {
                 return reject(error);
             }
@@ -115,7 +215,32 @@ DeleteJadwal : async (idj) => {
  getJumat : async () => {
     return new Promise((resolve, reject) => {
         connection.query(`
-          SELECT jadwal.idj,hari.hari as hari, guru.nama_guru as nama_guru, kelas.nama_kelas as nama_kelas, mata_pelajaran.nama_mp as nama_mp, jadwal.jam_mulai, jadwal.jam_selesai FROM jadwal, hari, guru, kelas, mata_pelajaran WHERE jadwal.idh = hari.idh AND jadwal.idg = guru.id_guru AND jadwal.idk = kelas.id_kelas AND jadwal.idm =mata_pelajaran.idm AND hari.idh = 5 ORDER BY jadwal.jam_mulai ASC, kelas.nama_kelas DESC  `, (error, result) => {
+ SELECT 
+    jadwal.idj,
+    hari.hari AS hari,
+    guru.nama_guru AS nama_guru,
+    guru.idm AS mapel_ajar,
+    kelas.nama_kelas AS nama_kelas,
+    mata_pelajaran.nama_mp AS nama_mp,
+    jadwal.jam_mulai,
+    jadwal.jam_selesai
+FROM 
+    jadwal
+JOIN 
+    hari ON jadwal.idh = hari.idh
+JOIN 
+    guru ON jadwal.idg = guru.id_guru
+JOIN 
+    kelas ON jadwal.idk = kelas.id_kelas
+JOIN 
+    mata_pelajaran ON jadwal.idm = mata_pelajaran.idm
+WHERE 
+    hari.idh = 5
+ORDER BY 
+    CAST(SUBSTRING_INDEX(kelas.nama_kelas, ' ', 1) AS UNSIGNED) ASC,
+    SUBSTRING(kelas.nama_kelas, 2) ASC,
+    jadwal.jam_mulai ASC;
+`, (error, result) => {
             if (error) {
                 return reject(error);
             }
@@ -126,7 +251,32 @@ DeleteJadwal : async (idj) => {
  getSabtu : async () => {
     return new Promise((resolve, reject) => {
         connection.query(`
-          SELECT jadwal.idj,hari.hari as hari, guru.nama_guru as nama_guru, kelas.nama_kelas as nama_kelas, mata_pelajaran.nama_mp as nama_mp, jadwal.jam_mulai, jadwal.jam_selesai FROM jadwal, hari, guru, kelas, mata_pelajaran WHERE jadwal.idh = hari.idh AND jadwal.idg = guru.id_guru AND jadwal.idk = kelas.id_kelas AND jadwal.idm =mata_pelajaran.idm AND hari.idh = 7 ORDER BY jadwal.jam_mulai ASC, kelas.nama_kelas DESC  `, (error, result) => {
+SELECT 
+    jadwal.idj,
+    hari.hari AS hari,
+    guru.nama_guru AS nama_guru,
+    guru.idm AS mapel_ajar,
+    kelas.nama_kelas AS nama_kelas,
+    mata_pelajaran.nama_mp AS nama_mp,
+    jadwal.jam_mulai,
+    jadwal.jam_selesai
+FROM 
+    jadwal
+JOIN 
+    hari ON jadwal.idh = hari.idh
+JOIN 
+    guru ON jadwal.idg = guru.id_guru
+JOIN 
+    kelas ON jadwal.idk = kelas.id_kelas
+JOIN 
+    mata_pelajaran ON jadwal.idm = mata_pelajaran.idm
+WHERE 
+    hari.idh = 7
+ORDER BY 
+    CAST(SUBSTRING_INDEX(kelas.nama_kelas, ' ', 1) AS UNSIGNED) ASC,
+    SUBSTRING(kelas.nama_kelas, 2) ASC,
+    jadwal.jam_mulai ASC;
+`, (error, result) => {
             if (error) {
                 return reject(error);
             }

@@ -21,19 +21,36 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-    // Daftar tipe file yang diizinkan
-    const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    const allowedTypes = [
+        'image/jpeg',                    // JPEG
+        'image/png',                     // PNG
+        'image/gif',                     // GIF
+        'image/bmp',                     // BMP
+        'image/webp',                    // WEBP
+        'application/pdf',               // PDF
+        'application/msword',            // DOC
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // DOCX
+        'application/vnd.ms-excel',      // XLS
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // XLSX
+        'application/vnd.ms-powerpoint', // PPT
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation', // PPTX
+        'text/plain',                    // TXT
+        'application/zip',               // ZIP
+        'application/x-rar-compressed',  // RAR
+        'application/x-7z-compressed'    // 7Z
+    ];
+
     if (allowedTypes.includes(file.mimetype)) {
-        cb(null, true); // File diizinkan
+        cb(null, true);
     } else {
-        cb(new Error('Tipe file tidak diizinkan'), false); // Tipe file tidak diizinkan
+        cb(new Error('Tipe file tidak diizinkan'), false);
     }
 };
 
 const upload = multer({ 
     storage: storage, 
     fileFilter: fileFilter,
-    limits: { fileSize: 5 * 1024 * 1024 } // Batas ukuran file 5MB
+    limits: { fileSize: 20 * 1024 * 1024 } // Batas ukuran file 5MB
 }).single('file_tugas');
 
 module.exports = {

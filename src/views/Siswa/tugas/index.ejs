@@ -203,29 +203,29 @@
                 });
             }
         });
-        $(document).on('click', '#btn-edit', function(){
-            const id = $(this).data("id");
-            if(id){
-                $.ajax({
-                    url : `/guru/tugasByid/${id}`,
-                    type : 'GET',
-                    success : function(response){
-                        var row = response.data[0];
-                        var tglDiberikan = new Date(row.tanggal_diberikan);
-                        var tglDeadline = new Date(row.tanggal_deadline);
-                        var formattedDiberikan = tglDiberikan.toLocaleDateString('en-CA')
-                        var formattedDeadline = tglDeadline.toLocaleDateString('en-CA')
-                        $("[name='id_tugas']").val(row.id_tugas);
-                        $("[name='judul_tugas']").val(row.judul_tugas);
-                        $("[name='tanggal_diberikan']").val(formattedDiberikan);
-                        $("[name='tanggal_deadline']").val(formattedDeadline);
-                        $("[name='deskripsi']").val(row.deskripsi);
-                        $("[name='id_kelas'] option[value='" + row.id_kelas + "']").prop('selected',true);
+        // $(document).on('click', '#btn-edit', function(){
+        //     const id = $(this).data("id");
+        //     if(id){
+        //         $.ajax({
+        //             url : `/guru/tugasByid/${id}`,
+        //             type : 'GET',
+        //             success : function(response){
+        //                 var row = response.data[0];
+        //                 var tglDiberikan = new Date(row.tanggal_diberikan);
+        //                 var tglDeadline = new Date(row.tanggal_deadline);
+        //                 var formattedDiberikan = tglDiberikan.toLocaleDateString('en-CA')
+        //                 var formattedDeadline = tglDeadline.toLocaleDateString('en-CA')
+        //                 $("[name='id_tugas']").val(row.id_tugas);
+        //                 $("[name='judul_tugas']").val(row.judul_tugas);
+        //                 $("[name='tanggal_diberikan']").val(formattedDiberikan);
+        //                 $("[name='tanggal_deadline']").val(formattedDeadline);
+        //                 $("[name='deskripsi']").val(row.deskripsi);
+        //                 $("[name='id_kelas'] option[value='" + row.id_kelas + "']").prop('selected',true);
                         
-                        $("#modal-tambah").modal("show") 
-                    }
-                })
-            }
-        })
+        //                 $("#modal-tambah").modal("show") 
+        //             }
+        //         })
+        //     }
+        // })
     </script>
 <%- include("../componen/footer") %>

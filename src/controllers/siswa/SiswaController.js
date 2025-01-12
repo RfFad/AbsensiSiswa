@@ -39,7 +39,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ 
     storage: storage, 
     fileFilter: fileFilter,
-    limits: { fileSize: 5 * 1024 * 1024 } // Batas ukuran file 5MB
+    limits: { fileSize: 20 * 1024 * 1024 } // Batas ukuran file 20MB
 }).single('file_jawaban');
 
 module.exports = {

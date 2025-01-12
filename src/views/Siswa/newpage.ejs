@@ -262,6 +262,17 @@
     $(document).ready(function () {
         notif();
     });
+    
+    const error = "<%= messages.error %>"
+    if(error){
+    Swal.fire({
+              title: "Error",
+              text: "<%= messages.error %>",
+              icon: "error",
+              //position: "top-end",
+              showConfirmButton: true,
+            });
+          }
 </script>
 
   

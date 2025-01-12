@@ -11,24 +11,37 @@ const connect = mysql.createPool({
 });
 
 module.exports = {
-   async login(req, res) {
+    async login(req, res) {
         try {
+            // Cek apakah user sudah memiliki session dan role
+            if (req.session.loggedin === true) {
+                return res.redirect('/admin');
+                // switch (req.session.role) {
+                //     case 'admin':
+                //         return res.redirect('/admin');
+                //     case 'guru':
+                //         return res.redirect('/guru');
+                //     case 'siswa':
+                //         return res.redirect('/siswa');
+                // }
+            }
+    
             const sekolah = await getSekolah();
-        res.render("login", {
-            sekolah,
-            colorFlash: req.flash('color'),
-            statusFlash: req.flash('status'),
-            pesanFlash: req.flash('message'),
-        });
+            res.render("login", {
+                sekolah,
+                colorFlash: req.flash('color'),
+                statusFlash: req.flash('status'),
+                pesanFlash: req.flash('message'),
+            });
         } catch (error) {
             console.error('Error in getting data:', error);
             res.status(500).json({
                 status: 'error',
-                message: 'Internal server error'})
+                message: 'Internal server error'
+            });
         }
-        
     },
-
+    
     async loginAuth(req, res) {
         let username = req.body.username;
         let password = md5(req.body.password); // Hash the password using MD5
@@ -209,18 +222,13 @@ module.exports = {
     checkRole(role) {
         return (req, res, next) => {
             if (req.session.role !== role) {
-                req.flash('color', 'danger');
-                req.flash('status', 'Oops..');
-                req.flash('message', 'You do not have permission to access this page');
-                if(req.session.role === 'admin'){
-                    return res.redirect('/admin');
-                }else if(req.session.role === 'guru'){
-                    return res.redirect('/guru');
-                }else{
-                    return res.redirect('/siswa');
-                }
+                const redirectUrl = req.session.role === 'admin' ? '/admin' : 
+                                    req.session.role === 'guru' ? '/guru' : '/siswa';
+                req.flash('error', 'Anda tidak memiliki akses ke halaman ini!');
+                return res.redirect(redirectUrl);
             }
             next();
         };
     }
+    
 };
