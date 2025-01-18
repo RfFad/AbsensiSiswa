@@ -18,6 +18,7 @@ const jadwal = require ('../controllers/admin/JadwalController');
 const riwayat = require ('../controllers/admin/RiwayatController');
 const TahunAjarCont = require('../controllers/admin/TahunAjarController');
 const user = require('../controllers/admin/UserController')
+const {deleteSelected} = require('../models/models_siswa')
 
 //router
 router.get('/', verifyUser.isLogin, checkRole('admin'), getCountData)
@@ -59,7 +60,8 @@ router.post('/hari/delete/:idh', verifyUser.isLogin, checkRole('admin'), authHea
 router.post('/hari/update/:idh', verifyUser.isLogin, checkRole('admin'), authHeader, getUpdateHari);
 
 //siswa
-router.get('/grafik', verifyUser.isLogin, checkRole('admin'), authHeader, getGrafik)
+router.get('/grafik', verifyUser.isLogin, checkRole('admin'), authHeader, getGrafik);
+router.post('/siswa/deletedAll', deleteSelected)
 router.get('/siswa', verifyUser.isLogin, checkRole('admin'), authHeader, getPageSiswa);
 router.get('/data_siswa', verifyUser.isLogin, checkRole('admin'), authHeader, getSiswaData)
 router.post('/insert_siswa', verifyUser.isLogin, checkRole('admin'), authHeader, getInsertSiswa);

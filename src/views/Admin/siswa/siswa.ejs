@@ -182,6 +182,7 @@
                   <input type="text" class="form-control" name="table_search" style="width: 160px;">
                   <button type="submit" class="btn btn-secondary ml-2">Search</button>
                   <a href="#" class="btn btn-warning ml-2" id="filter-btn">Filter</a>
+                  <button id="deleteSelected" class="btn btn-sm btn-danger ml-2">Hapus</button>
                 </div>
               </div>
               
@@ -199,7 +200,8 @@
                 <table id="example1" class="table text-nowrap">
                   <thead class="thead-dark position-sticky top-0">
                     <tr>
-                      <th style="width: 1%;">No</th>
+                      <th style="width: 1%;"><input type="checkbox" id="selectAll"></th>
+                      <th>No</th>
                       <th>Nis</th>
                       <th>Nama Siswa</th>
                       <th>Kelas</th>
@@ -212,34 +214,25 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <p id="no-results" style="display: none; text-align: center; padding: 10px; font-size: 30px; font-weight: bold;">Data tidak ada</p>
-                    <% if (siswakelas.length === 0) { %>
+                    <% siswakelas.forEach((siswa, index) => { %>
                       <tr>
-                        <td colspan="9" class="text-center">Data tidak ada</td>
+                        <td><input type="checkbox" class="delete-checkbox" value="<%= siswa.id_siswa %>"></td>
+                        <td><%= index + 1 %></td>
+                        <td><%= siswa.nis %></td>
+                        <td><%= siswa.nama_siswa %></td>
+                        <td><%= siswa.nama_kelas %></td>
+                        <td><%= siswa.jk %></td>
+                        <td><%= siswa.nama_wali %></td>
+                        <td><%= siswa.alamat %></td>
+                        <td><%= siswa.pekerjaan_wali %></td>
+                        <td><%= siswa.nama_ajaran %></td>
+                        <td>
+                          <!-- Action buttons -->
+                        </td>
                       </tr>
-                    <% } else { %>
-                      <% siswakelas.forEach((siswa, index) => { %>
-                        <tr>
-                          <td><%= index + 1 %></td>
-                          <td><%= siswa.nis %></td>
-                          <td><%= siswa.nama_siswa %></td>
-                          <td><%= siswa.nama_kelas %></td>
-                          <td><%= siswa.jk %></td>
-                          <td><%= siswa.nama_wali %></td>
-                          <td><%= siswa.alamat %></td>
-                          <td><%= siswa.pekerjaan_wali %></td>
-                          <td><%= siswa.nama_ajaran %></td>
-                          <td>
-                            <a href="/admin/siswa/edit/<%= siswa.id_siswa %>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                            <a href="#" class="btn btn-primary info-btn" data-nis="<%= siswa.nis %>"><i class="fa fa-info-circle"></i></a>
-                            <form action="/admin/siswa/delete/<%= siswa.id_siswa %>?_method=DELETE" method="post" style="display:inline;" class="delete-form">
-                              <button type="button" class="btn btn-danger" onclick="confirmDelete(this)"><i class='fas fa-trash-alt'></i></button>
-                            </form>
-                          </td>
-                        </tr>
-                      <% }); %>
-                    <% } %>
+                    <% }); %>
                   </tbody>
+                  
                 </table>
               </div>
               
@@ -396,7 +389,7 @@
             </div>
             <!-- /.modal-body -->
             <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default close-btn" data-dismiss="modal">Close</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -416,7 +409,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Upload excel</h5>
-        <button type="button" class="exit" data-bs-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span></button>
+        <button type="button" class="exit close-btn" data-bs-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
         <form enctype="multipart/form-data" action="/admin/import_siswa" method="POST">
@@ -467,6 +460,72 @@
 
 <script>
   $(document).ready(function() {
+    //
+    //untuk select all
+    $('#selectAll').on('change', function(){
+      $('.delete-checkbox').prop('checked', $(this).prop('checked'));
+    })
+    //hapus data yang dipilih
+    $('#deleteSelected').on('click', function () {
+  const idSelected = $('.delete-checkbox:checked').map(function () {
+    return $(this).val();
+  }).get();
+
+  if (idSelected.length === 0) {
+    Swal.fire({
+      title: "Pilih data siswa terlebih dahulu!",
+      icon: "warning",
+      showCancelButton: false,
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "Oke",
+    });
+    return;
+  }
+
+  Swal.fire({
+    title: 'Apakah Anda yakin?',
+    text: "Anda tidak akan dapat mengembalikan data ini!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Ya, hapus!',
+    cancelButtonText: 'Batal',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        url: '/admin/siswa/deletedAll',
+        method: 'POST',
+        contentType: "application/json",
+        data: JSON.stringify({ id_siswa: idSelected }),
+        success: function (response) {
+          Swal.fire({
+            title: "Berhasil",
+            text: "Berhasil menghapus data",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            location.reload();
+          });
+        },
+        error: function (xhr, status, error) {
+          Swal.fire({
+            title: "Gagal",
+            text: "Terjadi kesalahan saat menghapus data",
+            icon: "error",
+          });
+        },
+      });
+    }
+  });
+});
+
+    
+    //
+    $('.close-btn').on('click', function(){
+      $('#modal-import').modal('hide')
+    })
     $(".import").on('click', function(){
       $("#modal-import").modal("show")
     })

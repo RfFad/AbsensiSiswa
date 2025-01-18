@@ -298,6 +298,34 @@ const DeleteSiswa = async (id_siswa) => {
             
     })
 }
+
+const deleteSelected = async (req, res) => {
+    const { id_siswa } = req.body;
+  
+    if (!Array.isArray(id_siswa) || id_siswa.length === 0) {
+      return res.status(400).json({ message: 'Tidak ada data yang dipilih.' });
+    }
+  
+    try {
+      const result = await new Promise((resolve, reject) => {
+        const placeholders = id_siswa.map(() => '?').join(',');
+        const query = `DELETE FROM siswa WHERE id_siswa IN (${placeholders})`;
+  
+        connection.query(query, id_siswa, (error, result) => {
+          if (error) {
+            return reject(error);
+          }
+          resolve(result);
+        });
+      });
+  
+      res.status(200).json({ message: 'Data berhasil dihapus.', affectedRows: result.affectedRows });
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ message: 'Terjadi kesalahan server.' });
+    }
+  };
+  
 const GetSiswaKelas = async (id_kelas) => {
     return new Promise((resolve, reject) => {
         connection.query(`
@@ -380,5 +408,5 @@ const getSiswaByGuru = async (id_kelas = null, idth = null, jk = null, tgl_lahir
 };
 
 
-module.exports = { getSiswa, getSiswaExport, getSiswaByNis, getSiswaByGuru, getSiswaById, InsertSiswa, UpdateSiswa, DeleteSiswa, GetSiswaKelas, getInfoSiswa, getGrafikSiswa };
+module.exports = { getSiswa, getSiswaExport, getSiswaByNis, getSiswaByGuru, getSiswaById, InsertSiswa, UpdateSiswa, DeleteSiswa, GetSiswaKelas, getInfoSiswa, getGrafikSiswa, deleteSelected };
 
