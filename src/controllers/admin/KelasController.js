@@ -5,6 +5,8 @@ const {
   UpdateKelas,
   DeleteKelas,
 } = require("../../models/models_kelas");
+const getCount = require('../../models/models_count')
+
 const getDataKelas = async (req, res) => {
   try {
     const messages = {
@@ -12,7 +14,7 @@ const getDataKelas = async (req, res) => {
       error: req.flash("error"),
     };
     const row = await getKelas();
-    res.render("admin/kelas/kelas", { row, index: 1, messages, currentPath : '/admin/data_kelas' }); // Removed the leading slash
+    res.render("admin/kelas/kelas", { row, index: 1, messages, currentPath : '/admin/data_kelas', Count : await getCount.CountKelas() }); // Removed the leading slash
   } catch (error) {
     res.status(420).json(error);
   }

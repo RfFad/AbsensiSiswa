@@ -1,3 +1,4 @@
+const { resolve } = require('path');
 const connection = require('../configs/Databases');
 
 const getGuru = async (nama_guru = null, alamat = null, jk = null, jabatan = null, nama_mp = null, nip=null) => {
@@ -132,5 +133,28 @@ const DeleteGuru = async (id_guru) => {
             
     })
 }
+const deleteSelectedGuru = async(req, res) => {
+    const {id_guru} = req.body;
+    if (!Array.isArray(id_guru) || id_guru.length === 0) {
+        return res.status(400).json({ message: 'Tidak ada data yang dipilih.' });
+      }
 
-module.exports = { getGuru, getInfoGuru, getGuruById, InsertGuru, UpdateGuru, DeleteGuru };
+    try {
+        const result = await new Promise((resolve, reject)=> {
+            const placeholder = id_guru.map(()=>'?').join(',');
+            const query = `DELETE FROM guru WHERE id_guru IN(${placeholder})`
+            connection.query(query, id_guru, (error, result) => {
+                if(error){
+                    return reject(error);
+                }
+                resolve(result);
+            });
+        });
+        res.status(200).json({messages:'Data berhasil dihapus.'})
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(404).json({messages:'gagal menghapus'})
+    }
+}
+
+module.exports = { getGuru, getInfoGuru, getGuruById, InsertGuru, UpdateGuru, DeleteGuru, deleteSelectedGuru };

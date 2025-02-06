@@ -4,6 +4,7 @@ const multer = require('multer');
 const fs = require('fs');
 const ExcelJS=require('exceljs');
 const md5 = require("md5");
+const getCount = require('../../models/models_count')
 // Membuat folder public/images jika belum ada
 if (!fs.existsSync(path.join(__dirname,'..', '..', 'public', 'images'))) {
   fs.mkdirSync(path.join(__dirname, '..','..', 'public', 'images'), { recursive: true });
@@ -29,7 +30,7 @@ module.exports = {
                 success: req.flash("success"),
                 error: req.flash("error"),
               };
-            res.render('admin/user/user', {data, currentPath : '/admin/data_user', messages})
+            res.render('admin/user/user', {data, currentPath : '/admin/data_user', messages, Count : await getCount.CountUser()})
         } catch (error) {
             console.log(error)
             res.status(404).json({message : 'error'})

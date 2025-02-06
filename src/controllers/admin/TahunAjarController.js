@@ -1,6 +1,7 @@
 const tahunAjar = require ("../../models/models_tahunajar")
 const {UpdateSiswa} = require("../../models/models_siswa");
 const { updateSiswa } = require("./SiswaController");
+const getCount = require('../../models/models_count')
 const TahunAjarCont = {
 TahunAjar : async(req, res) => {
     try {
@@ -9,7 +10,7 @@ TahunAjar : async(req, res) => {
             error: req.flash("error"),
           };
         const row = await tahunAjar.getTahunAjar();
-        res.render("Admin/tahun_ajar/tahun_ajar", {row, messages, currentPath : "/admin/tahun_ajaran"});
+        res.render("Admin/tahun_ajar/tahun_ajar", {row, messages, currentPath : "/admin/tahun_ajaran", Count : await getCount.CountTahun()});
     } catch (error) {
         res.status(404).json({msg : error});
         console.log(error)

@@ -2,6 +2,7 @@ const { InsertRiwayat, InsertNotification, getRiwayat, getRiwayatById, UpdateRiw
 const {getSiswa} = require('../../models/models_siswa')
 const {getKelas} = require ('../../models/models_kelas');
 const { getDataKelas } = require('./KelasController');
+const getCount = require('../../models/models_count')
  // Import the MD5 module
  const riwayat = {
 
@@ -15,7 +16,7 @@ const { getDataKelas } = require('./KelasController');
             error: req.flash('error')
         };
         const row = await getRiwayat();
-        res.render("admin/riwayat/riwayat", { row, index: 1, messages, currentPath : '/admin/data_riwayat' });
+        res.render("admin/riwayat/riwayat", { row, index: 1, messages, currentPath : '/admin/data_riwayat', Count : await getCount.CountRiwayat() });
     } catch (error) {
         res.status(500).json(error);
     }

@@ -14,6 +14,7 @@ const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
 const ExcelJS = require('exceljs');
+const getCount = require('../../models/models_count')
 //untuk upload foto
 if (!fs.existsSync(path.join(__dirname,'..', '..', 'public', 'fp_guru'))) {
   fs.mkdirSync(path.join(__dirname, '..','..', 'public', 'fp_guru'), { recursive: true });
@@ -203,7 +204,7 @@ const getGuruData = async (req, res) => {
     const jabatan = req.query.jabatan || null;
     const nama_mp = req.query.nama_mp || null;
     const row = await getGuru(nama_guru, alamat, jk, jabatan, nama_mp, nip);
-    res.render("admin/guru/guru", { row, index: 1, messages, currentPath: '/admin/data_guru', mapel});
+    res.render("admin/guru/guru", { row, index: 1, messages, currentPath: '/admin/data_guru', mapel, countGuru : await getCount.CountGuru()});
   } catch (error) {
     res.status(500).json(error);
   }

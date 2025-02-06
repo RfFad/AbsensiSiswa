@@ -5,6 +5,7 @@ const {
   UpdateMapel,
   DeleteMapel,
 } = require("../../models/models_mapel");
+const getCount = require('../../models/models_count')
 const getDataMapel = async (req, res) => {
   try {
     const messages = {
@@ -12,7 +13,7 @@ const getDataMapel = async (req, res) => {
       error: req.flash("error"),
     };
     const row = await getMapel();
-    res.render("admin/mapel/mapel", { row, index: 1, messages, currentPath : '/admin/data_mapel' }); // Removed the leading slash
+    res.render("admin/mapel/mapel", { row, index: 1, messages, currentPath : '/admin/data_mapel', Count : await getCount.CountMapel() }); // Removed the leading slash
   } catch (error) {
     res.status(420).json(error);
   }

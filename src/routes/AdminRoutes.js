@@ -19,6 +19,7 @@ const riwayat = require ('../controllers/admin/RiwayatController');
 const TahunAjarCont = require('../controllers/admin/TahunAjarController');
 const user = require('../controllers/admin/UserController')
 const {deleteSelected} = require('../models/models_siswa')
+const {deleteSelectedGuru} = require('../models/models_guru')
 
 //router
 router.get('/', verifyUser.isLogin, checkRole('admin'), getCountData)
@@ -42,7 +43,8 @@ router.get('/mapel/edit/:idm', verifyUser.isLogin, checkRole('admin'), authHeade
 router.post('/mapel/update/:idm', verifyUser.isLogin, checkRole('admin'), authHeader, getUpdateMapel);
 router.post('/mapel/delete/:idm', verifyUser.isLogin, checkRole('admin'), authHeader, getDeleteMapel);
 //guru
-router.get('/guru/', verifyUser.isLogin, checkRole('admin'), authHeader, getPageGuru);
+router.post('/guru/deletedAll', deleteSelectedGuru);
+router.get('/guru', verifyUser.isLogin, checkRole('admin'), authHeader, getPageGuru);
 router.get('/data_guru', verifyUser.isLogin, checkRole('admin'), authHeader, getGuruData)
 router.post('/insert_guru', verifyUser.isLogin, checkRole('admin'), authHeader, getInsertGuru);
 router.get('/guru/edit/:id_guru', verifyUser.isLogin, checkRole('admin'), authHeader, getUpdatePage)

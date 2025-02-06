@@ -5,15 +5,39 @@ module.exports = {
   rekapHarian: async (id_kelas, tanggal, nip) => {
     return new Promise((resolve, reject) => {
       db.query(
-        `SELECT siswa.id_siswa, siswa.nama_siswa, siswa.nis, DATE(absen.tanggal) AS tanggal, absen.status, COUNT(*) AS jumlah, jadwal.idg, jadwal.idm, mata_pelajaran.nama_mp, guru.nip, kelas.nama_kelas
-             FROM absen
-             JOIN siswa ON absen.id_siswa = siswa.id_siswa
-             JOIN jadwal ON absen.id_jadwal = jadwal.idj
-             JOIN mata_pelajaran ON jadwal.idm = mata_pelajaran.idm 
-             JOIN guru ON jadwal.idg = guru.id_guru
-             JOIN kelas ON jadwal.idk = kelas.id_kelas
-             WHERE siswa.id_kelas = ? AND DATE(absen.tanggal) = ? AND guru.nip = ?
-             GROUP BY siswa.id_siswa, tanggal, absen.status`,
+        `SELECT 
+    siswa.id_siswa, 
+    siswa.nama_siswa, 
+    siswa.nis, 
+    DATE(absen.tanggal) AS tanggal, 
+    absen.status, 
+    COUNT(*) AS jumlah, 
+    jadwal.idg, 
+    jadwal.idm, 
+    mata_pelajaran.nama_mp, 
+    guru.nip, 
+    kelas.nama_kelas
+FROM absen
+JOIN siswa ON absen.id_siswa = siswa.id_siswa
+JOIN jadwal ON absen.id_jadwal = jadwal.idj
+JOIN mata_pelajaran ON jadwal.idm = mata_pelajaran.idm 
+JOIN guru ON jadwal.idg = guru.id_guru
+JOIN kelas ON jadwal.idk = kelas.id_kelas
+WHERE siswa.id_kelas = ?
+  AND DATE(absen.tanggal) = ?
+  AND guru.nip = ?
+GROUP BY 
+    siswa.id_siswa, 
+    siswa.nama_siswa, 
+    siswa.nis, 
+    tanggal, 
+    absen.status, 
+    jadwal.idg, 
+    jadwal.idm, 
+    mata_pelajaran.nama_mp, 
+    guru.nip, 
+    kelas.nama_kelas;
+`,
         [id_kelas, tanggal, nip],
         (error, results) => {
           if (error) {
@@ -91,10 +115,19 @@ module.exports = {
       }
   
       query += `
-        GROUP BY 
-          siswa.id_siswa, 
-          tanggal, 
-          absen.status;
+       GROUP BY 
+    siswa.id_siswa, 
+    jadwal.idg, 
+    jadwal.idm, 
+    siswa.idth, 
+    siswa.nama_siswa, 
+    siswa.nis, 
+    guru.nama_guru, 
+    mata_pelajaran.nama_mp, 
+    tahun_ajaran.nama_ajaran, 
+    tanggal, 
+    absen.status;
+
       `;
   
       db.query(query, params, (error, result) => {
