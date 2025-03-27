@@ -65,7 +65,7 @@ router.post('/hari/update/:idh', verifyUser.isLogin, checkRole('admin'), authHea
 router.get('/grafik', verifyUser.isLogin, checkRole('admin'), authHeader, getGrafik);
 router.post('/siswa/deletedAll', deleteSelected)
 router.get('/siswa', getPageSiswa);
-router.get('/data_siswa', verifyUser.isLogin, checkRole('admin'), authHeader, getSiswaData)
+router.get('/data_siswa', getSiswaData)
 router.post('/insert_siswa', verifyUser.isLogin, checkRole('admin'), authHeader, getInsertSiswa);
 router.get('/siswa/edit/:id_siswa', verifyUser.isLogin, checkRole('admin'), authHeader, getUpdatePageSiswa)
 //ini buat guru juga
