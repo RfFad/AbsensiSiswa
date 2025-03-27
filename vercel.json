@@ -11,5 +11,11 @@
             "src" : "/(.*)",
             "dest" : "/"
         }
-    ]
+    ],
+    "env": {
+        "DB_HOST": "bydhxjrth2bmh8ybxfem",
+        "DB_USER": "ud70zixcu63ynzst",
+        "DB_PASS": "qywqGf9V5E2SWl1PtAdQ",
+        "DB_NAME": "bydhxjrth2bmh8ybxfem"
+      }
 }
