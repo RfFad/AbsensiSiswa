@@ -114,7 +114,7 @@ WHERE
             const query = `
                 INSERT INTO tugas 
                 (id_guru, id_kelas, id_mapel, judul_tugas, deskripsi, tanggal_diberikan, tanggal_deadline, file_tugas, status)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+                VALUES (? ,?, ?, ?, ?, ?, ?, ?, ?, ?);
             `;
             
             const values = [
@@ -361,25 +361,25 @@ WHERE
         });
     },
     // Misalnya menggunakan MySQL
-     upsertTugas : (id_tugas, id_guru, id_kelas, id_mapel, judul_tugas, deskripsi, tanggal_diberikan, tanggal_deadline, waktu_deadline, file_tugas, status) => {
+    upsertTugas: (id_tugas, id_guru, id_kelas, id_mapel, judul_tugas, deskripsi, tanggal_diberikan, tanggal_deadline, waktu_deadline, file_tugas, status) => {
         return new Promise((resolve, reject) => {
             const query = `
-                INSERT INTO tugas (id_tugas, id_guru, id_kelas, id_mapel, judul_tugas, deskripsi, tanggal_diberikan, tanggal_deadline, waktu_deadline, file_tugas, status)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-ON DUPLICATE KEY UPDATE
-    id_guru = VALUES(id_guru),
-    id_kelas = VALUES(id_kelas),
-    id_mapel = VALUES(id_mapel),
-    judul_tugas = VALUES(judul_tugas),
-    deskripsi = VALUES(deskripsi),
-    tanggal_diberikan = VALUES(tanggal_diberikan),
-    tanggal_deadline = VALUES(tanggal_deadline),
-    waktu_deadline = VALUES(waktu_deadline),
-    file_tugas = VALUES(file_tugas),
-    status = VALUES(status);
+                INSERT INTO tugas (id_guru, id_kelas, id_mapel, judul_tugas, deskripsi, tanggal_diberikan, tanggal_deadline, waktu_deadline, file_tugas, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON DUPLICATE KEY UPDATE
+                    id_guru = VALUES(id_guru),
+                    id_kelas = VALUES(id_kelas),
+                    id_mapel = VALUES(id_mapel),
+                    judul_tugas = VALUES(judul_tugas),
+                    deskripsi = VALUES(deskripsi),
+                    tanggal_diberikan = VALUES(tanggal_diberikan),
+                    tanggal_deadline = VALUES(tanggal_deadline),
+                    waktu_deadline = VALUES(waktu_deadline),
+                    file_tugas = VALUES(file_tugas),
+                    status = VALUES(status);
             `;
-            
-            const values = [id_tugas, id_guru, id_kelas, id_mapel, judul_tugas, deskripsi, tanggal_diberikan, tanggal_deadline, waktu_deadline, file_tugas, status];
+    
+            const values = [id_guru, id_kelas, id_mapel, judul_tugas, deskripsi, tanggal_diberikan, tanggal_deadline, waktu_deadline, file_tugas, status];
     
             db.query(query, values, (err, result) => {
                 if (err) {
@@ -389,6 +389,8 @@ ON DUPLICATE KEY UPDATE
             });
         });
     },
+    
+
     detailJawabanSiswa : async(id_tugas, id_siswa) =>{
         return new Promise((resolve, reject) => {
             db.query(`
