@@ -37,7 +37,8 @@ module.exports = {
             console.error('Error in getting data:', error);
             res.status(500).json({
                 status: 'error',
-                message: 'Internal server error'
+                message: 'Internal server error',
+                err : error
             });
         }
     },
