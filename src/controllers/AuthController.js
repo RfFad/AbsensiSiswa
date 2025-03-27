@@ -53,7 +53,8 @@ module.exports = {
                     console.error('Database connection error:', err);
                     return res.status(500).json({
                         status: 'error',
-                        message: 'Internal server error'
+                        message: 'Internal server error',
+                        err : error
                     });
                 }
     
@@ -66,7 +67,8 @@ module.exports = {
                             console.error(error);
                             return res.status(500).json({
                                 status: 'error',
-                                message: 'Internal server error'
+                                message: 'Internal server error',
+                                err : error
                             });
                         }
     
@@ -98,7 +100,8 @@ module.exports = {
                                         console.error(error);
                                         return res.status(500).json({
                                             status: 'error',
-                                            message: 'Internal server error'
+                                            message: 'Internal server error',
+                                            err : error
                                         });
                                     }
     
@@ -129,7 +132,8 @@ module.exports = {
                                                     console.error(error);
                                                     return res.status(500).json({
                                                         status: 'error',
-                                                        message: 'Internal server error'
+                                                        message: 'Internal server error',
+                                                        err : error
                                                     });
                                                 }
         
