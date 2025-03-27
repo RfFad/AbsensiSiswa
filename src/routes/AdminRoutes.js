@@ -64,7 +64,7 @@ router.post('/hari/update/:idh', verifyUser.isLogin, checkRole('admin'), authHea
 //siswa
 router.get('/grafik', verifyUser.isLogin, checkRole('admin'), authHeader, getGrafik);
 router.post('/siswa/deletedAll', deleteSelected)
-router.get('/siswa', verifyUser.isLogin, checkRole('admin'), authHeader, getPageSiswa);
+router.get('/siswa', getPageSiswa);
 router.get('/data_siswa', verifyUser.isLogin, checkRole('admin'), authHeader, getSiswaData)
 router.post('/insert_siswa', verifyUser.isLogin, checkRole('admin'), authHeader, getInsertSiswa);
 router.get('/siswa/edit/:id_siswa', verifyUser.isLogin, checkRole('admin'), authHeader, getUpdatePageSiswa)
